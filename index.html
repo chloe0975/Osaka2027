@@ -1,693 +1,512 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>京阪神自駕＆賞雪過生日 8 日遊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #FAF8F5;
+      --card-bg: #FFFFFF;
+      --navy: #1E2D4A;
+      --text-main: #2C3539;
+      --text-sub: #7A869A;
+      --accent-coral: #E06D53;
+      --accent-gold: #D4A373;
+      --ice-blue: #E8F1F5;
+      --snow-blue: #D0E1FD;
+      --border-soft: #EDE8E1;
+      --radius: 16px;
+      --shadow-sm: 0 2px 8px rgba(30, 45, 74, 0.04);
+      --shadow-md: 0 8px 24px rgba(30, 45, 74, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-cream); color: var(--text-main); font-family: 'Noto Sans TC', sans-serif; line-height: 1.6; padding-bottom: 90px; }
+    .hero { position: relative; background: linear-gradient(135deg, #1B2A4A 0%, #2D4059 50%, #4A6572 100%); color: white; padding: 40px 24px 28px; border-radius: 0 0 28px 28px; overflow: hidden; }
+    .hero::before { content: "❄️"; position: absolute; top: -15px; right: -10px; font-size: 110px; opacity: 0.12; transform: rotate(15deg); }
+    .hero-tag { display: inline-block; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px); padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.25); }
+    .hero h1 { font-family: 'Zen Maru Gothic', sans-serif; font-size: 1.65rem; font-weight: 700; line-height: 1.35; margin-bottom: 8px; }
+    .hero p { font-size: 0.85rem; opacity: 0.85; font-weight: 300; }
+    .countdown-box { margin-top: 18px; background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(10px); border-radius: 14px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255, 255, 255, 0.2); }
+    .countdown-title { font-size: 0.8rem; opacity: 0.9; }
+    .countdown-num { font-size: 1.15rem; font-weight: 700; color: #FFE69A; }
+    .nav-wrapper { position: sticky; top: 0; background: rgba(248, 249, 250, 0.92); backdrop-filter: blur(12px); z-index: 100; padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .nav-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 2px; }
+    .nav-scroll::-webkit-scrollbar { display: none; }
+    .nav-pill { flex: 0 0 auto; text-decoration: none; padding: 7px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; background: white; color: var(--indigo); box-shadow: 0 2px 6px rgba(0,0,0,0.06); transition: all 0.2s ease; border: 1px solid #E2E8F0; }
+    .nav-pill:active { transform: scale(0.95); }
+    .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+    .widget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .widget-card { background: white; padding: 14px; border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); }
+    .widget-card h3 { font-size: 0.85rem; color: var(--navy); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .calc-input { width: 100%; padding: 6px 10px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 0.9rem; text-align: right; }
+    .calc-result { font-size: 0.85rem; color: var(--accent-coral); font-weight: bold; text-align: right; margin-top: 6px; }
+    .notice-card { background: #FFFBF0; border-left: 5px solid var(--accent-gold); border-radius: 14px; padding: 14px 16px; margin-bottom: 22px; box-shadow: var(--shadow-sm); }
+    .notice-header { font-weight: 700; color: #92580C; font-size: 0.92rem; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .notice-body { font-size: 0.85rem; color: #633C02; line-height: 1.55; }
+    .day-section { margin-bottom: 28px; scroll-margin-top: 75px; }
+    .card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--border-soft); position: relative; }
+    .card-header { padding: 18px 20px 14px; background: white; border-bottom: 1px solid #F1F3F9; display: flex; justify-content: space-between; align-items: center; }
+    .day-label { font-family: 'Zen Maru Gothic', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+    .date-badge { font-size: 0.82rem; background: var(--ice-blue); color: var(--navy); font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+    .hotel-bar { background: #F0F7FF; border-left: 4px solid var(--snow-blue); padding: 10px 18px; font-size: 0.88rem; font-weight: 600; color: #034870; display: flex; align-items: center; gap: 6px; }
+    .timeline { padding: 18px 20px; position: relative; list-style: none; }
+    .timeline::before { content: ""; position: absolute; left: 31px; top: 25px; bottom: 25px; width: 2px; background: #E2E8F0; }
+    .timeline-item { position: relative; padding-left: 38px; margin-bottom: 20px; }
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-item::before { content: ""; position: absolute; left: 7px; top: 7px; width: 10px; height: 10px; background: white; border: 3px solid var(--navy); border-radius: 50%; z-index: 1; }
+    .timeline-item.active::before { border-color: var(--accent-coral); background: var(--accent-coral); }
+    .time-slot { font-size: 0.78rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; margin-bottom: 2px; }
+    .event-title { font-size: 0.96rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .event-desc { font-size: 0.86rem; color: #4A5568; line-height: 1.5; }
+    .badge { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
+    .b-food { background: #FFE8E8; color: #C53030; }
+    .b-car { background: #E6FFFA; color: #234E52; }
+    .b-sight { background: #EBF8FF; color: #2B6CB0; }
+    .b-onsen { background: #FEFCBF; color: #744210; }
+    .b-shop { background: #FAF5FF; color: #553C9A; }
+    .btn-map { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; padding: 3px 8px; background: #F1F5F9; color: #334155; text-decoration: none; border-radius: 6px; margin-top: 4px; font-weight: 500; border: 1px solid #E2E8F0; }
+    .btn-map:hover { background: #E2E8F0; }
+    .extra-group { margin-top: 14px; border-bottom: 1px dashed #E2E8F0; padding-bottom: 12px; }
+    .extra-group:last-child { border: none; padding-bottom: 0; }
+    .extra-title { font-weight: 700; font-size: 0.92rem; color: var(--navy); margin-bottom: 8px; }
+    .checklist-item { display: flex; align-items: center; gap: 8px; font-size: 0.86rem; padding: 6px 0; cursor: pointer; }
+    .checklist-item input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--navy); }
+    footer { text-align: center; padding: 30px 16px 20px; font-size: 0.8rem; color: var(--text-sub); }
+  </style>
+</head>
+<body>
 
-body {
-  background-color: var(--bg-cream);
-  color: var(--text-main);
-  font-family: 'Noto Sans TC', sans-serif;
-  line-height: 1.6;
-  padding-bottom: 90px;
-}
-
-/* 頂部封面 Hero Banner */
-.hero {
-  position: relative;
-  background: linear-gradient(135deg, #1B2A4A 0%, #2D4059 50%, #4A6572 100%);
-  color: white;
-  padding: 40px 24px 28px;
-  border-radius: 0 0 28px 28px;
-  box-shadow: 0 10px 30px rgba(27, 42, 74, 0.2);
-  overflow: hidden;
-}
-
-.hero::before {
-  content: "❄️";
-  position: absolute;
-  top: -15px;
-  right: -10px;
-  font-size: 110px;
-  opacity: 0.12;
-  transform: rotate(15deg);
-}
-
-.hero-tag {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.hero h1 {
-  font-family: 'Zen Maru Gothic', sans-serif;
-  font-size: 1.65rem;
-  font-weight: 700;
-  line-height: 1.35;
-  margin-bottom: 8px;
-}
-
-.hero p {
-  font-size: 0.88rem;
-  opacity: 0.85;
-  font-weight: 300;
-}
-
-/* 倒數計時卡 */
-.countdown-box {
-  margin-top: 18px;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
-  border-radius: 14px;
-  padding: 10px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-.countdown-title { font-size: 0.8rem; opacity: 0.9; }
-.countdown-num { font-size: 1.15rem; font-weight: 700; color: #FFE69A; }
-
-/* 滑動導航 Bar */
-.nav-wrapper {
-  position: sticky;
-  top: 0;
-  background: rgba(248, 249, 250, 0.92);
-  backdrop-filter: blur(12px);
-  z-index: 100;
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-.nav-scroll {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  padding: 2px;
-}
-.nav-scroll::-webkit-scrollbar { display: none; }
-
-.nav-pill {
-  flex: 0 0 auto;
-  text-decoration: none;
-  padding: 7px 16px;
-  border-radius: 30px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  background: white;
-  color: var(--indigo);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  transition: all 0.2s ease;
-  border: 1px solid #E2E8F0;
-}
-.nav-pill:active { transform: scale(0.95); }
-
-/* 主要容器 */
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
-/* 快速小工具卡片 */
-.widget-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.widget-card {
-  background: white;
-  padding: 14px;
-  border-radius: 16px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-soft);
-}
-.widget-card h3 {
-  font-size: 0.85rem;
-  color: var(--navy);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.calc-input {
-  width: 100%;
-  padding: 6px 10px;
-  border: 1px solid #CBD5E1;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  text-align: right;
-}
-.calc-result {
-  font-size: 0.85rem;
-  color: var(--accent-coral);
-  font-weight: bold;
-  text-align: right;
-  margin-top: 6px;
-}
-
-/* 重要乘車提示卡 */
-.notice-card {
-  background: #FFF8E7;
-  border-left: 5px solid var(--accent-gold);
-  border-radius: 14px;
-  padding: 14px 16px;
-  margin-bottom: 22px;
-  box-shadow: var(--shadow-sm);
-}
-.notice-header {
-  font-weight: 700;
-  color: #92580C;
-  font-size: 0.92rem;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.notice-body {
-  font-size: 0.85rem;
-  color: #633C02;
-  line-height: 1.55;
-}
-
-/* 每日行程卡片 */
-.day-section {
-  margin-bottom: 28px;
-  scroll-margin-top: 75px;
-}
-
-.card {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  border: 1px solid var(--border-soft);
-  position: relative;
-}
-
-.card-header {
-  padding: 18px 20px 14px;
-  background: white;
-  border-bottom: 1px solid #F1F5F9;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.day-label {
-  font-family: 'Zen Maru Gothic', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--navy);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.date-badge {
-  font-size: 0.82rem;
-  background: var(--ice-blue);
-  color: var(--navy);
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 20px;
-}
-
-/* 住宿橫條 */
-.hotel-bar {
-  background: #F0F7FF;
-  border-left: 4px solid var(--snow-blue);
-  padding: 10px 18px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: #034870;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* 時間軸設計 */
-.timeline {
-  padding: 18px 20px;
-  position: relative;
-  list-style: none;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 31px;
-  top: 25px;
-  bottom: 25px;
-  width: 2px;
-  background: #E2E8F0;
-}
-
-.timeline-item {
-  position: relative;
-  padding-left: 38px;
-  margin-bottom: 20px;
-}
-.timeline-item:last-child { margin-bottom: 0; }
-
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: 7px;
-  top: 7px;
-  width: 10px;
-  height: 10px;
-  background: white;
-  border: 3px solid var(--navy);
-  border-radius: 50%;
-  z-index: 1;
-}
-
-.timeline-item.active::before {
-  border-color: var(--accent-coral);
-  background: var(--accent-coral);
-}
-
-.time-slot {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--text-sub);
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-
-.event-title {
-  font-size: 0.96rem;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 4px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-}
-
-.event-desc {
-  font-size: 0.86rem;
-  color: #4A5568;
-  line-height: 1.5;
-}
-
-/* 標籤小泡泡 */
-.badge {
-  display: inline-block;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-weight: 600;
-}
-.b-food { background: #FFE8E8; color: #C53030; }
-.b-car { background: #E6FFFA; color: #234E52; }
-.b-sight { background: #EBF8FF; color: #2B6CB0; }
-.b-onsen { background: #FEFCBF; color: #744210; }
-.b-shop { background: #FAF5FF; color: #553C9A; }
-
-/* 地圖導航小按鈕 */
-.btn-map {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
-  padding: 3px 8px;
-  background: #F1F5F9;
-  color: #334155;
-  text-decoration: none;
-  border-radius: 6px;
-  margin-top: 4px;
-  font-weight: 500;
-  border: 1px solid #E2E8F0;
-}
-.btn-map:hover { background: #E2E8F0; }
-
-/* 口袋名單專用樣式 */
-.extra-group {
-  margin-top: 14px;
-  border-bottom: 1px dashed #E2E8F0;
-  padding-bottom: 12px;
-}
-.extra-group:last-child { border: none; padding-bottom: 0; }
-.extra-title {
-  font-weight: 700;
-  font-size: 0.92rem;
-  color: var(--navy);
-  margin-bottom: 6px;
-}
-
-/* 打勾清單 */
-.checklist-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.86rem;
-  padding: 6px 0;
-  cursor: pointer;
-}
-.checklist-item input[type="checkbox"] {
-  width: 17px;
-  height: 17px;
-  accent-color: var(--navy);
-}
-
-/* 頁尾 */
-footer {
-  text-align: center;
-  padding: 30px 16px 20px;
-  font-size: 0.8rem;
-  color: var(--text-sub);
-}
-
-
-<div class="countdown-box">
-  <div class="countdown-title">✈️ 距離出發還有：</div>
-  <div class="countdown-num" id="daysLeft">即將啟程</div>
-</div>
-
-
-<!-- 實用隨身工具（匯率換算 + 打勾清單） -->
-<div class="widget-grid">
-  <div class="widget-card">
-    <h3>💴 日幣匯率速算</h3>
-    <input type="number" id="jpyInput" class="calc-input" placeholder="輸入日幣 ¥" oninput="calcTwd(this.value)">
-    <div class="calc-result" id="twdResult">約 NT$ 0</div>
-  </div>
-  <div class="widget-card">
-    <h3>🎒 出發必帶檢查</h3>
-    <label class="checklist-item"><input type="checkbox"> 護照正本</label>
-    <label class="checklist-item"><input type="checkbox"> 台灣駕照+日譯本</label>
-    <label class="checklist-item"><input type="checkbox"> 環球影城門票/快速通關</label>
-  </div>
-</div>
-
-<!-- 南海電鐵指南提示卡 -->
-<div class="notice-card">
-  <div class="notice-header">🚆 機場特急 Rapi:t 乘車核心重點</div>
-  <div class="notice-body">
-    ・<strong>車程速度</strong>：約 34 分鐘直達難波，每 30 分鐘一班車。<br>
-    ・<strong>購票提醒</strong>：大人票 1,490 日圓（兒童票需現場窗口購買）。<br>
-    ・<strong>乘車位置</strong>：關西機場第 1 航廈 2 樓。大廳設有清楚顏色地標：<span style="color:#C53030; font-weight:bold;">紅色為南海電鐵</span>、<span style="color:#2B6CB0; font-weight:bold;">藍色為 JR 線 (HARUKA)</span>，千萬別走錯月台！
-  </div>
-</div>
-
-<!-- DAY 1 -->
-<div class="day-section" id="d1">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">DAY 1 <span>啟程抵達・難波散策</span></div>
-      <span class="date-badge">1/19</span>
+  <div class="hero">
+    <div class="hero-tag">🎂 Birthday & Snow Trip</div>
+    <h1>京阪神自駕＆賞雪 8 日遊</h1>
+    <p>關西機場・難波・有馬溫泉・神戶・琵琶湖・天橋立・USJ</p>
+    <div class="countdown-box">
+      <span class="countdown-title">🛫 距離出發還有：</span>
+      <span class="countdown-num" id="countdown">即將啟程</span>
     </div>
-    <div class="hotel-bar">🏨 住宿：WELLSTAY 難波（難波站出站約 500 公尺）</div>
-    <ul class="timeline">
-      <li class="timeline-item">
-        <div class="time-slot">10:00</div>
-        <div class="event-title">開車家裡出發</div>
-        <div class="event-desc">前往高雄小港國際機場集合準備。</div>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">15:25 ➔ 19:10</div>
-        <div class="event-title">中華航空班機起飛 <span class="badge b-sight">飛行</span></div>
-        <div class="event-desc">抵達關西國際機場 ➔ 於機場內美食區稍作覓食晚餐。</div>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">20:30</div>
-        <div class="event-title">搭乘南海電鐵特急 Rapi:t</div>
-        <div class="event-desc">直達難波站 ➔ 徒步 500 公尺前往辦理 Check-in。</div>
-      </li>
-      <li class="timeline-item active">
-        <div class="time-slot">21:30</div>
-        <div class="event-title">黑門中川 生鮮館 <span class="badge b-shop">超市</span></div>
-        <div class="event-desc">採買當季日本草莓、新鮮水果與今晚宵夜點心。</div>
-        <a href="https://maps.google.com/?q=黑門中川+生鮮館" target="_blank" class="btn-map">📍 開啟地圖導航</a>
-      </li>
-    </ul>
   </div>
-</div>
 
-<!-- DAY 2 -->
-<div class="day-section" id="d2">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">DAY 2 <span>自駕啟程・有馬名湯・神戶</span></div>
-      <span class="date-badge">1/20</span>
+  <div class="nav-wrapper">
+    <div class="nav-scroll">
+      <a class="nav-pill" href="#d1">D1 出發難波</a>
+      <a class="nav-pill" href="#d2">D2 有馬神戶</a>
+      <a class="nav-pill" href="#d3">D3 琵琶湖賞雪</a>
+      <a class="nav-pill" href="#d4">D4 伊根宮津</a>
+      <a class="nav-pill" href="#d5">D5 天橋立USJ</a>
+      <a class="nav-pill" href="#d6">D6 環球影城</a>
+      <a class="nav-pill" href="#d7">D7 慶生備案</a>
+      <a class="nav-pill" href="#pocket">📌 口袋清單</a>
     </div>
-    <div class="hotel-bar">🏨 住宿：神戶美利堅公園東方酒店 (Kobe Meriken Park Oriental Hotel)</div>
-    <ul class="timeline">
-      <li class="timeline-item">
-        <div class="time-slot">07:00 / 08:30</div>
-        <div class="event-title">早餐時間 <span class="badge b-food">早餐</span></div>
-        <div class="event-desc">全家便利商店 元町二丁目店（買日式飯糰/咖啡）。</div>
-      </li>
-      <li class="timeline-item active">
-        <div class="time-slot">09:30</div>
-        <div class="event-title">門市取車出發 <span class="badge b-car">自駕開始</span></div>
-        <div class="event-desc">辦理保險與車輛檢查，設定導航啟程。</div>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">11:00</div>
-        <div class="event-title">午餐：PECOPECO <span class="badge b-food">午餐</span></div>
-        <div class="event-desc">隠れ家 森の小さなレストラン PECOPECO 享受森林氛圍料理。</div>
-        <a href="https://maps.google.com/?q=森の小さなレストラン+PECOPECO" target="_blank" class="btn-map">📍 導航 PECOPECO</a>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">14:00</div>
-        <div class="event-title">有馬溫泉老街悠閒散策 <span class="badge b-onsen">名湯街</span></div>
-        <div class="event-desc">
-          ・竹中肉店（可樂餅、炸牛肉串）<br>
-          ・豆清 有馬店（豆乳冰淇淋）<br>
-          ・Mitsumori 三ツ森 本店（碳酸煎餅、溫泉饅頭）<br>
-          ・有馬玩具博物館 ＆ 有馬川親水公園拍照<br>
-          ・品嚐有馬啤酒 ➔ 前往<strong>「金の湯」</strong>享受經典溫泉。
-        </div>
-        <a href="https://maps.google.com/?q=有馬溫泉+金の湯" target="_blank" class="btn-map">📍 導航 金の湯</a>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">18:00 / 19:00</div>
-        <div class="event-title">神戶臨海樂園 ＆ 丸亀製麵 <span class="badge b-food">晚餐</span></div>
-        <div class="event-desc">神戶港夜景漫步 ➔ umie 丸亀製麺晚餐 ➔ 辦理東方酒店入住。</div>
-      </li>
-    </ul>
   </div>
-</div>
 
-<!-- DAY 3 -->
-<div class="day-section" id="d3">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">DAY 3 <span>琵琶湖戲雪・名湯湯元館</span></div>
-      <span class="date-badge">1/21</span>
-    </div>
-    <div class="hotel-bar">🏨 住宿：雄琴溫泉 湯元館 (Yumotokan)</div>
-    <ul class="timeline">
-      <li class="timeline-item">
-        <div class="time-slot">07:30 / 09:00</div>
-        <div class="event-title">美利堅公園散策拍照</div>
-        <div class="event-desc">飯店早餐後在神戶港邊地標「BE KOBE」前合影留念。</div>
-      </li>
-      <li class="timeline-item active">
-        <div class="time-slot">11:30</div>
-        <div class="event-title">琵琶湖觀景台戲雪 <span class="badge b-sight">打雪仗</span></div>
-        <div class="event-desc">
-          搭高空纜車直達山頂欣賞琵琶湖全景，玩雪球、雪盆滑雪！<br>
-          午餐：觀景台景觀咖啡 <strong>Café Stand at North Terrace</strong>。
-        </div>
-        <a href="https://maps.google.com/?q=琵琶湖觀景台+Biwako+Valley" target="_blank" class="btn-map">📍 導航 琵琶湖山谷</a>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">17:30</div>
-        <div class="event-title">Check-in 湯元館溫泉名宿 <span class="badge b-onsen">會席料理</span></div>
-        <div class="event-desc">辦理入住 ➔ 享用道地會席晚餐 ➔ 享受館內多座露天風呂。</div>
-      </li>
-    </ul>
-  </div>
-</div>
+  <div class="container">
 
-<!-- DAY 4 -->
-<div class="day-section" id="d4">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">DAY 4 <span>海上列車・伊根舟屋秘境</span></div>
-      <span class="date-badge">1/22</span>
-    </div>
-    <div class="hotel-bar">🏨 住宿：京都宮津美居溫泉度假酒店 (Mercure Kyoto Miyazu)</div>
-    <ul class="timeline">
-      <li class="timeline-item">
-        <div class="time-slot">11:00</div>
-        <div class="event-title">Lawson 宮津由良店 <span class="badge b-sight">經典機位</span></div>
-        <div class="event-desc">停靠拍照！捕捉丹後鐵道海上列車如「神隱少女」般的絕美身影。</div>
-        <a href="https://maps.google.com/?q=Lawson+Miyazu+Yura" target="_blank" class="btn-map">📍 導航 Lawson宮津由良店</a>
-      </li>
-      <li class="timeline-item active">
-        <div class="time-slot">13:00</div>
-        <div class="event-title">伊根舟屋浪漫秘境 <span class="badge b-sight">必去</span></div>
-        <div class="event-desc">
-          ・搭乘海上計程車近距離賞舟屋並餵海鷗<br>
-          ・午餐：海景第一排 <strong>INE CAFE</strong> 喝咖啡看海<br>
-          ・走訪 <strong>向井酒造</strong> 購買知名女性杜氏釀製的「伊根滿開」紫米酒。
-        </div>
-        <a href="https://maps.google.com/?q=INE+CAFE" target="_blank" class="btn-map">📍 導航 INE CAFE</a>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">18:00</div>
-        <div class="event-title">海鮮名店富田屋 ＆ 超市採買 <span class="badge b-food">海鮮</span></div>
-        <div class="event-desc">宮津人氣食堂「富田屋」享用生魚片定食 ➔ 逛 Mipple (さとう宮津店) 超市補給點心。</div>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<!-- DAY 5 -->
-<div class="day-section" id="d5">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">DAY 5 <span>天橋立・自駕還車・轉進影城</span></div>
-      <span class="date-badge">1/23</span>
-    </div>
-    <div class="hotel-bar">🏨 住宿：日本環球影城港灣酒店 (Hotel Universal Port)</div>
-    <ul class="timeline">
-      <li class="timeline-item active">
-        <div class="time-slot">10:00</div>
-        <div class="event-title">天橋立 View Land <span class="badge b-sight">日本三景</span></div>
-        <div class="event-desc">
-          搭登山纜車上山 ➔ 體驗刺激好玩的 <strong>Cycle Car（空中腳踏車）</strong>！<br>
-          午餐：展望餐廳享用丼飯、熱騰騰烏龍麵與招牌布丁。
-        </div>
-        <a href="https://maps.google.com/?q=天橋立ViewLand" target="_blank" class="btn-map">📍 導航 天橋立 View Land</a>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">17:00 ➔ 19:30</div>
-        <div class="event-title">南下關西機場順利還車 <span class="badge b-car">還車</span></div>
-        <div class="event-desc">加滿油完成驗車手續，圓滿結束雪國自駕之旅。</div>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">20:00</div>
-        <div class="event-title">搭電車進大阪環球影城</div>
-        <div class="event-desc">
-          1. 關西機場搭乘 <strong>JR 關空快速</strong> 至「西九條站」<br>
-          2. 走至對面月台轉乘 <strong>JR 櫻島線</strong> 至「環球城站」<br>
-          3. 辦理港灣酒店 Check-in，逛環球城市步行街！
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<!-- DAY 6 -->
-<div class="day-section" id="d6">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">DAY 6 <span>日本環球影城 USJ 全日狂歡</span></div>
-      <span class="date-badge">1/24</span>
-    </div>
-    <div class="hotel-bar">🏨 住宿：日本環球影城港灣酒店 (連住兩晚最輕鬆)</div>
-    <ul class="timeline">
-      <li class="timeline-item">
-        <div class="time-slot">06:00 / 07:00</div>
-        <div class="event-title">早起元氣補給</div>
-        <div class="event-desc">7-Eleven Heart-in JR環球城站收票口店採買能量飲品與早餐。</div>
-      </li>
-      <li class="timeline-item active">
-        <div class="time-slot">整天瘋玩</div>
-        <div class="event-title">日本環球影城 (USJ) 過生日 🎂 <span class="badge b-sight">生日派對</span></div>
-        <div class="event-desc">
-          超級任天堂世界（瑪利歐賽車）、哈利波特魔法世界、小小兵樂園嗨玩！記得索取園區壽星貼紙！
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<!-- DAY 7 -->
-<div class="day-section" id="d7">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">DAY 7 <span>咖啡香・心齋橋購物・生日大餐</span></div>
-      <span class="date-badge">1/25</span>
-    </div>
-    <div class="hotel-bar">🏨 住宿：大阪市區飯店</div>
-    <ul class="timeline">
-      <li class="timeline-item">
-        <div class="time-slot">08:00</div>
-        <div class="event-title">TULLY'S COFFEE 晨光咖啡</div>
-        <div class="event-desc">The Park Front Hotel 店享用現烤吐司與拿鐵。</div>
-      </li>
-      <li class="timeline-item active">
-        <div class="time-slot">下午 / 晚上</div>
-        <div class="event-title">心齋橋、道頓堀大採購 <span class="badge b-shop">逛街</span></div>
-        <div class="event-desc">
-          藥妝店、服飾店採買 ➔ 前往 <strong>AEON FOOD STYLE 東心齋橋店</strong>（24小時營業生鮮超市）採買伴手禮與零食。
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<!-- DAY 8 -->
-<div class="day-section" id="d8">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">DAY 8 <span>老舖咖啡・最後衝刺・平安返台</span></div>
-      <span class="date-badge">1/26</span>
-    </div>
-    <ul class="timeline">
-      <li class="timeline-item">
-        <div class="time-slot">早上</div>
-        <div class="event-title">丸福珈琲店 千日前本店 <span class="badge b-food">昭和名店</span></div>
-        <div class="event-desc">品嚐極致濃郁的老舖滴漏黑咖啡與經典銅鑼燒/厚鬆餅。</div>
-      </li>
-      <li class="timeline-item">
-        <div class="time-slot">中午 ➔ 下午</div>
-        <div class="event-title">搭乘南海電鐵特急前往機場</div>
-        <div class="event-desc">關西機場免稅店掃貨 ➔ 搭機飛返高雄小港機場，滿載美好回憶回家！</div>
-      </li>
-    </ul>
-  </div>
-</div>
-
-<!-- 備案、美食與周邊口袋名單 -->
-<div class="day-section" id="extra">
-  <div class="card">
-    <div class="card-header">
-      <div class="day-label">🌟 <span>備案景點、租車與美食庫</span></div>
-    </div>
-    <div class="card-body" style="padding: 18px 20px;">
-      
-      <div class="extra-group">
-        <div class="extra-title">🚗 市區重要租車備案點</div>
-        <p class="event-desc">・<strong>離道頓堀最近</strong>：Toyota Rent A Car 難波總站店（トヨタレンタカーなんばターミナル店）<br>
-        ・<strong>離環球影城最近</strong>：Toyota Rent a car 野田阪神站前店（トヨタレンタカー野田阪神駅前店）</p>
+    <div class="widget-grid">
+      <div class="widget-card">
+        <h3>💴 日幣匯率換算</h3>
+        <input type="number" id="jpyInput" class="calc-input" placeholder="日幣 JPY" value="2000">
+        <div class="calc-result" id="twdResult">約 NT$ 0</div>
       </div>
-
-      <div class="extra-group">
-        <div class="extra-title">🛒 必逛超市補給站</div>
-        <p class="event-desc">・<strong>心齋橋 24H 超市</strong>：AEON FOOD STYLE 東心齋橋店（隨時買泡麵、新鮮水果）。<br>
-        ・<strong>琵琶湖周邊平價量販</strong>：LAMU (ラ・ムー) 雄琴店（住湯元館前補給好去處）。</p>
+      <div class="widget-card">
+        <h3>🎒 出發必帶檢查</h3>
+        <label class="checklist-item"><input type="checkbox"> 護照正本</label>
+        <label class="checklist-item"><input type="checkbox"> 台灣駕照+日譯本</label>
+        <label class="checklist-item"><input type="checkbox"> 環球影城門票/快速通關</label>
       </div>
+    </div>
 
-      <div class="extra-group">
-        <div class="extra-title">🍜 口袋美食名單</div>
-        <p class="event-desc">・<strong>拉麵</strong>：らぁ麺 はやし田（極鮮醬油湯頭） 或 龜王拉麵（濃郁豚骨叉燒）。<br>
-        ・<strong>神戶晚餐</strong>：神戶牡蠣酒吧 The Oyster Bar Kobe（精緻生蠔與海味）。<br>
-        ・<strong>天橋立晚餐</strong>：二反田（冬季美味螃蟹全餐套餐）。<br>
-        ・<strong>京都迴轉壽司</strong>：MoriMori壽司 四條河原町店（金澤知名新鮮海產）。</p>
+    <div class="notice-card">
+      <div class="notice-header">🚆 機場特急 Rapi:t 乘車核心重點</div>
+      <div class="notice-body">
+        • <b>車程速度</b>：約 34 分鐘直達難波，每 30 分鐘一班車。<br>
+        • <b>購票提醒</b>：大人票 1,490 日圓（兒童票需現場窗口購買）。<br>
+        • <b>乘車位置</b>：關西機場第 1 航廈 2 樓。大廳設有清楚顏色指標：<b style="color:#C53030;">紅色為南海電鐵</b>、<b style="color:#2B6CB0;">藍色為 JR 線 (HARUKA)</b>，千萬別走錯月台！
       </div>
+    </div>
 
-      <div class="extra-group">
-        <div class="extra-title">🌲 備用景點與文創逛街</div>
-        <p class="event-desc">・<strong>水杉林蔭大道 (メタセコイア並木)</strong>：雪季如童話，可順吃「なみ木食堂 ツバメ」。<br>
-        ・<strong>京都河原町文創</strong>：SOU・SOU、無印良品 京都BAL店、UNIQLO 京都河原町店。<br>
-        ・<strong>文化景點</strong>：山崎蒸餾所、水無瀬神宮。</p>
+    <!-- Day 1 -->
+    <div class="day-section" id="d1">
+      <div class="card">
+        <div class="card-header">
+          <div class="day-label">DAY 1 啟程抵達，難波散策</div>
+          <div class="date-badge">1/19</div>
+        </div>
+        <div class="hotel-bar">🏨 住宿：WELLSTAY 難波（難波站出站約 500 公尺）</div>
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="time-slot">10:00</div>
+            <div class="event-title">開車自家出發</div>
+            <div class="event-desc">前往高雄小港國際機場集合準備。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">15:25 - 19:10</div>
+            <div class="event-title">中華航空班機 起飛 ➔ 抵達關西機場</div>
+            <div class="event-desc">出關領行李、完成入境手續。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">19:30</div>
+            <div class="event-title"><span class="badge b-food">美食</span> 機場覓食晚餐</div>
+            <div class="event-desc">於關西機場內快速享用日式晚餐。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">20:15</div>
+            <div class="event-title"><span class="badge b-sight">交通</span> 搭乘南海電鐵特急 Rapi:t 直達難波站</div>
+            <div class="event-desc">第1航廈2F紅色標示搭乘，約34分鐘直達難波。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">21:15</div>
+            <div class="event-title">Check-in WELLSTAY 難波</div>
+            <div class="event-desc">出站步行約500公尺抵達飯店放行李。
+              <br><a class="btn-map" href="https://maps.google.com/?q=WELLSTAY難波" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">21:45</div>
+            <div class="event-title"><span class="badge b-shop">採買</span> 黑門中川生鮮館</div>
+            <div class="event-desc">採買當季新鮮水果、草莓、飲品與消夜。
+              <br><a class="btn-map" href="https://maps.google.com/?q=黑門中川+生鮮館" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+        </ul>
       </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-section" id="d2">
+      <div class="card">
+        <div class="card-header">
+          <div class="day-label">DAY 2 取車出發，有馬溫泉＆神戶港夜景</div>
+          <div class="date-badge">1/20</div>
+        </div>
+        <div class="hotel-bar">🏨 住宿：神戶美利堅公園東方酒店 (Kobe Meriken Park Oriental Hotel)</div>
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="time-slot">07:00 - 08:30</div>
+            <div class="event-title"><span class="badge b-food">早餐</span> 全家便利商店 元町二丁目店</div>
+            <div class="event-desc">買美味日式飯糰與熱咖啡。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">09:30</div>
+            <div class="event-title"><span class="badge b-car">自駕</span> 門市取車，開啟自駕旅程</div>
+            <div class="event-desc">驗車、設定導航與雪胎/ETC確認。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">11:00</div>
+            <div class="event-title"><span class="badge b-food">午餐</span> 隠れ家 森の小さなレストラン PECOPECO</div>
+            <div class="event-desc">森林系溫馨隱藏版料理。
+              <br><a class="btn-map" href="https://maps.google.com/?q=隠れ家+森の小さなレストラン+PECOPECO" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">14:00</div>
+            <div class="event-title"><span class="badge b-onsen">景點</span> 有馬溫泉老街吃喝散策 ＆ 金之湯泡湯</div>
+            <div class="event-desc">
+              • 必吃：竹中肉店 (炸牛肉餅)、豆清 有馬店、三ツ森 本店 (碳酸煎餅、溫泉饅頭)、有馬啤酒<br>
+              • 景點：有馬玩具博物館、有馬川親水公園<br>
+              • 體驗：金の湯（招牌赤褐色金泉舒壓泡湯）
+              <br><a class="btn-map" href="https://maps.google.com/?q=有馬溫泉+金の湯" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">18:00</div>
+            <div class="event-title"><span class="badge b-sight">景點</span> 神戶臨海樂園 (Harborland)</div>
+            <div class="event-desc">欣賞神戶港灣無敵浪漫夜景與摩天輪燈光。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">19:00</div>
+            <div class="event-title"><span class="badge b-food">晚餐</span> 丸亀製麺 神戸ハーバーランド umie</div>
+            <div class="event-desc">大啖熱騰騰讚岐烏龍麵與炸物天婦羅。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">20:30</div>
+            <div class="event-title">Check-in 神戶美利堅公園東方酒店</div>
+            <div class="event-desc">經典郵輪造型海景飯店，房間陽台即可眺望港灣夜景。
+              <br><a class="btn-map" href="https://maps.google.com/?q=神戶美利堅公園東方酒店" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="day-section" id="d3">
+      <div class="card">
+        <div class="card-header">
+          <div class="day-label">DAY 3 琵琶湖雪白絕景，極上溫泉饗宴</div>
+          <div class="date-badge">1/21</div>
+        </div>
+        <div class="hotel-bar">🏨 住宿：雄琴溫泉 湯元館 (Yumotokan)</div>
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="time-slot">07:30 - 09:00</div>
+            <div class="event-title"><span class="badge b-food">早餐</span> 飯店早餐 ＆ 美利堅公園晨間散策拍照</div>
+            <div class="event-desc">與 BE KOBE 巨型地標及神戶港塔合照。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">11:30</div>
+            <div class="event-title"><span class="badge b-sight">賞雪</span> 琵琶湖觀景台 (Biwako Valley) ＆ 雪上樂園</div>
+            <div class="event-desc">
+              • 搭乘高速纜車直達山頂，眺望整面琵琶湖銀白雪景<br>
+              • 玩雪盆、打雪仗、丟雪球<br>
+              • <b>午餐</b>：Café Stand at North Terrace（絕景觀景台景觀咖啡廳）
+              <br><a class="btn-map" href="https://maps.google.com/?q=琵琶湖觀景台" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">17:30</div>
+            <div class="event-title">Check-in 溫泉飯店 湯元館</div>
+            <div class="event-desc">滋賀知名湖畔溫泉旅館。
+              <br><a class="btn-map" href="https://maps.google.com/?q=雄琴溫泉+湯元館" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">18:00</div>
+            <div class="event-title"><span class="badge b-onsen">晚餐</span> 精緻會席料理 ＆ 露天溫泉</div>
+            <div class="event-desc">享用飯店極上晚餐，頂樓露天風呂眺望琵琶湖夜空泡湯放鬆。</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="day-section" id="d4">
+      <div class="card">
+        <div class="card-header">
+          <div class="day-label">DAY 4 海上列車、伊根舟屋海鷗與美酒</div>
+          <div class="date-badge">1/22</div>
+        </div>
+        <div class="hotel-bar">🏨 住宿：京都宮津美居溫泉度假酒店 (Mercure Kyoto Miyazu)</div>
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="time-slot">07:30</div>
+            <div class="event-title"><span class="badge b-food">早餐</span> 飯店早餐後退房出發</div>
+            <div class="event-desc">開車前往日本海側丹後地區。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">11:00</div>
+            <div class="event-title"><span class="badge b-sight">打卡</span> Lawson 宮津由良店 (ローソン 宮津由良店)</div>
+            <div class="event-desc">IG爆紅拍照點！在超商前捕捉丹後鐵道海上列車通過的宮川橋梁絕景。
+              <br><a class="btn-map" href="https://maps.google.com/?q=ローソン+宮津由良店" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">13:00</div>
+            <div class="event-title"><span class="badge b-sight">景點</span> 伊根舟屋 ＆ 海上計程車餵海鷗</div>
+            <div class="event-desc">
+              • 搭乘海上計程車出海，近距離體驗舟屋水上聚落風貌，體驗餵食海鷗<br>
+              • <b>午餐</b>：INE CAFE（臨海落地窗打卡咖啡廳）<br>
+              • <b>探店</b>：向井酒造（必買女性杜氏釀造的特殊粉紅清酒「伊根滿開」）
+              <br><a class="btn-map" href="https://maps.google.com/?q=伊根+INE+CAFE" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">18:00</div>
+            <div class="event-title"><span class="badge b-food">晚餐</span> 宮津在地老食堂「富田屋」</div>
+            <div class="event-desc">宮津車站前高CP值海鮮名店，品嚐當季鮮美刺身、炸海鮮。
+              <br><a class="btn-map" href="https://maps.google.com/?q=富田屋+宮津" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">19:30</div>
+            <div class="event-title"><span class="badge b-shop">超市</span> Satō Miyazu (Mipple) さとう宮津店</div>
+            <div class="event-desc">大型複合商場超市採買當地特產與宵夜（營業至 21:30）。
+              <br><a class="btn-map" href="https://maps.google.com/?q=さとう宮津店+ミップル" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">20:30</div>
+            <div class="event-title">Check-in 京都宮津美居溫泉度假酒店</div>
+            <div class="event-desc">享受露天大浴場與休閒設施。</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Day 5 -->
+    <div class="day-section" id="d5">
+      <div class="card">
+        <div class="card-header">
+          <div class="day-label">DAY 5 日本三景天橋立，還車轉進大阪環球</div>
+          <div class="date-badge">1/23</div>
+        </div>
+        <div class="hotel-bar">🏨 住宿：環球影城港灣酒店 (Hotel Kintetsu / Port Universal)</div>
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="time-slot">08:00 - 10:00</div>
+            <div class="event-title"><span class="badge b-food">早餐</span> 飯店早餐退房 ➔ 天橋立 View Land</div>
+            <div class="event-desc">坐登山吊椅/纜車登上展望台，體驗傳統「股のぞき」（彎腰從胯下看飛龍在天絕景）。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">11:00</div>
+            <div class="event-title"><span class="badge b-sight">遊樂</span> 空中腳踏車 (Cycle Car) ＆ 景觀中餐</div>
+            <div class="event-desc">
+              • 踩空中腳踏車俯瞰沙洲松林全景<br>
+              • <b>午餐</b>：天橋立觀景台餐廳（享用熱呼呼丼飯、烏龍麵與招牌布丁）
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">17:00 - 19:30</div>
+            <div class="event-title"><span class="badge b-car">自駕</span> 開車返回關西機場門市還車</div>
+            <div class="event-desc">19:30 前完成加滿油手續與還車點交。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">20:00</div>
+            <div class="event-title"><span class="badge b-sight">交通</span> 關西機場搭乘 JR 前往環球影城</div>
+            <div class="event-desc">
+              1. 關西機場搭乘 <b>JR關空快速</b>（往大阪/京橋方向）至 <b>「西九條站」</b>（約 55~60 分鐘）<br>
+              2. 西九條站走到對側月台（第2、3月台）轉乘 <b>JR櫻島線（夢咲線）</b> 直達 <b>《環球城站》</b>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">21:30</div>
+            <div class="event-title">Check-in 環球影城港灣酒店 ＆ 步行街散策</div>
+            <div class="event-desc">逛大阪環球城市步行街 (Universal CityWalk)，感受歡樂氣氛備戰明日 USJ！</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Day 6 -->
+    <div class="day-section" id="d6">
+      <div class="card">
+        <div class="card-header">
+          <div class="day-label">DAY 6 日本環球影城全日狂歡 (USJ)</div>
+          <div class="date-badge">1/24</div>
+        </div>
+        <div class="hotel-bar">🏨 住宿：環球影城港灣酒店</div>
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="time-slot">06:00 - 07:00</div>
+            <div class="event-title"><span class="badge b-food">早餐</span> 7-Eleven Heart-in JR環球城站收票口店</div>
+            <div class="event-desc">快速補充能量，準備提早前往園區排隊入園！</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">07:30 - 全日</div>
+            <div class="event-title"><span class="badge b-sight">遊樂</span> 日本環球影城 (Universal Studios Japan) 一日暢玩</div>
+            <div class="event-desc">超級任天堂世界（瑪利歐賽車、能量手環敲磚塊）、哈利波特的魔法世界、小小兵樂園狂歡！</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">20:30</div>
+            <div class="event-title">返回飯店休息泡澡</div>
+            <div class="event-desc">環球影城港灣酒店，結束充實刺激的遊樂園之日。</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Day 7 & 8 -->
+    <div class="day-section" id="d7">
+      <div class="card">
+        <div class="card-header">
+          <div class="day-label">DAY 7 - 8 慶生時光、市區採購與滿載歸國</div>
+          <div class="date-badge">1/25 - 1/26</div>
+        </div>
+        <div class="hotel-bar">🏨 住宿：森津屋旅館 或 城崎温泉 旅館 つばき乃（或市區星級飯店）</div>
+        <ul class="timeline">
+          <li class="timeline-item">
+            <div class="time-slot">08:00</div>
+            <div class="event-title"><span class="badge b-food">早餐</span> Tully's Coffee 咖啡店 (Park Front 門市)</div>
+            <div class="event-desc">享用香濃熱拿鐵與現烤厚片土司。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">白天</div>
+            <div class="event-title"><span class="badge b-food">午餐</span> 茶房 夢屋 或 城崎 TOKIWA GARDEN</div>
+            <div class="event-desc">享受愜意悠閒的午後咖啡時光。</div>
+          </li>
+          <li class="timeline-item">
+            <div class="time-slot">晚上</div>
+            <div class="event-title"><span class="badge b-food">生日大餐</span> 鮮魚の海中苑 本店（日本海極上螃蟹海鮮）</div>
+            <div class="event-desc">品嚐極品鮮美松葉蟹與產地直送刺身，慶祝生日幸福之夜！</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 口袋名單卡片 -->
+    <div class="day-section" id="pocket">
+      <div class="card">
+        <div class="card-header">
+          <div class="day-label">📌 備案景點、租車與必吃口袋名單</div>
+        </div>
+        <div style="padding: 16px 20px;">
+          
+          <div class="extra-group">
+            <div class="extra-title">🛒 24小時便利超市與大賣場</div>
+            <div class="event-desc">
+              • <b>道頓堀 24H 超市</b>：AEON FOOD STYLE 東心齋橋店<br>
+              • <b>琵琶湖超便宜量販店</b>：LAMU ラ・ムー 雄琴店<br>
+              • <b>天橋立/宮津</b>：さとう宮津店（Mipple複合商場）
+            </div>
+          </div>
+
+          <div class="extra-group">
+            <div class="extra-title">🚗 市區便利取還車據點 (Toyota Rent a Car)</div>
+            <div class="event-desc">
+              • <b>離環球最近</b>：トヨタレンタカー 野田阪神駅前店<br>
+              • <b>離道頓堀/難波最近</b>：トヨタレンタカー なんばターミナル店
+            </div>
+          </div>
+
+          <div class="extra-group">
+            <div class="extra-title">🍜 隱藏版美味名單</div>
+            <div class="event-desc">
+              • <b>拉麵</b>：らぁ麺 はやし田、龜王拉麵<br>
+              • <b>早餐推薦</b>：難波 MAZE CAFE NAMBA、老舖丸福珈琲店 千日前本店、美月黑門市場<br>
+              • <b>螃蟹大餐</b>：二反田（香住蟹/松葉蟹套餐）<br>
+              • <b>神戶晚餐</b>：神戶牡蠣酒吧 The Oyster Bar Kobe
+            </div>
+          </div>
+
+          <div class="extra-group">
+            <div class="extra-title">⛩️ 絕景與文青逛街採買</div>
+            <div class="event-desc">
+              • <b>水杉樹林大道</b>：Avenue of Metasequoias (メタセコイア並木)，午餐推薦「並木食堂 燕 (ツバメ)」<br>
+              • <b>京都河原町逛街</b>：無印良品 京都BAL店、UNIQLO 京都河原町店、SOU・SOU 贈禮選品店、壽司吃「MoriMori 壽司 四條河原町店」<br>
+              • <b>名酒與神社</b>：三得利山崎蒸餾所、水無瀬神宮
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>✈️ 祝京阪神自駕賞雪＆生日快樂！旅途平安順心 ❄️</p>
+  </footer>
+
+  <script>
+    // 匯率換算器
+    const jpyInput = document.getElementById('jpyInput');
+    const twdResult = document.getElementById('twdResult');
+    const RATE = 0.215; // 參考匯率
+    function updateCalc() {
+      const jpy = parseFloat(jpyInput.value) || 0;
+      twdResult.innerText = `約 NT$ ${Math.round(jpy * RATE).toLocaleString()}`;
+    }
+    jpyInput.addEventListener('input', updateCalc);
+    updateCalc();
+
+    // 倒數計時器 (預設 1/19 10:00 出發)
+    function updateCountdown() {
+      const now = new Date();
+      const targetYear = (now.getMonth() === 0 && now.getDate() <= 19) ? now.getFullYear() : now.getFullYear() + 1;
+      const target = new Date(`${targetYear}/01/19 10:00:00`);
+      const diff = target - now;
+      if (diff <= 0) {
+        document.getElementById('countdown').innerText = '旅途中・祝旅途愉快！';
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      document.getElementById('countdown').innerText = `${days} 天 ${hours} 小時`;
+    }
+    updateCountdown();
+  </script>
+</body>
+</html>
