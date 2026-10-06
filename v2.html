@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>京阪神自駕＆雪國慶生 8 日手冊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1E2D4A;
+      --primary-light: #2D4059;
+      --accent: #E06D53;
+      --accent-gold: #D4A373;
+      --bg: #F4F6F9;
+      --card-bg: #FFFFFF;
+      --text: #2C3539;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --snow-blue: #EBF3FA;
+      --shadow-sm: 0 2px 6px rgba(30, 45, 74, 0.05);
+      --shadow-md: 0 8px 24px rgba(30, 45, 74, 0.08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans TC', sans-serif;
+      line-height: 1.6;
+      padding-bottom: 90px;
+    }
+
+    /* 頂部封面 */
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, #131E33 0%, #1E2D4A 60%, #34495E 100%);
+      color: white;
+      padding: 40px 20px 30px;
+      border-radius: 0 0 32px 32px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(19, 30, 51, 0.2);
+    }
+    .hero::after {
+      content: "❄️";
+      position: absolute;
+      top: -10px;
+      right: 10px;
+      font-size: 110px;
+      opacity: 0.12;
+      transform: rotate(15deg);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(10px);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .hero h1 {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .hero p {
+      font-size: 0.86rem;
+      opacity: 0.85;
+      font-weight: 400;
+    }
+    .countdown-card {
+      margin-top: 18px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .countdown-text { font-size: 0.82rem; opacity: 0.9; }
+    .countdown-val { font-size: 1.18rem; font-weight: 700; color: #FFE28A; }
+
+    /* 滑動導航列 */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      background: rgba(244, 246, 249, 0.94);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .nav-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .nav-scroll::-webkit-scrollbar { display: none; }
+    .nav-btn {
+      flex: 0 0 auto;
+      text-decoration: none;
+      padding: 7px 15px;
+      border-radius: 25px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .nav-btn:active { transform: scale(0.95); background: var(--snow-blue); }
+
+    /* 內容容器 */
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* 航班卡片 */
+    .flight-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+    .flight-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .flight-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .plane-tag {
+      font-size: 0.72rem;
+      background: #EFF6FF;
+      color: #1D4ED8;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .flight-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #F8FAFC;
+    }
+    .flight-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .flight-city { font-weight: 700; font-size: 1.05rem; color: var(--primary); }
+    .flight-port { font-size: 0.75rem; color: var(--text-muted); }
+    .flight-middle { text-align: center; flex: 1; padding: 0 10px; }
+    .flight-no { font-size: 0.78rem; font-weight: 700; color: #DC2626; }
+    .flight-arrow { font-size: 0.8rem; color: #94A3B8; margin: 2px 0; }
+    .flight-aircraft { font-size: 0.7rem; color: var(--text-muted); }
+
+    /* 小工具網格 */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .tool-box {
+      background: white;
+      padding: 14px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+    .tool-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .calc-input {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: right;
+    }
+    .calc-out {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 700;
+      text-align: right;
+      margin-top: 6px;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    .check-item input { accent-color: var(--primary); }
+
+    /* 乘車注意警告條 */
+    .alert-card {
+      background: #FFFBF0;
+      border-left: 5px solid var(--accent-gold);
+      border-radius: 14px;
+      padding: 13px 16px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-sm);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .alert-title {
+      font-weight: 700;
+      color: #92580C;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 每日行程卡片 */
+    .day-block {
+      margin-bottom: 26px;
+      scroll-margin-top: 75px;
+    }
+    .day-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .day-head {
+      padding: 16px 18px;
+      background: white;
+      border-bottom: 1px solid #F1F5F9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .day-title {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--primary);
+    }
+    .day-date {
+      font-size: 0.8rem;
+      background: var(--snow-blue);
+      color: var(--primary);
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .hotel-strip {
+      background: #F0F7FF;
+      border-left: 4px solid #93C5FD;
+      padding: 9px 18px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #034870;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 時間軸 */
+    .timeline {
+      padding: 18px 18px 10px;
+      list-style: none;
+      position: relative;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 28px;
+      top: 25px;
+      bottom: 25px;
+      width: 2px;
+      background: #E2E8F0;
+    }
+    .timeline-node {
+      position: relative;
+      padding-left: 32px;
+      margin-bottom: 20px;
+    }
+    .timeline-node:last-child { margin-bottom: 8px; }
+    .timeline-node::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      background: white;
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .time-txt {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .event-txt {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .desc-txt {
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-weight: 600;
+    }
+    .b-eat { background: #FEE2E2; color: #DC2626; }
+    .b-car { background: #CCFBF1; color: #0F766E; }
+    .b-see { background: #E0E7FF; color: #4338CA; }
+    .b-spa { background: #FEF3C7; color: #92400E; }
+    .b-shop { background: #F3E8FF; color: #7E22CE; }
+
+    .action-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.74rem;
+      padding: 4px 10px;
+      background: #F1F5F9;
+      color: #334155;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      border: 1px solid #CBD5E1;
+      cursor: pointer;
+    }
+    .btn-action:hover { background: #E2E8F0; }
+
+    /* 口袋清單群組 */
+    .pocket-section {
+      padding: 16px 18px;
+    }
+    .pocket-card {
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .pocket-card:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .pocket-head {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 16px 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.84rem;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部封面 -->
+  <div class="hero">
+    <div class="hero-badge">🎂 Birthday & Snow Road Trip</div>
+    <h1>京阪神自駕＆賞雪 8 日遊</h1>
+    <p>關西機場 ➔ 難波 ➔ 有馬溫泉 ➔ 神戶 ➔ 琵琶湖 ➔ 天橋立 ➔ USJ ➔ 大阪購物</p>
+    <div class="countdown-card">
+      <span class="countdown-text">🛫 華航 CI176 出發倒數：</span>
+      <span class="countdown-val" id="countdownVal">計算中...</span>
+    </div>
+  </div>
+
+  <!-- 滑動錨點導覽 -->
+  <div class="sticky-nav">
+    <div class="nav-scroll">
+      <a class="nav-btn" href="#flight">✈️ 航班</a>
+      <a class="nav-btn" href="#d1">D1 出發難波</a>
+      <a class="nav-btn" href="#d2">D2 有馬神戶</a>
+      <a class="nav-btn" href="#d3">D3 琵琶湖雪</a>
+      <a class="nav-btn" href="#d4">D4 伊根宮津</a>
+      <a class="nav-btn" href="#d5">D5 天橋立USJ</a>
+      <a class="nav-btn" href="#d6">D6 環球影城</a>
+      <a class="nav-btn" href="#d7">D7 慶生螃蟹</a>
+      <a class="nav-btn" href="#d8">D8 滿載歸國</a>
+      <a class="nav-btn" href="#pocket">📌 口袋備案</a>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- 航班資訊 -->
+    <div class="flight-card" id="flight">
+      <div class="flight-header">
+        <span class="flight-title">✈️ 中華航空 (China Airlines) 訂位詳細</span>
+        <span class="plane-tag">A321neo 新機</span>
+      </div>
+      <div class="flight-item">
+        <div>
+          <div class="flight-city">高雄 KHH</div>
+          <div class="flight-port">小港國際機場</div>
+        </div>
+        <div class="flight-middle">
+          <div class="flight-no">去程 CI176 (1/19 週二)</div>
+          <div class="flight-arrow">15:25 ➔ 19:10</div>
+          <div class="flight-aircraft">經濟艙 H / 飛行 2h 45m</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="flight-city">大阪 KIX</div>
+          <div class="flight-port">關西機場 T1</div>
+        </div>
+      </div>
+      <div class="flight-item">
+        <div>
+          <div class="flight-city">大阪 KIX</div>
+          <div class="flight-port">關西機場 T1</div>
+        </div>
+        <div class="flight-middle">
+          <div class="flight-no">回程 CI177 (1/26 週二)</div>
+          <div class="flight-arrow">20:10 ➔ 22:45</div>
+          <div class="flight-aircraft">晚班機！把握最後一天購物</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="flight-city">高雄 KHH</div>
+          <div class="flight-port">小港國際機場</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 小工具組 -->
+    <div class="tools-grid">
+      <div class="tool-box">
+        <div class="tool-title">💴 日幣試算</div>
+        <input type="number" id="jpyInput" class="calc-input" placeholder="日幣 JPY" value="2000">
+        <div class="calc-out" id="twdOut">約 NT$ 0</div>
+      </div>
+      <div class="tool-box">
+        <div class="tool-title">🎒 必備證件</div>
+        <label class="check-item"><input type="checkbox"> 護照正本</label>
+        <label class="check-item"><input type="checkbox"> 台灣駕照+日文譯本</label>
+        <label class="check-item"><input type="checkbox"> 環球門票+快速通關</label>
+      </div>
+    </div>
+
+    <!-- 警示卡片 -->
+    <div class="alert-card">
+      <div class="alert-title">🚆 南海電鐵特急 Rapi:t 注意事項</div>
+      • <b>直達速度</b>：僅需 34 分鐘直達難波，每半小時一班。<br>
+      • <b>乘車位置</b>：關西機場第 1 航廈 2 樓。紅色為南海線、藍色為 JR 線，請認準<b>紅色標示</b>進站！<br>
+      • <b>票價提醒</b>：大人 1,490 日圓（兒童票請至現場窗口購買）。
+    </div>
+
+    <!-- DAY 1 -->
+    <div class="day-block" id="d1">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">DAY 1 出發啟程 ➔ 難波散策</div>
+          <div class="day-date">1/19 (二)</div>
+        </div>
+        <div class="hotel-strip">🏨 住宿：WELLSTAY 難波（難波站出站步行約 500 公尺）</div>
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">10:00</div>
+            <div class="event-txt">開車自家出發</div>
+            <div class="desc-txt">前往高雄小港機場，預計 12:30~13:00 抵達辦理報到手續。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">15:25 - 19:10</div>
+            <div class="event-txt">CI176 高雄 ➔ 關西機場 T1</div>
+            <div class="desc-txt">入境出關、領取行李與嬰幼兒推車。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">19:30</div>
+            <div class="event-txt"><span class="badge b-eat">晚餐</span> 關西機場覓食</div>
+            <div class="desc-txt">機場內美食街快速享用拉麵或丼飯。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">20:15</div>
+            <div class="event-txt"><span class="badge b-see">交通</span> 搭乘南海電鐵特急 Rapi:t</div>
+            <div class="desc-txt">直達難波站（車程約 34 分鐘）。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">21:15</div>
+            <div class="event-txt">Check-in WELLSTAY 難波</div>
+            <div class="desc-txt">出站步行 500 公尺抵達飯店放行李休整。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=WELLSTAY難波" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">21:45</div>
+            <div class="event-txt"><span class="badge b-shop">採買</span> 黑門中川 生鮮館</div>
+            <div class="desc-txt">買當季大草莓、新鮮水果、飲料與消夜。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=黑門中川+生鮮館" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-block" id="d2">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">DAY 2 取車出發 ➔ 有馬老街 ➔ 神戶港夜景</div>
+          <div class="day-date">1/20 (三)</div>
+        </div>
+        <div class="hotel-strip">🏨 住宿：神戶美利堅公園東方酒店 (Meriken Park Oriental Hotel)</div>
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">07:00 - 08:30</div>
+            <div class="event-txt"><span class="badge b-eat">早餐</span> 全家 元町二丁目店</div>
+            <div class="desc-txt">日式三角飯糰、炸雞排與熱咖啡。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">09:30</div>
+            <div class="event-txt"><span class="badge b-car">自駕</span> 門市取車出發</div>
+            <div class="desc-txt">驗車、雪胎確認、安裝安全座椅與導航設定。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">11:00</div>
+            <div class="event-txt"><span class="badge b-eat">午餐</span> PECOPECO 森林小餐館</div>
+            <div class="desc-txt">隠れ家 森の小さなレストラン PECOPECO，溫馨療癒系料理。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=森の小さなレストラン+PECOPECO" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">14:00</div>
+            <div class="event-txt"><span class="badge b-spa">溫泉</span> 有馬溫泉老街 ＆ 金之湯</div>
+            <div class="desc-txt">
+              • 必吃：竹中肉店炸牛肉餅、豆清豆腐霜淇淋、三ツ森本店碳酸煎餅與溫泉饅頭<br>
+              • 景點：有馬玩具博物館、有馬川親水公園<br>
+              • 泡湯：體驗經典「金の湯」赤褐色鐵泉
+            </div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=有馬溫泉+金の湯" target="_blank">📍 金の湯地圖</a>
+              <button class="btn-action" onclick="copyTxt('52 233 462*52')">📌 複製 MapCode</button>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">18:00 - 19:00</div>
+            <div class="event-txt"><span class="badge b-see">景點</span> 神戶臨海樂園 umie ＆ 丸龜製麵</div>
+            <div class="desc-txt">賞神戶港絕美摩天輪與港灣夜景，晚餐吃熱騰騰丸龜讚岐烏龍麵。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=神戶臨海樂園+umie" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">20:30</div>
+            <div class="event-txt">Check-in 神戶美利堅公園東方酒店</div>
+            <div class="desc-txt">郵輪造型五星飯店，陽台直面海景與神戶塔。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=神戶美利堅公園東方酒店" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-block" id="d3">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">DAY 3 琵琶湖山頂玩雪 ➔ 雄琴溫泉會席</div>
+          <div class="day-date">1/21 (四)</div>
+        </div>
+        <div class="hotel-strip">🏨 住宿：滋賀雄琴溫泉 湯元館 (Yumotokan)</div>
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">07:30 - 09:00</div>
+            <div class="event-txt"><span class="badge b-see">拍照</span> 飯店早餐 ＆ 美利堅公園晨間漫步</div>
+            <div class="desc-txt">與經典地標「BE KOBE」拍大合照。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">11:30</div>
+            <div class="event-txt"><span class="badge b-see">玩雪</span> 琵琶湖山谷觀景台 (Biwako Valley)</div>
+            <div class="desc-txt">
+              • 搭全日本最快登山纜車直達山頂，賞琵琶湖銀白雪景<br>
+              • 玩雪盆、丟雪球<br>
+              • <b>午餐</b>：Café Stand at North Terrace 絕景咖啡廳
+            </div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=琵琶湖觀景台" target="_blank">📍 Google 地圖</a>
+              <button class="btn-action" onclick="copyTxt('236 767 763*22')">📌 複製 MapCode</button>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">17:30</div>
+            <div class="event-txt">Check-in 湯元館 ＆ 會席料理晚餐</div>
+            <div class="desc-txt">享受頂級露天風呂眺望琵琶湖夜空，品嚐精緻溫泉會席料理。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=雄琴溫泉+湯元館" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-block" id="d4">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">DAY 4 海上列車 ➔ 伊根舟屋 ➔ 宮津美居</div>
+          <div class="day-date">1/22 (五)</div>
+        </div>
+        <div class="hotel-strip">🏨 住宿：京都宮津美居溫泉度假酒店 (Mercure Kyoto Miyazu)</div>
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">07:30</div>
+            <div class="event-txt">飯店早餐後出發往日本海丹後地區</div>
+            <div class="desc-txt">沿途欣賞雪國自然風光。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">11:00</div>
+            <div class="event-txt"><span class="badge b-see">打卡</span> Lawson 宮津由良店 (海上列車)</div>
+            <div class="desc-txt">拍丹後鐵道海上單節電車通過宮川橋梁的經典畫面。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=ローソン+宮津由良店" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">13:00</div>
+            <div class="event-txt"><span class="badge b-see">景點</span> 伊根舟屋 ＆ 海上計程車餵海鷗</div>
+            <div class="desc-txt">
+              • 搭海上計程車出海餵海鷗，欣賞傳統水上舟屋<br>
+              • <b>午餐</b>：INE CAFE 臨海景觀咖啡廳<br>
+              • <b>清酒</b>：向井酒造（必買「伊根滿開」女性杜氏粉紅清酒）
+            </div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=伊根+INE+CAFE" target="_blank">📍 Google 地圖</a>
+              <button class="btn-action" onclick="copyTxt('652 633 462*33')">📌 複製 MapCode</button>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">18:00</div>
+            <div class="event-txt"><span class="badge b-eat">晚餐</span> 富田屋 ＆ Mipple 超市採買</div>
+            <div class="desc-txt">宮津站前排隊名店富田屋吃產地直送刺身，隨後到大型賣場さとう宮津店買特產。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=宮津+富田屋" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">20:30</div>
+            <div class="event-txt">Check-in 京都宮津美居溫泉度假酒店</div>
+            <div class="desc-txt">享受舒壓露天溫泉大浴場。</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day-block" id="d5">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">DAY 5 天橋立飛龍觀 ➔ 還車 ➔ 環球影城</div>
+          <div class="day-date">1/23 (六)</div>
+        </div>
+        <div class="hotel-strip">🏨 住宿：環球影城港灣酒店 (Hotel Universal Port)</div>
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">10:00 - 13:00</div>
+            <div class="event-txt"><span class="badge b-see">景點</span> 天橋立 View Land ＆ 空中腳踏車</div>
+            <div class="desc-txt">
+              • 搭登山吊椅纜車上山，體驗彎腰看「飛龍在天」沙洲景觀<br>
+              • 騎空中腳踏車 (Cycle Car)<br>
+              • <b>午餐</b>：景觀餐廳享用熱騰騰丼飯與招牌布丁
+            </div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=天橋立View+Land" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">17:00 - 19:30</div>
+            <div class="event-txt"><span class="badge b-car">自駕</span> 開車返回關西機場門市還車</div>
+            <div class="desc-txt">19:30 前加滿油完成還車手續。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">20:00</div>
+            <div class="event-txt"><span class="badge b-see">交通</span> 轉乘 JR 前往環球影城</div>
+            <div class="desc-txt">
+              1. 關西機場搭乘 <b>JR 關空快速</b> 坐到 <b>「西九條站」</b>（約 55 分鐘）<br>
+              2. 走到對側月台轉乘 <b>JR 櫻島線（夢咲線）</b> 直達 <b>《環球城站》</b>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">21:30</div>
+            <div class="event-txt">Check-in 港灣酒店 ＆ 逛環球步行街</div>
+            <div class="desc-txt">入住環球影城港灣酒店，採買明日作戰補給。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=環球影城港灣酒店" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 6 -->
+    <div class="day-block" id="d6">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">DAY 6 日本環球影城 USJ 全日暢玩</div>
+          <div class="day-date">1/24 (日)</div>
+        </div>
+        <div class="hotel-strip">🏨 住宿：環球影城港灣酒店</div>
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">06:30 - 07:00</div>
+            <div class="event-txt"><span class="badge b-eat">早餐</span> 7-Eleven 環球城站門市補充熱量</div>
+            <div class="desc-txt">提早前往大門排隊提早入園！</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">07:30 - 全日</div>
+            <div class="event-txt"><span class="badge b-see">狂歡</span> 日本環球影城 (USJ) 一日暢玩</div>
+            <div class="desc-txt">超級任天堂世界（能量手環敲磚塊、瑪利歐賽車）、哈利波特魔法世界、小小兵樂園狂歡！</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">20:30</div>
+            <div class="event-txt">返回飯店泡澡休息</div>
+            <div class="desc-txt">結束充滿歡樂刺激的一天。</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 7 -->
+    <div class="day-block" id="d7">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">DAY 7 慶生極上螃蟹 ＆ 浪漫溫泉</div>
+          <div class="day-date">1/25 (一)</div>
+        </div>
+        <div class="hotel-strip">🏨 住宿：森津屋旅館 或 城崎溫泉 旅館つばき乃（或市區星級酒店）</div>
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">08:00</div>
+            <div class="event-txt"><span class="badge b-eat">早餐</span> Tully's Coffee 悠閒咖啡早午餐</div>
+            <div class="desc-txt">Park Front 門市享用現煮拿鐵與熱壓吐司。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">白天</div>
+            <div class="event-txt"><span class="badge b-see">休閒</span> 茶房 夢屋 或 城崎 TOKIWA GARDEN</div>
+            <div class="desc-txt">享受充滿日式雅致氛圍的午後時光。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">晚上</div>
+            <div class="event-txt"><span class="badge b-eat">生日大餐</span> 鮮魚の海中苑 本店（極上螃蟹）</div>
+            <div class="desc-txt">大啖鮮甜日本海松葉蟹、刺身盛合與陶板燒，慶祝生日幸福之夜！</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=鮮魚の海中苑+本店" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 8 -->
+    <div class="day-block" id="d8">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">DAY 8 市區最後採購 ➔ 晚班機滿載歸國</div>
+          <div class="day-date">1/26 (二)</div>
+        </div>
+        <div class="hotel-strip">✈️ 今晚搭乘 20:10 華航 CI177 回高雄</div>
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">08:30</div>
+            <div class="event-txt"><span class="badge b-eat">早餐</span> 丸福珈琲店 千日前本店</div>
+            <div class="desc-txt">老派喫茶店招牌厚鬆餅與炭火焙煎黑咖啡。</div>
+            <div class="action-row">
+              <a class="btn-action" href="https://maps.google.com/?q=丸福珈琲店+千日前本店" target="_blank">📍 Google 地圖</a>
+            </div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">10:30 - 15:30</div>
+            <div class="event-txt"><span class="badge b-shop">採購</span> 心齋橋、道頓堀、百貨免稅伴手禮採買</div>
+            <div class="desc-txt">大丸百貨、藥妝店補貨、採買Royce生巧克力與伴手禮。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">16:30</div>
+            <div class="event-txt"><span class="badge b-see">交通</span> 難波搭乘南海特急 Rapi:t 直奔關西機場</div>
+            <div class="desc-txt">約 17:15 抵達關西機場第 1 航廈。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">17:40</div>
+            <div class="event-txt">華航 CI177 櫃台報到託運 ＆ 機場免稅店採買</div>
+            <div class="desc-txt">完成託運與安檢，登機前最後採買。</div>
+          </li>
+          <li class="timeline-node">
+            <div class="time-txt">20:10 - 22:45</div>
+            <div class="event-txt">CI177 班機起飛 ➔ 平安抵達高雄小港機場</div>
+            <div class="desc-txt">領取行李，開車平安返家，結束美好的 8 天生日雪國之旅！</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 口袋備案清單 -->
+    <div class="day-block" id="pocket">
+      <div class="day-card">
+        <div class="day-head">
+          <div class="day-title">📌 備案景點、租車與口袋名單</div>
+        </div>
+        <div class="pocket-section">
+          
+          <div class="pocket-card">
+            <div class="pocket-head">🛒 24小時便利超市與大賣場</div>
+            <div class="desc-txt">
+              • <b>道頓堀 24H</b>：AEON FOOD STYLE 東心齋橋店<br>
+              • <b>琵琶湖便宜批發超市</b>：LAMU ラ・ムー 雄琴店<br>
+              • <b>天橋立/宮津</b>：さとう宮津店（Mipple 複合商場）
+            </div>
+          </div>
+
+          <div class="pocket-card">
+            <div class="pocket-head">🚗 市區便利租車據點 (Toyota Rent a Car)</div>
+            <div class="desc-txt">
+              • <b>離環球影城最近</b>：トヨタレンタカー 野田阪神駅前店<br>
+              • <b>離道頓堀/難波最近</b>：トヨタレンタカー なんばターミナル店
+            </div>
+          </div>
+
+          <div class="pocket-card">
+            <div class="pocket-head">🍜 美味推薦與備案餐廳</div>
+            <div class="desc-txt">
+              • <b>拉麵名店</b>：らぁ麺 はやし田、龜王拉麵<br>
+              • <b>早餐推薦</b>：MAZE CAFE NAMBA、美月黑門市場<br>
+              • <b>螃蟹盛宴</b>：二反田（香住蟹/松葉蟹套餐）<br>
+              • <b>神戶晚餐</b>：神戶牡蠣酒吧 The Oyster Bar Kobe
+            </div>
+          </div>
+
+          <div class="pocket-card">
+            <div class="pocket-head">⛩️ 絕景與文青採買備案</div>
+            <div class="desc-txt">
+              • <b>水杉林大道</b>：Avenue of Metasequoias (メタセコイア並木)，午餐推薦「並木食堂 燕 (ツバメ)」<br>
+              • <b>京都河原町文青街</b>：無印良品 京都BAL店、UNIQLO 京都河原町店、SOU・SOU 贈禮選品店、晚餐推薦「MoriMori 壽司 四條河原町店」<br>
+              • <b>名酒神社</b>：三得利山崎蒸餾所、水無瀬神宮
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>✈️ 祝京阪神自駕賞雪＆生日快樂！旅途順心平安 ❄️</p>
+  </footer>
+
+  <div id="toast" class="toast">已複製到剪貼簿！</div>
+
+  <script>
+    // 匯率計算
+    const jpyInput = document.getElementById('jpyInput');
+    const twdOut = document.getElementById('twdOut');
+    const RATE = 0.215;
+    function updateCalc() {
+      const val = parseFloat(jpyInput.value) || 0;
+      twdOut.innerText = `約 NT$ ${Math.round(val * RATE).toLocaleString()}`;
+    }
+    jpyInput.addEventListener('input', updateCalc);
+    updateCalc();
+
+    // 倒數計算 (預設 1/19 15:25 起飛)
+    function updateCountdown() {
+      const now = new Date();
+      let target = new Date(now.getFullYear(), 0, 19, 15, 25, 0);
+      if (now > target) {
+        target = new Date(now.getFullYear() + 1, 0, 19, 15, 25, 0);
+      }
+      const diff = target - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      document.getElementById('countdownVal').innerText = `${days} 天 ${hours} 小時`;
+    }
+    updateCountdown();
+
+    // 複製功能
+    function copyTxt(text) {
+      navigator.clipboard.writeText(text).then(function() {
+        showToast('已複製：' + text);
+      }, function() {
+        showToast('請手動複製：' + text);
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 1800);
+    }
+  </script>
+</body>
+</html>
