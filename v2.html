@@ -32,38 +32,50 @@
       padding-bottom: 90px;
     }
 
-   /* 頂部封面：加大高度並讓文字沉底 */
-    .hero {
-      position: relative;
-      background: url('cover.jpeg') center top / cover no-repeat;
+/* 頂部海報與資訊卡 */
+    .hero-banner-wrap {
+      width: 100%;
+      line-height: 0;
+      background: #E8D8B8;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+    .hero-banner-img {
+      width: 100%;
+      height: auto;
+      max-height: 380px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+    .hero-info-bar {
+      background: linear-gradient(135deg, #1E2D4A 0%, #2D4059 100%);
       color: white;
-      min-height: 420px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 30px 20px 24px;
-      border-radius: 0 0 32px 32px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(19, 30, 51, 0.18);
+      padding: 22px 20px 20px;
+      border-radius: 0 0 28px 28px;
+      box-shadow: 0 8px 24px rgba(30, 45, 74, 0.12);
     }
-
-    /* 下方漸層遮罩：保護文字好讀 */
-    .hero::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 65%;
-      background: linear-gradient(to bottom, rgba(19, 30, 51, 0) 0%, rgba(19, 30, 51, 0.85) 55%, rgba(19, 30, 51, 0.98) 100%);
-      pointer-events: none;
-      z-index: 1;
+    .hero-info-bar .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(10px);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      margin-bottom: 8px;
     }
-
-    /* 文字排在遮罩之上 */
-    .hero > * {
-      position: relative;
-      z-index: 2;
+    .hero-info-bar h1 {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .hero-info-bar p {
+      font-size: 0.84rem;
+      opacity: 0.85;
+      margin-bottom: 12px;
     }
     .hero::after {
       content: "❄️";
@@ -449,8 +461,13 @@
 </head>
 <body>
 
-  <!-- 頂部封面 -->
-  <div class="hero">
+ <!-- 頂部手繪封面海報（完整露出不擋字） -->
+  <div class="hero-banner-wrap">
+    <img class="hero-banner-img" src="cover.jpeg" alt="關西行程封面">
+  </div>
+
+  <!-- 標題與出發倒數列（收在海報下方） -->
+  <div class="hero-info-bar">
     <div class="hero-badge">🎂 Birthday & Snow Road Trip</div>
     <h1>京阪神自駕＆賞雪 8 日遊</h1>
     <p>關西機場 ➔ 難波 ➔ 有馬溫泉 ➔ 神戶 ➔ 琵琶湖 ➔ 天橋立 ➔ USJ ➔ 大阪購物</p>
