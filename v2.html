@@ -228,6 +228,31 @@
       box-shadow: var(--shadow-sm);
       border: 1px solid var(--border);
     }
+    /* 折疊清單專用樣式 */
+    .checklist-group {
+      margin-bottom: 8px;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #F8FAFC;
+    }
+    .checklist-group summary {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary);
+      padding: 7px 10px;
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #F1F5F9;
+    }
+    .checklist-items {
+      padding: 8px 10px 4px;
+      background: white;
+    }
     .tool-title {
       font-size: 0.85rem;
       font-weight: 700;
@@ -540,19 +565,53 @@
         <input type="number" id="jpyInput" class="calc-input" placeholder="日幣 JPY" value="2000">
         <div class="calc-out" id="twdOut">約 NT$ 0</div>
       </div>
-      <div class="tool-box">
-        <div class="tool-title">🎒 必備證件</div>
-        <label class="check-item"><input type="checkbox"> 護照正本</label>
-        <label class="check-item"><input type="checkbox"> 台灣駕照+日文譯本</label>
-        <label class="check-item"><input type="checkbox"> 環球門票+快速通關</label>
-        <label class="check-item"><input type="checkbox"> 角膜塑型</label>
-        <label class="check-item"><input type="checkbox"> 拖鞋</label>
-        <label class="check-item"><input type="checkbox"> 塑膠袋</label>
-        <label class="check-item"><input type="checkbox">眼鏡</label>
-
+      <!-- 分類收摺備品清單 -->
+      <div class="tool-box" style="grid-column: span 1;">
+        <div class="tool-title">🎒 行李＆備品檢查</div>
         
+        <!-- 分類 1：證件與票券（預設展開） -->
+        <details class="checklist-group" open>
+          <summary>📄 重要證件與票券</summary>
+          <div class="checklist-items">
+            <label class="check-item"><input type="checkbox"> 護照正本</label>
+            <label class="check-item"><input type="checkbox"> 台灣駕照＋日文譯本</label>
+            <label class="check-item"><input type="checkbox"> 環球影城門票＋快速通關</label>
+            <label class="check-item"><input type="checkbox"> 信用卡＋日幣現鈔</label>
+          </div>
+        </details>
+
+        <!-- 分類 2：個人護理與醫藥（點擊可展開/收起） -->
+        <details class="checklist-group">
+          <summary>👁️ 個人護理與醫療</summary>
+          <div class="checklist-items">
+            <label class="check-item"><input type="checkbox"> 角膜塑型片＋護理藥水</label>
+            <label class="check-item"><input type="checkbox"> 眼鏡＋眼鏡盒</label>
+            <label class="check-item"><input type="checkbox"> 常備藥品／保濕乳霜</label>
+          </div>
+        </details>
+
+        <!-- 分類 3：衣物與生活用品 -->
+        <details class="checklist-group">
+          <summary>👟 衣物生活與雜物</summary>
+          <div class="checklist-items">
+            <label class="check-item"><input type="checkbox"> 室內／便攜拖鞋</label>
+            <label class="check-item"><input type="checkbox"> 塑膠袋／髒衣收納袋</label>
+            <label class="check-item"><input type="checkbox"> 保暖雪靴／防滑鞋</label>
+            <label class="check-item"><input type="checkbox"> 發熱衣／防風手套／毛帽</label>
+          </div>
+        </details>
+
+        <!-- 分類 4：自駕與 3C -->
+        <details class="checklist-group">
+          <summary>📱 3C 與車用配件</summary>
+          <div class="checklist-items">
+            <label class="check-item"><input type="checkbox"> 手機車用導航支架</label>
+            <label class="check-item"><input type="checkbox"> 車充轉接頭＋多孔充電線</label>
+            <label class="check-item"><input type="checkbox"> 行動電源＋充電器</label>
+          </div>
+        </details>
       </div>
-    </div>
+        </div>
 
     <!-- 警示卡片 -->
     <div class="alert-card">
