@@ -267,12 +267,7 @@
       margin-bottom: 5px;
       cursor: pointer;
     }
-   /* 打勾後自動加上刪除線與淡化效果 */
-    .check-item input:checked + span {
-      text-decoration: line-line;
-      text-decoration: line-through;
-      color: #A0988F;
-    }
+    .check-item input { accent-color: var(--accent-matcha); }
 
     /* 乘車注意警告便條 */
     .alert-memo {
@@ -683,6 +678,12 @@
     <!-- 小工具組 -->
     <div class="tools-grid">
       <div class="tool-box">
+        <div class="tool-title">💴 日幣試算</div>
+        <input type="number" id="jpyInput" class="calc-input" placeholder="日幣 JPY" value="2000">
+        <div class="calc-out" id="twdOut">約 NT$ 430</div>
+      </div>
+
+      <div class="tool-box">
         <div class="tool-title">🎒 行李＆備品檢查</div>
         
         <details class="checklist-group" open>
@@ -720,55 +721,9 @@
             <label class="check-item"><input type="checkbox"> 行動電源＋充電器</label>
           </div>
         </details>
-
-        <!-- 新增：購物願望清單分類 -->
-        <details class="checklist-group">
-          <summary>🛍️ 購物清單 (已買打勾)</summary>
-          <div class="checklist-items">
-            <label class="check-item"><input type="checkbox"> 向井酒造「伊根滿開」紫米清酒</label>
-            <label class="check-item"><input type="checkbox"> Royce 生巧克力 / 洋芋片</label>
-            <label class="check-item"><input type="checkbox"> 合利他命 EX Plus / 藥妝</label>
-            <label class="check-item"><input type="checkbox"> USJ 任天堂能量手環 / 紀念品</label>
-          </div>
-        </details>
       </div>
-<!-- 🛍️ 購物願望清單 -->
-      <div class="tool-box" style="grid-column: 1 / -1; margin-top: 4px;">
-        <div class="tool-title">🛍️ 日本必買購物清單</div>
+    </div>
 
-        <!-- 分類 1：零食伴手禮 -->
-        <details class="checklist-group" open>
-          <summary>🍓 必買甜點與名產伴手禮</summary>
-          <div class="checklist-items">
-            <label class="check-item"><input type="checkbox"><span>向井酒造「伊根滿開」紫米紅清酒</span></label>
-            <label class="check-item"><input type="checkbox"><span>Royce 生巧克力 / 洋芋片巧克力</span></label>
-            <label class="check-item"><input type="checkbox"><span>黑門市場冬季大草莓（古都華/白草莓）</span></label>
-            <label class="check-item"><input type="checkbox"><span>有馬溫泉 三ツ森炭酸煎餅</span></label>
-          </div>
-        </details>
-
-        <!-- 分類 2：藥妝與美妝保養 -->
-        <details class="checklist-group">
-          <summary>💄 藥妝與生活保養</summary>
-          <div class="checklist-items">
-            <label class="check-item"><input type="checkbox"><span>合利他命 EX Plus 強效錠</span></label>
-            <label class="check-item"><input type="checkbox"><span>大正感冒微粒 / EVE 止痛藥</span></label>
-            <label class="check-item"><input type="checkbox"><span>休足時間（環球影城回飯店必貼！）</span></label>
-            <label class="check-item"><input type="checkbox"><span>日本防曬乳 / 保濕護唇膏</span></label>
-          </div>
-        </details>
-
-        <!-- 分類 3：環球影城與服飾配件 -->
-        <details class="checklist-group">
-          <summary>🍄 環球影城周邊與服飾</summary>
-          <div class="checklist-items">
-            <label class="check-item"><input type="checkbox"><span>USJ 超級任天堂世界「能量手環」</span></label>
-            <label class="check-item"><input type="checkbox"><span>瑪利歐賽車周邊 / 奇諾比奧爆米花桶</span></label>
-            <label class="check-item"><input type="checkbox"><span>心齋橋童裝 / 日本限定款球鞋</span></label>
-          </div>
-        </details>
-      </div>
-      <div class="tool-box">
     <!-- 乘車警告便條 -->
     <div class="alert-memo">
       <div class="alert-title">🚆 南海電鐵特急 Rapi:t 注意事項</div>
