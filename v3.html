@@ -126,7 +126,7 @@
       color: var(--accent-red);
     }
 
-    /* 快捷日期跳轉導航 */
+    /* 快捷日期跳轉導航（含購物清單標籤） */
     .quick-nav {
       display: flex;
       flex-wrap: wrap;
@@ -134,6 +134,7 @@
       gap: 8px 6px;
       padding: 4px 0 16px 0;
       margin-bottom: 16px;
+      scroll-margin-top: 20px;
     }
     .nav-pill {
       flex-shrink: 0;
@@ -158,6 +159,17 @@
       margin-bottom: 20px;
       box-shadow: 0 4px 12px rgba(63, 57, 52, 0.04);
       position: relative;
+    }
+
+    /* 購物清單折疊樣式 */
+    details.memo-card summary {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+    }
+    details.memo-card summary::-webkit-details-marker {
+      display: none;
     }
 
     /* 航班卡片 */
@@ -199,7 +211,7 @@
     .flight-no { font-size: 0.78rem; font-weight: 900; color: var(--accent-red); }
     .flight-time { font-size: 0.8rem; color: var(--text-muted); }
 
-    /* 小工具網格 */
+    /* 小工具網格（維持雙欄） */
     .tools-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -237,7 +249,7 @@
       margin-top: 6px;
     }
 
-    /* 折疊備品清單 */
+    /* 折疊備品樣式 */
     .checklist-group {
       margin-bottom: 6px;
       border: 1px solid #EAE1D5;
@@ -256,18 +268,168 @@
       outline: none;
     }
     .checklist-items {
-      padding: 6px 8px 4px;
+      padding: 6px 8px 6px;
       background: white;
     }
-    .check-item {
+    .check-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3px 0;
+      border-bottom: 1px dashed #F2ECE3;
+    }
+    .check-item-row:last-child {
+      border-bottom: none;
+    }
+    .check-item-label {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.78rem;
-      margin-bottom: 5px;
+      font-size: 0.76rem;
+      cursor: pointer;
+      flex: 1;
+    }
+    .check-item-label input {
+      accent-color: var(--accent-matcha);
+      width: 13px;
+      height: 13px;
+    }
+    .check-item-text.done {
+      text-decoration: line-through;
+      color: #A39B92;
+    }
+    .item-del-btn {
+      background: none;
+      border: none;
+      color: #B42318;
+      cursor: pointer;
+      font-size: 0.75rem;
+      padding: 1px 4px;
+      opacity: 0.5;
+      transition: opacity 0.15s ease;
+    }
+    .item-del-btn:hover, .item-del-btn:active {
+      opacity: 1;
+    }
+    .mini-add-box {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+      padding-top: 4px;
+      border-top: 1px solid #F0E9DF;
+    }
+    .mini-input {
+      flex: 1;
+      padding: 4px 6px;
+      border: 1px solid #DDD3C7;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-family: inherit;
+      outline: none;
+      background: #FCF9EE;
+    }
+    .mini-input:focus {
+      background: #FFFFFF;
+      border-color: var(--accent-ochre);
+    }
+    .mini-btn {
+      background: var(--accent-ochre);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
       cursor: pointer;
     }
-    .check-item input { accent-color: var(--accent-matcha); }
+
+    /* 下方動態購物清單樣式 */
+    .shop-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .shop-input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1.5px solid #DDD3C7;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-family: inherit;
+      outline: none;
+      background: #FAF7F2;
+    }
+    .shop-input:focus {
+      border-color: var(--accent-ochre);
+      background: #FFFFFF;
+    }
+    .shop-add-btn {
+      background: var(--accent-matcha);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      padding: 0 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(78, 120, 80, 0.15);
+      transition: all 0.15s ease;
+    }
+    .shop-add-btn:active {
+      transform: scale(0.96);
+    }
+    .shop-list-wrap {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .shop-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--paper-yellow);
+      border: 1px solid #ECE3D4;
+      padding: 7px 10px;
+      border-radius: 8px;
+    }
+    .shop-item-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      cursor: pointer;
+    }
+    .shop-item-left input {
+      accent-color: var(--accent-matcha);
+      width: 15px;
+      height: 15px;
+    }
+    .shop-item-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+    .shop-item-name.done {
+      text-decoration: line-through;
+      color: #A39B92;
+    }
+    .shop-del-btn {
+      background: none;
+      border: none;
+      color: #B42318;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      opacity: 0.6;
+      transition: opacity 0.15s ease;
+    }
+    .shop-del-btn:hover, .shop-del-btn:active {
+      opacity: 1;
+    }
 
     /* 乘車注意警告便條 */
     .alert-memo {
@@ -348,6 +510,25 @@
       color: var(--text-muted);
       font-weight: 700;
     }
+    .day-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .back-nav-btn {
+      font-size: 0.74rem;
+      background: #FFFFFF;
+      border: 1px solid #D1C4B5;
+      color: var(--accent-navy);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .back-nav-btn:hover, .back-nav-btn:active {
+      background: #EAE3D8;
+    }
     .day-toggle-icon {
       font-size: 0.78rem;
       background: #F4EFE6;
@@ -378,12 +559,13 @@
       padding-top: 6px;
     }
 
-    .hotel-sticky {
+    /* 住宿便條貼（置於時間軸最下方） */
+    .hotel-sticky-bottom {
       background: #EFF6F9;
       border-left: 4px solid var(--accent-navy);
       border-radius: 8px;
       padding: 10px 12px;
-      margin-bottom: 18px;
+      margin-top: 14px;
       font-size: 0.86rem;
       display: flex;
       justify-content: space-between;
@@ -393,7 +575,7 @@
     }
     .hotel-name { font-weight: 900; color: var(--accent-navy); }
 
-    /* ⭐ 時間軸樣式 ⭐ */
+    /* 時間軸樣式 */
     .timeline {
       padding: 6px 4px 6px 14px;
       list-style: none;
@@ -624,9 +806,10 @@
       </div>
     </div>
 
-    <!-- 快捷跳轉導航 -->
-    <div class="quick-nav">
+    <!-- 快捷日期跳轉導航（錨點 id="top-nav"） -->
+    <div class="quick-nav" id="top-nav">
       <a href="#flight" class="nav-pill">✈️ 航班</a>
+      <a href="#shop-sec" class="nav-pill">🛍️ 購物清單</a>
       <a href="#d1" class="nav-pill">D1 難波</a>
       <a href="#d2" class="nav-pill">D2 有馬神戶</a>
       <a href="#d3" class="nav-pill">D3 琵琶湖雪</a>
@@ -675,90 +858,80 @@
       </div>
     </div>
 
-    <!-- 小工具組 -->
+    <!-- 小工具組：左右雙欄版型 -->
     <div class="tools-grid">
+      <!-- 左欄：日幣試算 -->
       <div class="tool-box">
         <div class="tool-title">💴 日幣試算</div>
         <input type="number" id="jpyInput" class="calc-input" placeholder="日幣 JPY" value="2000">
         <div class="calc-out" id="twdOut">約 NT$ 430</div>
       </div>
 
+      <!-- 右欄：行李＆備品檢查 -->
       <div class="tool-box">
         <div class="tool-title">🎒 行李＆備品檢查</div>
         
         <details class="checklist-group" open>
           <summary>📄 重要證件與票券</summary>
           <div class="checklist-items">
-            <label class="check-item"><input type="checkbox"> 護照正本</label>
-            <label class="check-item"><input type="checkbox"> 台灣駕照＋日文譯本</label>
-            <label class="check-item"><input type="checkbox"> 環球門票＋快速通關</label>
+            <div id="luggage-list-docs"></div>
+            <div class="mini-add-box">
+              <input type="text" id="addInput-docs" class="mini-input" placeholder="新增證件/票券..." />
+              <button class="mini-btn" onclick="addLuggageItem('docs')">＋</button>
+            </div>
           </div>
         </details>
 
         <details class="checklist-group">
           <summary>👁️ 個人護理與醫療</summary>
           <div class="checklist-items">
-            <label class="check-item"><input type="checkbox"> 角膜塑型片＋藥水</label>
-            <label class="check-item"><input type="checkbox"> 眼鏡＋眼鏡盒</label>
-            <label class="check-item"><input type="checkbox"> 常備藥品／保濕乳霜</label>
+            <div id="luggage-list-med"></div>
+            <div class="mini-add-box">
+              <input type="text" id="addInput-med" class="mini-input" placeholder="新增護理/藥品..." />
+              <button class="mini-btn" onclick="addLuggageItem('med')">＋</button>
+            </div>
           </div>
         </details>
 
         <details class="checklist-group">
           <summary>👟 衣物生活與雜物</summary>
           <div class="checklist-items">
-            <label class="check-item"><input type="checkbox"> 室內／便攜拖鞋</label>
-            <label class="check-item"><input type="checkbox"> 塑膠袋／髒衣收納袋</label>
-            <label class="check-item"><input type="checkbox"> 保暖雪靴／手套毛帽</label>
+            <div id="luggage-list-clothes"></div>
+            <div class="mini-add-box">
+              <input type="text" id="addInput-clothes" class="mini-input" placeholder="新增衣物/用品..." />
+              <button class="mini-btn" onclick="addLuggageItem('clothes')">＋</button>
+            </div>
           </div>
         </details>
 
         <details class="checklist-group">
           <summary>📱 3C 與車用配件</summary>
           <div class="checklist-items">
-            <label class="check-item"><input type="checkbox"> 手機車用導航支架</label>
-            <label class="check-item"><input type="checkbox"> 車充頭＋多孔充電線</label>
-            <label class="check-item"><input type="checkbox"> 行動電源＋充電器</label>
+            <div id="luggage-list-tech"></div>
+            <div class="mini-add-box">
+              <input type="text" id="addInput-tech" class="mini-input" placeholder="新增3C/線材..." />
+              <button class="mini-btn" onclick="addLuggageItem('tech')">＋</button>
+            </div>
           </div>
         </details>
       </div>
     </div>
-<!-- 🛍️ 獨立購物清單卡片（版型維持不動，位於下方） -->
-    <div class="memo-card" style="margin-bottom: 20px;">
-      <div class="tool-title" style="margin-bottom: 12px; font-size: 0.95rem;">🛍️ 日本必買願望購物清單</div>
+
+    <!-- ⭐ 1. 購物清單支援收摺功能 (預設展開，支援點擊折疊) ⭐ -->
+    <details class="memo-card" id="shop-sec" open style="margin-bottom: 20px; scroll-margin-top: 15px;">
+      <summary style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem;">🛍️ 日本必買願望購物清單 (已買打勾存檔，刪除需密碼)</div>
+        <span class="day-toggle-icon"></span>
+      </summary>
       
-      <!-- 分類 1：名產伴手禮（預設展開） -->
-      <details class="checklist-group" open>
-        <summary>🍓 名產與甜點伴手禮</summary>
-        <div class="checklist-items">
-          <label class="check-item"><input type="checkbox"> 向井酒造「伊根滿開」紫米清酒</label>
-          <label class="check-item"><input type="checkbox"> Royce 生巧克力 / 洋芋片巧克力</label>
-          <label class="check-item"><input type="checkbox"> 有馬溫泉 三ツ森炭酸煎餅</label>
-          <label class="check-item"><input type="checkbox"> 黑門中川大草莓（白草莓/古都華）</label>
-        </div>
-      </details>
+      <div class="shop-input-row">
+        <input type="text" id="shopNewInput" class="shop-input" placeholder="輸入想買的物品 (例如: 合利他命、白草莓...)" />
+        <button id="shopAddBtn" class="shop-add-btn">＋加入</button>
+      </div>
 
-      <!-- 分類 2：藥妝與個人保養 -->
-      <details class="checklist-group">
-        <summary>💄 免稅藥妝與日常保養</summary>
-        <div class="checklist-items">
-          <label class="check-item"><input type="checkbox"> 合利他命 EX Plus 強效錠</label>
-          <label class="check-item"><input type="checkbox"> 大正感冒微粒 / EVE 止痛藥</label>
-          <label class="check-item"><input type="checkbox"> 休足時間足貼（環球影城回飯店必貼！）</label>
-          <label class="check-item"><input type="checkbox"> 日本保濕護唇膏 / 防曬乳</label>
-        </div>
-      </details>
+      <div class="shop-list-wrap" id="shopListContainer"></div>
+    </details>
 
-      <!-- 分類 3：環球影城與特色周邊 -->
-      <details class="checklist-group">
-        <summary>🍄 環球影城周邊與服飾</summary>
-        <div class="checklist-items">
-          <label class="check-item"><input type="checkbox"> USJ 超級任天堂世界「能量手環」</label>
-          <label class="check-item"><input type="checkbox"> 瑪利歐賽車周邊 / 奇諾比奧爆米花桶</label>
-          <label class="check-item"><input type="checkbox"> 心齋橋大丸百貨童裝 / 日本限定球鞋</label>
-        </div>
-      </details>
-    </div>
     <!-- 乘車警告便條 -->
     <div class="alert-memo">
       <div class="alert-title">🚆 南海電鐵特急 Rapi:t 注意事項</div>
@@ -776,20 +949,16 @@
             <span class="day-badge">DAY 1</span>
             <span class="day-date">1/19 (週二)</span>
           </div>
-          <span class="day-toggle-icon"></span>
+          <div class="day-toggle-wrap">
+            <a href="#top-nav" class="back-nav-btn">🔝 回標籤列</a>
+            <span class="day-toggle-icon"></span>
+          </div>
         </div>
         <div class="day-theme">🛫 啟程出發 ➔ 難波漫步採買</div>
       </summary>
 
       <div class="day-content">
-        <div class="hotel-sticky">
-          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">WELLSTAY 難波</span>（步行 500m）</div>
-          <div class="btn-row">
-            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=WELLSTAY難波">📍 導航飯店</a>
-            <button class="nav-stamp-btn" onclick="copyTxt('1 285 240*32')">📌 MapCode</button>
-          </div>
-        </div>
-
+        <!-- 時間軸行程 -->
         <ul class="timeline">
           <li class="timeline-node">
             <div class="time-txt">10:00</div>
@@ -838,6 +1007,15 @@
             </div>
           </li>
         </ul>
+
+        <!-- ⭐ 4. 今晚住宿提醒用在時間軸下方 ⭐ -->
+        <div class="hotel-sticky-bottom">
+          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">WELLSTAY 難波</span>（步行 500m）</div>
+          <div class="btn-row">
+            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=WELLSTAY難波">📍 導航飯店</a>
+            <button class="nav-stamp-btn" onclick="copyTxt('1 285 240*32')">📌 MapCode</button>
+          </div>
+        </div>
       </div>
     </details>
 
@@ -850,20 +1028,15 @@
             <span class="day-badge">DAY 2</span>
             <span class="day-date">1/20 (週三)</span>
           </div>
-          <span class="day-toggle-icon"></span>
+          <div class="day-toggle-wrap">
+            <a href="#top-nav" class="back-nav-btn">🔝 回標籤列</a>
+            <span class="day-toggle-icon"></span>
+          </div>
         </div>
         <div class="day-theme">🚗 取車出發 ➔ 有馬老街 ➔ 神戶港夜景</div>
       </summary>
 
       <div class="day-content">
-        <div class="hotel-sticky">
-          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">神戶美利堅公園東方酒店</span></div>
-          <div class="btn-row">
-            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Kobe+Meriken+Park+Oriental+Hotel">📍 導航飯店</a>
-            <button class="nav-stamp-btn" onclick="copyTxt('12 337 178*47')">📌 飯店 MapCode</button>
-          </div>
-        </div>
-
         <ul class="timeline">
           <li class="timeline-node">
             <div class="time-txt">07:30</div>
@@ -928,6 +1101,15 @@
             </div>
           </li>
         </ul>
+
+        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
+        <div class="hotel-sticky-bottom">
+          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">神戶美利堅公園東方酒店</span></div>
+          <div class="btn-row">
+            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Kobe+Meriken+Park+Oriental+Hotel">📍 導航飯店</a>
+            <button class="nav-stamp-btn" onclick="copyTxt('12 337 178*47')">📌 飯店 MapCode</button>
+          </div>
+        </div>
       </div>
     </details>
 
@@ -940,20 +1122,15 @@
             <span class="day-badge">DAY 3</span>
             <span class="day-date">1/21 (週四)</span>
           </div>
-          <span class="day-toggle-icon"></span>
+          <div class="day-toggle-wrap">
+            <a href="#top-nav" class="back-nav-btn">🔝 回標籤列</a>
+            <span class="day-toggle-icon"></span>
+          </div>
         </div>
         <div class="day-theme">❄️ 琵琶湖山頂玩雪 ➔ 雄琴溫泉會席料理</div>
       </summary>
 
       <div class="day-content">
-        <div class="hotel-sticky">
-          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">雄琴溫泉 湯元館 (Yumotokan)</span></div>
-          <div class="btn-row">
-            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=雄琴溫泉+湯元館">📍 導航湯元館</a>
-            <button class="nav-stamp-btn" onclick="copyTxt('263 190 824*12')">📌 湯元館 MapCode</button>
-          </div>
-        </div>
-
         <ul class="timeline">
           <li class="timeline-node">
             <div class="time-txt">08:30</div>
@@ -997,6 +1174,15 @@
             </div>
           </li>
         </ul>
+
+        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
+        <div class="hotel-sticky-bottom">
+          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">雄琴溫泉 湯元館 (Yumotokan)</span></div>
+          <div class="btn-row">
+            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=雄琴溫泉+湯元館">📍 導航湯元館</a>
+            <button class="nav-stamp-btn" onclick="copyTxt('263 190 824*12')">📌 湯元館 MapCode</button>
+          </div>
+        </div>
       </div>
     </details>
 
@@ -1009,20 +1195,15 @@
             <span class="day-badge">DAY 4</span>
             <span class="day-date">1/22 (週五)</span>
           </div>
-          <span class="day-toggle-icon"></span>
+          <div class="day-toggle-wrap">
+            <a href="#top-nav" class="back-nav-btn">🔝 回標籤列</a>
+            <span class="day-toggle-icon"></span>
+          </div>
         </div>
         <div class="day-theme">🌊 海上電車 ➔ 伊根舟屋餵海鷗 ➔ 宮津</div>
       </summary>
 
       <div class="day-content">
-        <div class="hotel-sticky">
-          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">京都宮津美居溫泉度假酒店</span></div>
-          <div class="btn-row">
-            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Mercure+Kyoto+Miyazu+Resort+Spa">📍 導航美居酒店</a>
-            <button class="nav-stamp-btn" onclick="copyTxt('197 444 321*47')">📌 飯店 MapCode</button>
-          </div>
-        </div>
-
         <ul class="timeline">
           <li class="timeline-node">
             <div class="time-txt">11:00</div>
@@ -1069,6 +1250,15 @@
             </div>
           </li>
         </ul>
+
+        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
+        <div class="hotel-sticky-bottom">
+          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">京都宮津美居溫泉度假酒店</span></div>
+          <div class="btn-row">
+            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Mercure+Kyoto+Miyazu+Resort+Spa">📍 導航美居酒店</a>
+            <button class="nav-stamp-btn" onclick="copyTxt('197 444 321*47')">📌 飯店 MapCode</button>
+          </div>
+        </div>
       </div>
     </details>
 
@@ -1081,20 +1271,15 @@
             <span class="day-badge">DAY 5</span>
             <span class="day-date">1/23 (週六)</span>
           </div>
-          <span class="day-toggle-icon"></span>
+          <div class="day-toggle-wrap">
+            <a href="#top-nav" class="back-nav-btn">🔝 回標籤列</a>
+            <span class="day-toggle-icon"></span>
+          </div>
         </div>
         <div class="day-theme">🐉 天橋立飛龍觀 ➔ 還車 ➔ 前往 USJ</div>
       </summary>
 
       <div class="day-content">
-        <div class="hotel-sticky">
-          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">環球影城港灣酒店</span></div>
-          <div class="btn-row">
-            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Hotel+Universal+Port">📍 導航港灣酒店</a>
-            <button class="nav-stamp-btn" onclick="copyTxt('1 278 893*63')">📌 MapCode</button>
-          </div>
-        </div>
-
         <ul class="timeline">
           <li class="timeline-node">
             <div class="time-txt">10:00</div>
@@ -1128,6 +1313,15 @@
             </div>
           </li>
         </ul>
+
+        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
+        <div class="hotel-sticky-bottom">
+          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">環球影城港灣酒店</span></div>
+          <div class="btn-row">
+            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Hotel+Universal+Port">📍 導航港灣酒店</a>
+            <button class="nav-stamp-btn" onclick="copyTxt('1 278 893*63')">📌 MapCode</button>
+          </div>
+        </div>
       </div>
     </details>
 
@@ -1140,17 +1334,15 @@
             <span class="day-badge">DAY 6</span>
             <span class="day-date">1/24 (週日)</span>
           </div>
-          <span class="day-toggle-icon"></span>
+          <div class="day-toggle-wrap">
+            <a href="#top-nav" class="back-nav-btn">🔝 回標籤列</a>
+            <span class="day-toggle-icon"></span>
+          </div>
         </div>
         <div class="day-theme">🍄 日本環球影城 (USJ) 全日熱血暢玩</div>
       </summary>
 
       <div class="day-content">
-        <div class="hotel-sticky">
-          <div>🏨 <b>續住：</b><span class="hotel-name">環球影城港灣酒店</span></div>
-          <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Hotel+Universal+Port">📍 導航港灣酒店</a>
-        </div>
-
         <ul class="timeline">
           <li class="timeline-node">
             <div class="time-txt">06:45</div>
@@ -1171,6 +1363,12 @@
             </div>
           </li>
         </ul>
+
+        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
+        <div class="hotel-sticky-bottom">
+          <div>🏨 <b>續住：</b><span class="hotel-name">環球影城港灣酒店</span></div>
+          <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Hotel+Universal+Port">📍 導航港灣酒店</a>
+        </div>
       </div>
     </details>
 
@@ -1183,17 +1381,15 @@
             <span class="day-badge">DAY 7</span>
             <span class="day-date">1/25 (週一)</span>
           </div>
-          <span class="day-toggle-icon"></span>
+          <div class="day-toggle-wrap">
+            <a href="#top-nav" class="back-nav-btn">🔝 回標籤列</a>
+            <span class="day-toggle-icon"></span>
+          </div>
         </div>
         <div class="day-theme">🦀 生日極上螃蟹大餐 ＆ 悠閒午後</div>
       </summary>
 
       <div class="day-content">
-        <div class="hotel-sticky">
-          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">特色溫泉飯店／市區飯店</span></div>
-          <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Namba+Station">📍 導航飯店</a>
-        </div>
-
         <ul class="timeline">
           <li class="timeline-node">
             <div class="time-txt">08:30</div>
@@ -1218,6 +1414,12 @@
             </div>
           </li>
         </ul>
+
+        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
+        <div class="hotel-sticky-bottom">
+          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">特色溫泉飯店／市區飯店</span></div>
+          <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Namba+Station">📍 導航飯店</a>
+        </div>
       </div>
     </details>
 
@@ -1230,21 +1432,20 @@
             <span class="day-badge">DAY 8</span>
             <span class="day-date">1/26 (週二)</span>
           </div>
-          <span class="day-toggle-icon"></span>
+          <div class="day-toggle-wrap">
+            <a href="#top-nav" class="back-nav-btn">🔝 回標籤列</a>
+            <span class="day-toggle-icon"></span>
+          </div>
         </div>
         <div class="day-theme">🛍️ 心齋橋最後大採購 ➔ 晚班機返台</div>
       </summary>
 
       <div class="day-content">
-        <div class="hotel-sticky">
-          <div>✈️ <b>回程班機：</b>今晚 20:10 華航 CI177 直飛高雄小港</div>
-        </div>
-
         <ul class="timeline">
           <li class="timeline-node">
             <div class="time-txt">08:30</div>
             <div class="event-txt"><span class="badge b-eat">早餐</span> 丸福珈琲店 千日前本店</div>
-            <div class="time-pill-bar"><span class="time-pill warn">⏰ 08:00 - 23:00</span></div>
+            <div class="time-pill-bar warn">⏰ 08:00 - 23:00</div>
             <div class="desc-txt">創業近百年昭和復古喫茶店，必點招牌厚鬆餅與炭火焙煎濃醇黑咖啡。</div>
             <div class="btn-row">
               <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=丸福珈琲店+千日前本店">📍 導航丸福珈琲店</a>
@@ -1270,6 +1471,11 @@
             </div>
           </li>
         </ul>
+
+        <!-- ⭐ 今晚提醒用在時間軸下方 ⭐ -->
+        <div class="hotel-sticky-bottom">
+          <div>✈️ <b>回程班機：</b>今晚 20:10 華航 CI177 直飛高雄小港</div>
+        </div>
       </div>
     </details>
 
@@ -1282,7 +1488,10 @@
   <div id="toast" class="toast">已複製到剪貼簿！</div>
 
   <script>
-    // 日幣即時試算
+    // 0. 刪除安全防護密碼
+    const DELETE_PASSWORD = "0913";
+
+    // 1. 日幣即時試算功能
     const jpyInput = document.getElementById('jpyInput');
     const twdOut = document.getElementById('twdOut');
     const RATE = 0.215;
@@ -1293,7 +1502,7 @@
       });
     }
 
-    // 倒數計算
+    // 2. 倒數計算功能
     function updateCountdown() {
       const el = document.getElementById('countdownVal');
       if (!el) return;
@@ -1309,7 +1518,7 @@
     }
     updateCountdown();
 
-    // MapCode 複製通知
+    // 3. MapCode 複製通知
     function copyTxt(text) {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => showToast('已複製：' + text)).catch(() => showToast('請複製：' + text));
@@ -1325,6 +1534,217 @@
       toast.style.display = 'block';
       setTimeout(() => { toast.style.display = 'none'; }, 1800);
     }
+
+    // 4. 行李備品檢查記憶庫（新增、打勾記憶、密碼 0913 才能刪除）
+    const LUGGAGE_STORAGE_KEY = 'japan_trip_luggage_data_2027';
+    const defaultLuggageData = {
+      docs: [
+        { id: 1, name: '護照正本', checked: false },
+        { id: 2, name: '台灣駕照＋日文譯本', checked: false },
+        { id: 3, name: '環球門票＋快速通關', checked: false }
+      ],
+      med: [
+        { id: 4, name: '角膜塑型片＋藥水', checked: false },
+        { id: 5, name: '眼鏡＋眼鏡盒', checked: false },
+        { id: 6, name: '常備藥品／保濕乳霜', checked: false }
+      ],
+      clothes: [
+        { id: 7, name: '室內／便攜拖鞋', checked: false },
+        { id: 8, name: '塑膠袋／髒衣收納袋', checked: false },
+        { id: 9, name: '保暖雪靴／手套毛帽', checked: false }
+      ],
+      tech: [
+        { id: 10, name: '手機車用導航支架', checked: false },
+        { id: 11, name: '車充頭＋多孔充電線', checked: false },
+        { id: 12, name: '行動電源＋充電器', checked: false }
+      ]
+    };
+
+    function loadLuggageData() {
+      const saved = localStorage.getItem(LUGGAGE_STORAGE_KEY);
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e) {}
+      }
+      return defaultLuggageData;
+    }
+
+    let luggageData = loadLuggageData();
+
+    function saveLuggageData() {
+      localStorage.setItem(LUGGAGE_STORAGE_KEY, JSON.stringify(luggageData));
+    }
+
+    function renderLuggageCategory(cat) {
+      const container = document.getElementById(`luggage-list-${cat}`);
+      if (!container) return;
+      container.innerHTML = '';
+
+      luggageData[cat].forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'check-item-row';
+
+        const label = document.createElement('label');
+        label.className = 'check-item-label';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = item.checked;
+        checkbox.addEventListener('change', () => {
+          luggageData[cat][index].checked = checkbox.checked;
+          saveLuggageData();
+          renderLuggageCategory(cat);
+        });
+
+        const span = document.createElement('span');
+        span.className = 'check-item-text' + (item.checked ? ' done' : '');
+        span.textContent = item.name;
+
+        label.appendChild(checkbox);
+        label.appendChild(span);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'item-del-btn';
+        delBtn.innerHTML = '🗑️';
+        delBtn.title = '刪除此項目 (需密碼)';
+        delBtn.addEventListener('click', () => {
+          const pwd = prompt('請輸入刪除密碼以確認移除：');
+          if (pwd === DELETE_PASSWORD) {
+            luggageData[cat].splice(index, 1);
+            saveLuggageData();
+            renderLuggageCategory(cat);
+            showToast('已刪除項目！');
+          } else if (pwd !== null) {
+            alert('密碼錯誤，無法刪除！');
+          }
+        });
+
+        row.appendChild(label);
+        row.appendChild(delBtn);
+        container.appendChild(row);
+      });
+    }
+
+    function addLuggageItem(cat) {
+      const input = document.getElementById(`addInput-${cat}`);
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) return;
+      luggageData[cat].push({
+        id: Date.now(),
+        name: val,
+        checked: false
+      });
+      saveLuggageData();
+      renderLuggageCategory(cat);
+      input.value = '';
+    }
+
+    ['docs', 'med', 'clothes', 'tech'].forEach(cat => {
+      renderLuggageCategory(cat);
+      const input = document.getElementById(`addInput-${cat}`);
+      input?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addLuggageItem(cat);
+      });
+    });
+
+    // 5. 購物清單記憶庫（新增、打勾記憶、密碼 0913 才能刪除）
+    const SHOP_STORAGE_KEY = 'japan_trip_shopping_items_2027';
+    const defaultShoppingItems = [
+      { id: 1, name: '向井酒造「伊根滿開」紫米紅清酒', checked: false },
+      { id: 2, name: 'Royce 生巧克力 / 洋芋片巧克力', checked: false },
+      { id: 3, name: '有馬溫泉 三ツ森炭酸煎餅', checked: false },
+      { id: 4, name: '黑門中川大草莓（白草莓/古都華）', checked: false },
+      { id: 5, name: '合利他命 EX Plus 強效錠', checked: false },
+      { id: 6, name: '大正百保能感冒微粒 / EVE 止痛藥', checked: false },
+      { id: 7, name: '休足時間足貼（環球影城回飯店必貼！）', checked: false },
+      { id: 8, name: 'USJ 超級任天堂世界「能量手環」', checked: false }
+    ];
+
+    function loadShoppingItems() {
+      const saved = localStorage.getItem(SHOP_STORAGE_KEY);
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e) {}
+      }
+      return defaultShoppingItems;
+    }
+
+    function saveShoppingItems(items) {
+      localStorage.setItem(SHOP_STORAGE_KEY, JSON.stringify(items));
+    }
+
+    let shoppingItems = loadShoppingItems();
+
+    function renderShoppingList() {
+      const container = document.getElementById('shopListContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      shoppingItems.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'shop-item-row';
+
+        const left = document.createElement('label');
+        left.className = 'shop-item-left';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = item.checked;
+        checkbox.addEventListener('change', () => {
+          shoppingItems[index].checked = checkbox.checked;
+          saveShoppingItems(shoppingItems);
+          renderShoppingList();
+        });
+
+        const span = document.createElement('span');
+        span.className = 'shop-item-name' + (item.checked ? ' done' : '');
+        span.textContent = item.name;
+
+        left.appendChild(checkbox);
+        left.appendChild(span);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'shop-del-btn';
+        delBtn.innerHTML = '🗑️';
+        delBtn.title = '刪除此項目 (需密碼)';
+        delBtn.addEventListener('click', () => {
+          const pwd = prompt('請輸入刪除密碼以確認移除：');
+          if (pwd === DELETE_PASSWORD) {
+            shoppingItems.splice(index, 1);
+            saveShoppingItems(shoppingItems);
+            renderShoppingList();
+            showToast('已刪除項目！');
+          } else if (pwd !== null) {
+            alert('密碼錯誤，無法刪除！');
+          }
+        });
+
+        row.appendChild(left);
+        row.appendChild(delBtn);
+        container.appendChild(row);
+      });
+    }
+
+    function addNewShoppingItem() {
+      const input = document.getElementById('shopNewInput');
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) return;
+      shoppingItems.unshift({
+        id: Date.now(),
+        name: val,
+        checked: false
+      });
+      saveShoppingItems(shoppingItems);
+      renderShoppingList();
+      input.value = '';
+    }
+
+    document.getElementById('shopAddBtn')?.addEventListener('click', addNewShoppingItem);
+    document.getElementById('shopNewInput')?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addNewShoppingItem();
+    });
+
+    renderShoppingList();
   </script>
 </body>
 </html>
