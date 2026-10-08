@@ -271,3 +271,626 @@
     /* 乘車注意警告便條 */
     .alert-memo {
       background: #
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>❄️ 2027 京阪神自駕＆賞雪手帳</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-cream: #FAF7F2;
+      --card-bg: #FFFFFF;
+      --paper-yellow: #FCF9EE;
+      --border-ink: #E2D7CC;
+      --text-main: #3F3934;
+      --text-muted: #7E756C;
+      --accent-red: #D9534F;
+      --accent-matcha: #4E7850;
+      --accent-ochre: #C68B59;
+      --accent-navy: #3C5A72;
+      --tape-color: rgba(226, 178, 140, 0.55);
+      --tape-blue: rgba(162, 197, 219, 0.55);
+      --tape-green: rgba(180, 208, 175, 0.55);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background-color: var(--bg-cream);
+      font-family: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
+      color: var(--text-main);
+      line-height: 1.65;
+      padding-bottom: 70px;
+      background-image: 
+        radial-gradient(#E5DED0 0.8px, transparent 0.8px),
+        radial-gradient(#E5DED0 0.8px, var(--bg-cream) 0.8px);
+      background-size: 22px 22px;
+      background-position: 0 0, 11px 11px;
+    }
+
+    /* 頂部封面海報 */
+    .hero-banner-wrap {
+      width: 100%;
+      background: #E8D8B8;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+    .hero-banner-img {
+      width: 100%;
+      height: auto;
+      max-height: 380px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* 封面手帳標題卡 */
+    .cover-card {
+      background: #FFFFFF;
+      border: 2px dashed #D5C9BE;
+      border-radius: 18px;
+      padding: 22px 18px;
+      text-align: center;
+      position: relative;
+      margin-top: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(60, 50, 40, 0.04);
+    }
+    .cover-card::before {
+      content: "";
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 24px;
+      background: var(--tape-color);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+    .cover-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      background: var(--paper-yellow);
+      color: var(--accent-ochre);
+      border: 1px solid var(--accent-ochre);
+      padding: 2px 12px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .cover-title {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .cover-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .countdown-sticky {
+      background: #FFFDF5;
+      border: 1px solid #EFE4CA;
+      border-left: 5px solid var(--accent-ochre);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.84rem;
+    }
+    .countdown-val {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--accent-red);
+    }
+
+    /* 快捷日期跳轉導航（自動換列、置中排列） */
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 6px;
+      padding: 4px 0 16px 0;
+      margin-bottom: 16px;
+    }
+    .nav-pill {
+      flex-shrink: 0;
+      background: #FFFFFF;
+      border: 1.5px solid #DDD3C7;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    .nav-pill:active { background: #EFE9DE; }
+
+    /* 通用便條卡 */
+    .memo-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      border: 1px solid var(--border-ink);
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(63, 57, 52, 0.04);
+      position: relative;
+    }
+
+    /* 航班卡片 */
+    .flight-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px dashed #E5DDD3;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .flight-title {
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: var(--accent-navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .plane-tag {
+      font-size: 0.72rem;
+      background: #E8F0F7;
+      color: var(--accent-navy);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+    .flight-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #FAF6F0;
+    }
+    .flight-row:last-child { border-bottom: none; }
+    .flight-city { font-weight: 900; font-size: 1.05rem; }
+    .flight-port { font-size: 0.75rem; color: var(--text-muted); }
+    .flight-mid { text-align: center; flex: 1; padding: 0 8px; }
+    .flight-no { font-size: 0.78rem; font-weight: 900; color: var(--accent-red); }
+    .flight-time { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* 小工具網格 */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .tool-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-ink);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+    }
+    .tool-title {
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: var(--accent-navy);
+      margin-bottom: 8px;
+    }
+    .calc-input {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1.5px solid #DDD3C7;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: right;
+      outline: none;
+      font-family: inherit;
+    }
+    .calc-out {
+      font-size: 0.88rem;
+      color: var(--accent-red);
+      font-weight: 900;
+      text-align: right;
+      margin-top: 6px;
+    }
+
+    /* 手帳折疊備品清單樣式 */
+    .checklist-group {
+      margin-bottom: 6px;
+      border: 1px solid #EAE1D5;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #FAF7F2;
+    }
+    .checklist-group summary {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      padding: 6px 8px;
+      cursor: pointer;
+      user-select: none;
+      background: #F4EFE6;
+      outline: none;
+    }
+    .checklist-items {
+      padding: 6px 8px 4px;
+      background: white;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+    .check-item input { accent-color: var(--accent-matcha); }
+
+    /* 乘車注意警告便條 */
+    .alert-memo {
+      background: #FFFBF0;
+      border-left: 5px solid var(--accent-ochre);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 22px;
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+    .alert-title {
+      font-weight: 900;
+      color: #92580C;
+      margin-bottom: 4px;
+    }
+
+    /* 每日手帳卡片（可收摺） */
+    details.day-book {
+      background: var(--card-bg);
+      border-radius: 18px;
+      border: 1px solid #E6DED5;
+      padding: 18px;
+      margin-bottom: 22px;
+      position: relative;
+      box-shadow: 0 6px 16px rgba(63, 57, 52, 0.05);
+      scroll-margin-top: 15px;
+    }
+    details.day-book summary {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+    }
+    details.day-book summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    .washi-tape {
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      width: 80px;
+      height: 22px;
+      background: var(--tape-color);
+      transform: rotate(-2deg);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    .washi-tape.right {
+      left: auto;
+      right: 25px;
+      background: var(--tape-blue);
+      transform: rotate(3deg);
+    }
+    .washi-tape.green {
+      left: 30px;
+      background: var(--tape-green);
+      transform: rotate(-1deg);
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed #EAE2D8;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .day-badge {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--accent-red);
+      margin-right: 8px;
+    }
+    .day-date {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .day-toggle-icon {
+      font-size: 0.78rem;
+      background: #F4EFE6;
+      border: 1px solid #E2D7CC;
+      color: var(--accent-ochre);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    details[open] .day-toggle-icon::after {
+      content: " 收起 ▲";
+    }
+    details:not([open]) .day-toggle-icon::after {
+      content: " 展開行程 ▼";
+    }
+
+    .day-theme {
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .day-content {
+      padding-top: 6px;
+    }
+
+    /* 住宿便條貼 */
+    .hotel-sticky {
+      background: #EFF6F9;
+      border-left: 4px solid var(--accent-navy);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      font-size: 0.86rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .hotel-name { font-weight: 900; color: var(--accent-navy); }
+
+    /* ⭐ 時間軸核心樣式 ⭐ */
+    .timeline {
+      padding: 6px 4px 6px 14px;
+      list-style: none;
+      position: relative;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 20px;
+      top: 14px;
+      bottom: 20px;
+      width: 2.5px;
+      background: #E5DDD3;
+      border-radius: 2px;
+    }
+    .timeline-node {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 22px;
+    }
+    .timeline-node:last-child {
+      margin-bottom: 6px;
+    }
+    .timeline-node::before {
+      content: "";
+      position: absolute;
+      left: 1px;
+      top: 6px;
+      width: 11px;
+      height: 11px;
+      background: #FFFFFF;
+      border: 3.5px solid var(--accent-ochre);
+      border-radius: 50%;
+      z-index: 2;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .time-txt {
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--accent-ochre);
+      margin-bottom: 3px;
+      display: inline-block;
+      background: #FCF9EE;
+      padding: 1px 8px;
+      border-radius: 6px;
+      border: 1px solid #ECE3D4;
+    }
+    .event-txt {
+      font-size: 0.98rem;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .desc-txt {
+      font-size: 0.85rem;
+      color: #5C544D;
+      line-height: 1.6;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+    .b-eat { background: #FEE2E2; color: #DC2626; }
+    .b-car { background: #CCFBF1; color: #0F766E; }
+    .b-see { background: #E0E7FF; color: #4338CA; }
+    .b-spa { background: #FEF3C7; color: #92400E; }
+    .b-shop { background: #F3E8FF; color: #7E22CE; }
+
+    /* 拍立得照片樣式 (Polaroid) */
+    .polaroid-card {
+      background: #FFFFFF;
+      padding: 10px 10px 30px 10px;
+      box-shadow: 0 4px 14px rgba(60, 50, 40, 0.12);
+      border: 1px solid #ECE3D4;
+      border-radius: 4px;
+      margin: 12px 0 8px;
+      max-width: 95%;
+      position: relative;
+      text-align: center;
+      transform: rotate(-1.5deg);
+      transition: transform 0.2s ease;
+    }
+    .polaroid-card.tilt-right {
+      transform: rotate(1.8deg);
+    }
+    .polaroid-card:hover {
+      transform: rotate(0deg) scale(1.02);
+    }
+    .polaroid-card::before {
+      content: "";
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 20px;
+      background: rgba(226, 178, 140, 0.65);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      backdrop-filter: blur(1px);
+    }
+    .polaroid-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      border-radius: 2px;
+      background: #F1ECE1;
+    }
+    .polaroid-caption {
+      position: absolute;
+      bottom: 7px;
+      left: 0;
+      right: 0;
+      font-size: 0.78rem;
+      color: #6C5F53;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .time-pill-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0;
+      font-size: 0.75rem;
+    }
+    .time-pill {
+      background: #FFF;
+      border: 1px solid #E2D7CC;
+      padding: 2px 8px;
+      border-radius: 6px;
+      color: #6C5F53;
+      font-weight: 500;
+    }
+    .time-pill.warn {
+      background: #FEF3F2;
+      border-color: #FECDCA;
+      color: #B42318;
+      font-weight: 700;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .nav-stamp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #FFFFFF;
+      color: var(--accent-matcha);
+      border: 1.5px solid var(--accent-matcha);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 2px 4px rgba(78, 120, 80, 0.08);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav-stamp-btn:hover, .nav-stamp-btn:active {
+      background: var(--accent-matcha);
+      color: #FFFFFF;
+      transform: translateY(-1px);
+    }
+    .nav-stamp-btn.navy {
+      color: var(--accent-navy);
+      border-color: var(--accent-navy);
+    }
+    .nav-stamp-btn.navy:hover, .nav-stamp-btn.navy:active {
+      background: var(--accent-navy);
+      color: #FFFFFF;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(63, 57, 52, 0.95);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部手繪封面海報 -->
+  <div class="hero-banner-wrap">
+    <img class="hero-banner-img" src="cover.jpeg" alt="關西行程封面" onerror="this.style.display='none'">
+  </div>
+
+  <div class="container">
+
+    <!-- 頂部手帳封面卡 -->
+    <div class="cover-card">
+      <div class="cover-tag">🎂 Birthday & Snow Road Trip</div>
+      <h1 class="cover-title">京阪神自駕＆賞雪 8 日遊</h1>
+      <p class="cover-sub">關西機場 ➔ 難波 ➔ 有馬 ➔ 神戶 ➔ 琵琶湖 ➔ 伊根 ➔ 天橋立 ➔ USJ</p>
+      
+      <div class="countdown-sticky">
+        <span>🛫
