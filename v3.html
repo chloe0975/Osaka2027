@@ -12,6 +12,8 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
+  <!-- 👇 請加入下面這一行 -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <style>
     :root {
       --bg-cream: #FAF7F2;
@@ -1690,6 +1692,7 @@
     };
 
     firebase.initializeApp(firebaseConfig);
+    firebase.auth().signInAnonymously().catch(console.error);
     const db = firebase.database();
 
     // 預設行李備品資料
