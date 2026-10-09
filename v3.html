@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
+  <!-- 引入 Firebase 核心與 Realtime Database 模組 (Compat 版本) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <style>
     :root {
       --bg-cream: #FAF7F2;
@@ -126,7 +130,7 @@
       color: var(--accent-red);
     }
 
-    /* 快捷日期跳轉導航（含購物清單標籤） */
+    /* 快捷日期跳轉導航 */
     .quick-nav {
       display: flex;
       flex-wrap: wrap;
@@ -211,7 +215,7 @@
     .flight-no { font-size: 0.78rem; font-weight: 900; color: var(--accent-red); }
     .flight-time { font-size: 0.8rem; color: var(--text-muted); }
 
-    /* 小工具網格（維持雙欄） */
+    /* 小工具網格（維持左右雙欄） */
     .tools-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -559,7 +563,6 @@
       padding-top: 6px;
     }
 
-    /* 住宿便條貼（置於時間軸最下方） */
     .hotel-sticky-bottom {
       background: #EFF6F9;
       border-left: 4px solid var(--accent-navy);
@@ -806,7 +809,7 @@
       </div>
     </div>
 
-    <!-- 快捷日期跳轉導航（錨點 id="top-nav"） -->
+    <!-- 快捷日期跳轉導航（含購物清單標籤） -->
     <div class="quick-nav" id="top-nav">
       <a href="#flight" class="nav-pill">✈️ 航班</a>
       <a href="#shop-sec" class="nav-pill">🛍️ 購物清單</a>
@@ -858,7 +861,7 @@
       </div>
     </div>
 
-    <!-- 小工具組：左右雙欄版型 -->
+    <!-- 小工具組：左右雙欄版型（全雲端同步） -->
     <div class="tools-grid">
       <!-- 左欄：日幣試算 -->
       <div class="tool-box">
@@ -869,7 +872,7 @@
 
       <!-- 右欄：行李＆備品檢查 -->
       <div class="tool-box">
-        <div class="tool-title">🎒 行李＆備品檢查</div>
+        <div class="tool-title">🎒 行李＆備品檢查 <span id="sync-status-luggage" style="font-size:0.7rem; color:var(--accent-matcha);">● 雲端連線</span></div>
         
         <details class="checklist-group" open>
           <summary>📄 重要證件與票券</summary>
@@ -917,10 +920,13 @@
       </div>
     </div>
 
-    <!-- ⭐ 1. 購物清單支援收摺功能 (預設展開，支援點擊折疊) ⭐ -->
+    <!-- 下方獨立購物清單卡片（全雲端同步） -->
     <details class="memo-card" id="shop-sec" open style="margin-bottom: 20px; scroll-margin-top: 15px;">
       <summary style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem;">🛍️ 日本必買願望購物清單 (已買打勾存檔)</div>
+        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem;">
+          🛍️ 日本必買願望購物清單 
+          <span id="sync-status-shop" style="font-size:0.7rem; color:var(--accent-matcha);">● 雲端連線</span>
+        </div>
         <span class="day-toggle-icon"></span>
       </summary>
       
@@ -958,30 +964,27 @@
       </summary>
 
       <div class="day-content">
-        <!-- 時間軸行程 -->
         <ul class="timeline">
-         <!-- 10:00 出發 (taiwan.png) -->
+          <!-- 10:00 出發 (taiwan.png) -->
           <li class="timeline-node">
             <div class="time-txt">10:00</div>
             <div class="event-txt">開車自家出發</div>
             <div class="desc-txt">前往高雄小港機場，預計 12:30~13:00 抵達辦理報到手續。</div>
 
-            <!-- 📸 DAY 1 10:00 拍立得照片 -->
             <div class="polaroid-card">
-              <img class="polaroid-img" src="taiwan.jpg" alt="自家出發" onerror="this.src='https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&auto=format&fit=crop&q=80'">
+              <img class="polaroid-img" src="taiwan.png" alt="自家出發" onerror="this.src='https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&auto=format&fit=crop&q=80'">
               <div class="polaroid-caption">🚗 裝滿行李箱・準備出發小港機場！</div>
             </div>
           </li>
 
-          <!-- 12:30 報到與起飛 (air2.png) -->
+          <!-- 12:30 報到起飛 (air2.png) -->
           <li class="timeline-node">
             <div class="time-txt">12:30 - 15:25</div>
             <div class="event-txt">CI176 報到與起飛</div>
             <div class="desc-txt">小港國際機場辦理登機與推車託運手續，15:25 起飛直奔關西。</div>
 
-            <!-- 📸 DAY 1 12:30 拍立得照片（tilt-right 微向右傾斜更生動） -->
             <div class="polaroid-card tilt-right">
-              <img class="polaroid-img" src="air2.jpg" alt="CI176 登機起飛" onerror="this.src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&auto=format&fit=crop&q=80'">
+              <img class="polaroid-img" src="air2.png" alt="CI176 登機起飛" onerror="this.src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&auto=format&fit=crop&q=80'">
               <div class="polaroid-caption">🛫 華航 CI176・小港飛往關西機場</div>
             </div>
 
@@ -989,7 +992,8 @@
               <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=高雄國際機場">📍 導航到小港機場</a>
             </div>
           </li>
-         <li class="timeline-node">
+
+          <li class="timeline-node">
             <div class="time-txt">19:30</div>
             <div class="event-txt"><span class="badge b-eat">晚餐</span> 關西機場美食街快速覓食</div>
             <div class="desc-txt">出關後在美食街快速享用拉麵或丼飯補充體力。</div>
@@ -1022,7 +1026,6 @@
           </li>
         </ul>
 
-        <!-- ⭐ 4. 今晚住宿提醒用在時間軸下方 ⭐ -->
         <div class="hotel-sticky-bottom">
           <div>🏨 <b>今晚住宿：</b><span class="hotel-name">WELLSTAY 難波</span>（步行 500m）</div>
           <div class="btn-row">
@@ -1058,7 +1061,7 @@
             <div class="time-pill-bar"><span class="time-pill">⏰ 24小時營業</span></div>
             <div class="desc-txt">日式三角飯糰、香脆炸雞排與熱黑咖啡。</div>
             <div class="btn-row">
-              <a class="nav-stamp-btn" target="_blank" href="https://maps.app.goo.gl/b6rGNge5SA1na48y5?g_st=il">📍 導航超商</a>
+              <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=FamilyMart+Motomachi+2-Chome">📍 導航超商</a>
             </div>
           </li>
 
@@ -1077,20 +1080,14 @@
             </div>
             <div class="desc-txt">溫馨森林風格隱藏小餐館，享受療癒系精緻料理。</div>
 
-            <!-- 📸 DAY 2 11:00 PECOPECO 拍立得照片 -->
             <div class="polaroid-card">
-              <img class="polaroid-img" src="pecopeco.jpeg" alt="森の小さなレストラン PECOPECO" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'">
+              <img class="polaroid-img" src="pecopeco.png" alt="森の小さなレストラン PECOPECO" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'">
               <div class="polaroid-caption">🍽️ 森林系小餐館・PECOPECO 療癒午餐</div>
             </div>
 
             <div class="btn-row">
               <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=森の小さなレストラン+PECOPECO">📍 導航 PECOPECO</a>
             </div>
-          </li>
-            </div>
-          
-          
-          
           </li>
 
           <li class="timeline-node">
@@ -1106,7 +1103,7 @@
             </div>
 
             <div class="polaroid-card">
-              <img class="polaroid-img" src="Hot Springs.png" alt="有馬溫泉老街">
+              <img class="polaroid-img" src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&auto=format&fit=crop&q=80" alt="有馬溫泉老街">
               <div class="polaroid-caption">♨️ 有馬老街・金の湯足湯體驗</div>
             </div>
 
@@ -1128,7 +1125,6 @@
           </li>
         </ul>
 
-        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
         <div class="hotel-sticky-bottom">
           <div>🏨 <b>今晚住宿：</b><span class="hotel-name">神戶美利堅公園東方酒店</span></div>
           <div class="btn-row">
@@ -1201,7 +1197,6 @@
           </li>
         </ul>
 
-        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
         <div class="hotel-sticky-bottom">
           <div>🏨 <b>今晚住宿：</b><span class="hotel-name">雄琴溫泉 湯元館 (Yumotokan)</span></div>
           <div class="btn-row">
@@ -1231,7 +1226,7 @@
 
       <div class="day-content">
         <ul class="timeline">
-         <li class="timeline-node">
+          <li class="timeline-node">
             <div class="time-txt">11:00</div>
             <div class="event-txt"><span class="badge b-see">打卡</span> Lawson 宮津由良店 (海上電車拍點)</div>
             <div class="time-pill-bar"><span class="time-pill">⏰ 24小時營業</span></div>
@@ -1261,7 +1256,7 @@
             </div>
 
             <div class="polaroid-card">
-              <img class="polaroid-img" src="ine.png" alt="伊根舟屋海鷗">
+              <img class="polaroid-img" src="ine.png" alt="伊根舟屋海鷗" onerror="this.src='https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600&auto=format&fit=crop&q=80'">
               <div class="polaroid-caption">🕊️ 伊根の舟屋・海上計程車餵海鷗</div>
             </div>
 
@@ -1283,7 +1278,6 @@
           </li>
         </ul>
 
-        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
         <div class="hotel-sticky-bottom">
           <div>🏨 <b>今晚住宿：</b><span class="hotel-name">京都宮津美居溫泉度假酒店</span></div>
           <div class="btn-row">
@@ -1346,7 +1340,6 @@
           </li>
         </ul>
 
-        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
         <div class="hotel-sticky-bottom">
           <div>🏨 <b>今晚住宿：</b><span class="hotel-name">環球影城港灣酒店</span></div>
           <div class="btn-row">
@@ -1390,19 +1383,12 @@
             <div class="event-txt"><span class="badge b-see">狂歡</span> 日本環球影城 (USJ)</div>
             <div class="time-pill-bar"><span class="time-pill warn">⏰ 營運約 08:30 - 21:00</span></div>
             <div class="desc-txt">超級任天堂世界（敲問號磚塊、瑪利歐賽車）、哈利波特魔法世界、小小兵瘋狂乘車遊！</div>
-
-            <!-- 👇 加入這段拍立得照片語法 👇 -->
-            <div class="polaroid-card">
-              <img class="polaroid-img" src="usj.jpg" alt="環球影城瑪利歐">
-              <div class="polaroid-caption">🍄 超級任天堂世界・敲問號磚塊！</div>
-            </div>
-
             <div class="btn-row">
-              <a class="nav-stamp-btn" target="_blank" href="...">📍 導航環球影城</a>
+              <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Universal+Studios+Japan">📍 導航環球影城</a>
             </div>
           </li>
+        </ul>
 
-        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
         <div class="hotel-sticky-bottom">
           <div>🏨 <b>續住：</b><span class="hotel-name">環球影城港灣酒店</span></div>
           <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Hotel+Universal+Port">📍 導航港灣酒店</a>
@@ -1453,7 +1439,6 @@
           </li>
         </ul>
 
-        <!-- ⭐ 今晚住宿提醒用在時間軸下方 ⭐ -->
         <div class="hotel-sticky-bottom">
           <div>🏨 <b>今晚住宿：</b><span class="hotel-name">特色溫泉飯店／市區飯店</span></div>
           <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Namba+Station">📍 導航飯店</a>
@@ -1510,7 +1495,6 @@
           </li>
         </ul>
 
-        <!-- ⭐ 今晚提醒用在時間軸下方 ⭐ -->
         <div class="hotel-sticky-bottom">
           <div>✈️ <b>回程班機：</b>今晚 20:10 華航 CI177 直飛高雄小港</div>
         </div>
@@ -1573,8 +1557,21 @@
       setTimeout(() => { toast.style.display = 'none'; }, 1800);
     }
 
-    // 4. 行李備品檢查記憶庫（新增、打勾記憶、密碼 0913 才能刪除）
-    const LUGGAGE_STORAGE_KEY = 'japan_trip_luggage_data_2027';
+    // 🔥 4. 初始化 Firebase 配置（已填入你的金鑰資訊）
+    const firebaseConfig = {
+      apiKey: "AIzaSyAzrWzY7vhByXzAgdkjcCoCdXNP_IbuRJU",
+      authDomain: "osaka2027.firebaseapp.com",
+      projectId: "osaka2027",
+      storageBucket: "osaka2027.firebasestorage.app",
+      messagingSenderId: "538308119116",
+      appId: "1:538308119116:web:c1dc6d2499dffd441a02e9",
+      measurementId: "G-G0WZKHP5QQ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 預設行李備品資料
     const defaultLuggageData = {
       docs: [
         { id: 1, name: '護照正本', checked: false },
@@ -1598,18 +1595,29 @@
       ]
     };
 
-    function loadLuggageData() {
-      const saved = localStorage.getItem(LUGGAGE_STORAGE_KEY);
-      if (saved) {
-        try { return JSON.parse(saved); } catch(e) {}
+    let luggageData = defaultLuggageData;
+    const luggageRef = db.ref('osaka_trip/luggage');
+
+    // 監聽雲端行李備品資料變更
+    luggageRef.on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val) {
+        luggageData = {
+          docs: val.docs || [],
+          med: val.med || [],
+          clothes: val.clothes || [],
+          tech: val.tech || []
+        };
+      } else {
+        luggageRef.set(defaultLuggageData);
       }
-      return defaultLuggageData;
-    }
+      ['docs', 'med', 'clothes', 'tech'].forEach(renderLuggageCategory);
+      const st = document.getElementById('sync-status-luggage');
+      if (st) st.innerText = '● 已即時同步';
+    });
 
-    let luggageData = loadLuggageData();
-
-    function saveLuggageData() {
-      localStorage.setItem(LUGGAGE_STORAGE_KEY, JSON.stringify(luggageData));
+    function saveLuggageToCloud() {
+      luggageRef.set(luggageData);
     }
 
     function renderLuggageCategory(cat) {
@@ -1617,7 +1625,8 @@
       if (!container) return;
       container.innerHTML = '';
 
-      luggageData[cat].forEach((item, index) => {
+      const list = luggageData[cat] || [];
+      list.forEach((item, index) => {
         const row = document.createElement('div');
         row.className = 'check-item-row';
 
@@ -1626,11 +1635,10 @@
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.checked = item.checked;
+        checkbox.checked = !!item.checked;
         checkbox.addEventListener('change', () => {
           luggageData[cat][index].checked = checkbox.checked;
-          saveLuggageData();
-          renderLuggageCategory(cat);
+          saveLuggageToCloud();
         });
 
         const span = document.createElement('span');
@@ -1648,8 +1656,7 @@
           const pwd = prompt('請輸入刪除密碼以確認移除：');
           if (pwd === DELETE_PASSWORD) {
             luggageData[cat].splice(index, 1);
-            saveLuggageData();
-            renderLuggageCategory(cat);
+            saveLuggageToCloud();
             showToast('已刪除項目！');
           } else if (pwd !== null) {
             alert('密碼錯誤，無法刪除！');
@@ -1667,26 +1674,24 @@
       if (!input) return;
       const val = input.value.trim();
       if (!val) return;
+      if (!luggageData[cat]) luggageData[cat] = [];
       luggageData[cat].push({
         id: Date.now(),
         name: val,
         checked: false
       });
-      saveLuggageData();
-      renderLuggageCategory(cat);
+      saveLuggageToCloud();
       input.value = '';
     }
 
     ['docs', 'med', 'clothes', 'tech'].forEach(cat => {
-      renderLuggageCategory(cat);
       const input = document.getElementById(`addInput-${cat}`);
       input?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addLuggageItem(cat);
       });
     });
 
-    // 5. 購物清單記憶庫（新增、打勾記憶、密碼 0913 才能刪除）
-    const SHOP_STORAGE_KEY = 'japan_trip_shopping_items_2027';
+    // 🔥 5. 購物清單雲端同步
     const defaultShoppingItems = [
       { id: 1, name: '向井酒造「伊根滿開」紫米紅清酒', checked: false },
       { id: 2, name: 'Royce 生巧克力 / 洋芋片巧克力', checked: false },
@@ -1698,19 +1703,24 @@
       { id: 8, name: 'USJ 超級任天堂世界「能量手環」', checked: false }
     ];
 
-    function loadShoppingItems() {
-      const saved = localStorage.getItem(SHOP_STORAGE_KEY);
-      if (saved) {
-        try { return JSON.parse(saved); } catch(e) {}
+    let shoppingItems = defaultShoppingItems;
+    const shopRef = db.ref('osaka_trip/shopping');
+
+    shopRef.on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val) {
+        shoppingItems = Array.isArray(val) ? val : Object.values(val);
+      } else {
+        shopRef.set(defaultShoppingItems);
       }
-      return defaultShoppingItems;
-    }
+      renderShoppingList();
+      const st = document.getElementById('sync-status-shop');
+      if (st) st.innerText = '● 已即時同步';
+    });
 
-    function saveShoppingItems(items) {
-      localStorage.setItem(SHOP_STORAGE_KEY, JSON.stringify(items));
+    function saveShoppingToCloud() {
+      shopRef.set(shoppingItems);
     }
-
-    let shoppingItems = loadShoppingItems();
 
     function renderShoppingList() {
       const container = document.getElementById('shopListContainer');
@@ -1726,11 +1736,10 @@
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.checked = item.checked;
+        checkbox.checked = !!item.checked;
         checkbox.addEventListener('change', () => {
           shoppingItems[index].checked = checkbox.checked;
-          saveShoppingItems(shoppingItems);
-          renderShoppingList();
+          saveShoppingToCloud();
         });
 
         const span = document.createElement('span');
@@ -1748,8 +1757,7 @@
           const pwd = prompt('請輸入刪除密碼以確認移除：');
           if (pwd === DELETE_PASSWORD) {
             shoppingItems.splice(index, 1);
-            saveShoppingItems(shoppingItems);
-            renderShoppingList();
+            saveShoppingToCloud();
             showToast('已刪除項目！');
           } else if (pwd !== null) {
             alert('密碼錯誤，無法刪除！');
@@ -1772,8 +1780,7 @@
         name: val,
         checked: false
       });
-      saveShoppingItems(shoppingItems);
-      renderShoppingList();
+      saveShoppingToCloud();
       input.value = '';
     }
 
@@ -1781,8 +1788,6 @@
     document.getElementById('shopNewInput')?.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') addNewShoppingItem();
     });
-
-    renderShoppingList();
   </script>
 </body>
 </html>
