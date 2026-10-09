@@ -2181,6 +2181,35 @@
 
       showToast('已下載 Excel 記帳檔！');
     }
+// 📅 依目前實際日期自動選取當天的行程日期
+    function autoSelectTodayTripDate() {
+      const dateSelect = document.getElementById('expDate');
+      if (!dateSelect) return;
+
+      const now = new Date();
+      const month = now.getMonth() + 1; // 1 ~ 12 月
+      const date = now.getDate();
+
+      // 在 1 月 19 日到 1 月 26 日期間，打開網頁會自動切換為當天的日期
+      if (month === 1) {
+        const tripMap = {
+          19: '1/19 (D1)',
+          20: '1/20 (D2)',
+          21: '1/21 (D3)',
+          22: '1/22 (D4)',
+          23: '1/23 (D5)',
+          24: '1/24 (D6)',
+          25: '1/25 (D7)',
+          26: '1/26 (D8)'
+        };
+        if (tripMap[date]) {
+          dateSelect.value = tripMap[date];
+        }
+      }
+    }
+
+    // 每次打開網頁自動執行判斷
+    autoSelectTodayTripDate();
   </script>
 </body>
 </html>
