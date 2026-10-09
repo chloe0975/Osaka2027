@@ -937,7 +937,123 @@
 
       <div class="shop-list-wrap" id="shopListContainer"></div>
     </details>
+<!-- 💰 家族專屬旅費即時記帳本 (全雲端同步) -->
+    <details class="memo-card" id="expense-sec" open style="margin-bottom: 22px; scroll-margin-top: 15px;">
+      <summary style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem;">
+          💰 家族旅費收支記帳 
+          <span id="sync-status-expense" style="font-size:0.7rem; color:var(--accent-matcha);">● 雲端連線</span>
+        </div>
+        <span class="day-toggle-icon"></span>
+      </summary>
 
+      <!-- 總花費統計看板 -->
+      <div style="background:#FFFDF5; border:1px dashed #E2D7CC; border-radius:10px; padding:10px 14px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.85rem; font-weight:700; color:var(--text-muted);">家族累計總支出：</span>
+        <div style="text-align:right;">
+          <div id="totalJpy" style="font-size:1.2rem; font-weight:900; color:var(--accent-red);">¥ 0</div>
+          <div id="totalTwd" style="font-size:0.78rem; color:var(--text-muted); font-weight:700;">約 NT$ 0</div>
+        </div>
+      </div>
+
+      <!-- 記帳輸入表單 -->
+      <div style="background:var(--paper-yellow); border:1px solid #ECE3D4; border-radius:12px; padding:12px; margin-top:10px; margin-bottom:12px;">
+        <!-- 第一行：日期 ＆ 付款者 -->
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+          <div style="flex:1;">
+            <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">📅 日期</label>
+            <select id="expDate" class="shop-input" style="padding:6px; font-size:0.82rem; width:100%; margin-top:2px;">
+              <option value="1/19 (D1)">1/19 (D1 出發)</option>
+              <option value="1/20 (D2)">1/20 (D2 神戶)</option>
+              <option value="1/21 (D3)">1/21 (D3 琵琶湖)</option>
+              <option value="1/22 (D4)">1/22 (D4 伊根)</option>
+              <option value="1/23 (D5)">1/23 (D5 天橋立)</option>
+              <option value="1/24 (D6)">1/24 (D6 USJ)</option>
+              <option value="1/25 (D7)">1/25 (D7 生日)</option>
+              <option value="1/26 (D8)">1/26 (D8 回程)</option>
+            </select>
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">👤 付款者</label>
+            <select id="expPayer" class="shop-input" style="padding:6px; font-size:0.82rem; width:100%; margin-top:2px;">
+              <option value="公費">公費</option>
+              <option value="許老爸">許老爸</option>
+              <option value="許老媽">許老媽</option>
+              <option value="許老姊">許老姊</option>
+              <option value="許老弟">許老弟</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 第二行：項目細項 ＆ 大分類 (自動對應) -->
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+          <div style="flex:1.2;">
+            <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">🏷️ 項目是???</label>
+            <select id="expItem" class="shop-input" style="padding:6px; font-size:0.82rem; width:100%; margin-top:2px;" onchange="autoMatchCategory()">
+              <option value="早餐">早餐</option>
+              <option value="午餐">午餐</option>
+              <option value="晚餐">晚餐</option>
+              <option value="點心">點心</option>
+              <option value="飲料">飲料</option>
+              <option value="超商">超商</option>
+              <option value="門票">門票</option>
+              <option value="停車費">停車費</option>
+              <option value="加油">加油</option>
+              <option value="ETC">ETC</option>
+              <option value="藥妝">藥妝</option>
+              <option value="伴手禮">伴手禮</option>
+              <option value="紀念品">紀念品</option>
+              <option value="文具">文具</option>
+              <option value="衣服">衣服</option>
+              <option value="鞋子">鞋子</option>
+              <option value="住宿稅另收">住宿稅另收</option>
+              <option value="保險">保險</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">📂 項目ㄌㄟ??</label>
+            <select id="expCategory" class="shop-input" style="padding:6px; font-size:0.82rem; width:100%; margin-top:2px;">
+              <option value="吃吃喝喝">吃吃喝喝</option>
+              <option value="油資">油資</option>
+              <option value="停車費">停車費</option>
+              <option value="紀念品">紀念品</option>
+              <option value="門票(日本買)">門票(日本買)</option>
+              <option value="消費稅">消費稅</option>
+              <option value="ETC">ETC</option>
+              <option value="車票/其他">車票/其他</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 第三行：花費金額 ＆ 幣別 -->
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+          <div style="flex:2;">
+            <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">💵 金額</label>
+            <input type="number" id="expAmount" class="shop-input" placeholder="輸入數字..." style="padding:6px 10px; font-size:0.9rem; text-align:right; width:100%; margin-top:2px;" />
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">幣別</label>
+            <select id="expCurrency" class="shop-input" style="padding:6px; font-size:0.82rem; width:100%; margin-top:2px;">
+              <option value="JPY">日幣 ¥</option>
+              <option value="TWD">台幣 NT$</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 第四行：備註 ＆ 記帳按鈕 -->
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="expNote" class="shop-input" placeholder="備註看看Bar!!! (例如: 一蘭、免稅發票)" style="flex:2; padding:6px 10px; font-size:0.8rem;" />
+          <button id="expAddBtn" class="shop-add-btn" style="flex:1; padding:6px 12px; font-size:0.85rem;" onclick="addNewExpense()">＋記一筆</button>
+        </div>
+      </div>
+
+      <!-- 記帳明細清單 -->
+      <div class="shop-list-wrap" id="expenseListContainer"></div>
+    </details>
+
+
+    
     <!-- 乘車警告便條 -->
     <div class="alert-memo">
       <div class="alert-title">🚆 南海電鐵特急 Rapi:t 注意事項</div>
@@ -1510,6 +1626,11 @@
   <div id="toast" class="toast">已複製到剪貼簿！</div>
 
   <script>
+
+    
+   
+    
+    
     // 0. 刪除安全防護密碼
     const DELETE_PASSWORD = "0913";
 
@@ -1786,9 +1907,295 @@
     }
 
     document.getElementById('shopAddBtn')?.addEventListener('click', addNewShoppingItem);
+   // 這裡原本是購物的代碼 ...
     document.getElementById('shopNewInput')?.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') addNewShoppingItem();
     });
+
+    // 👇👇👇 請貼在這邊（購物代碼下方、</script> 上方）👇👇👇
+
+    // 💡 自動依細項對應大項目分類
+    function autoMatchCategory() {
+      const item = document.getElementById('expItem').value;
+      const catSelect = document.getElementById('expCategory');
+      const map = {
+        '早餐': '吃吃喝喝', '午餐': '吃吃喝喝', '晚餐': '吃吃喝喝',
+        '點心': '吃吃喝喝', '飲料': '吃吃喝喝', '超商': '吃吃喝喝',
+        '加油': '油資',
+        '停車費': '停車費',
+        '紀念品': '紀念品', '伴手禮': '紀念品', '文具': '紀念品', '衣服': '紀念品', '鞋子': '紀念品', '藥妝': '紀念品',
+        '門票': '門票(日本買)',
+        '住宿稅另收': '消費稅',
+        'ETC': 'ETC',
+        '保險': '車票/其他', '其他': '車票/其他'
+      };
+      if (map[item]) {
+        catSelect.value = map[item];
+      }
+    }
+
+    // 🔥 6. 家族收支即時記帳雲端同步 (含修改與收折)
+    let expenseItems = [];
+    const expenseRef = db.ref('osaka_trip/expenses');
+
+    // 監聽雲端資料變更
+    expenseRef.on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val) {
+        expenseItems = Array.isArray(val) ? val : Object.values(val);
+      } else {
+        expenseItems = [];
+      }
+      renderExpenseList();
+      const st = document.getElementById('sync-status-expense');
+      if (st) st.innerText = '● 已即時同步';
+    });
+
+    function saveExpenseToCloud() {
+      expenseRef.set(expenseItems);
+    }
+
+    function renderExpenseList() {
+      const container = document.getElementById('expenseListContainer');
+      const totalJpyEl = document.getElementById('totalJpy');
+      const totalTwdEl = document.getElementById('totalTwd');
+      if (!container) return;
+
+      container.innerHTML = '';
+      let sumJpy = 0;
+
+      expenseItems.forEach((item, index) => {
+        let costJpy = 0;
+        let costTwd = 0;
+        if (item.currency === 'TWD') {
+          costTwd = Number(item.amount) || 0;
+          costJpy = Math.round(costTwd / RATE);
+        } else {
+          costJpy = Number(item.amount) || 0;
+          costTwd = Math.round(costJpy * RATE);
+        }
+        sumJpy += costJpy;
+
+        const row = document.createElement('div');
+        row.className = 'shop-item-row';
+        row.style.alignItems = 'flex-start';
+        row.style.padding = '9px 10px';
+
+        // 左側詳細資訊
+        const left = document.createElement('div');
+        left.style.flex = '1';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.style.display = 'flex';
+        titleDiv.style.alignItems = 'center';
+        titleDiv.style.gap = '6px';
+        titleDiv.style.flexWrap = 'wrap';
+        titleDiv.innerHTML = `
+          <span style="font-size:0.72rem; background:#E8F0F7; color:var(--accent-navy); padding:1px 6px; border-radius:4px; font-weight:700;">${item.date || ''}</span>
+          <span style="font-size:0.72rem; background:#FEF3C7; color:#92400E; padding:1px 6px; border-radius:4px; font-weight:700;">${item.payer || ''}</span>
+          <span style="font-weight:900; font-size:0.88rem; color:var(--text-main);">${item.item || ''}</span>
+          <span style="font-size:0.7rem; color:var(--text-muted);">(${item.category || ''})</span>
+        `;
+
+        const noteDiv = document.createElement('div');
+        noteDiv.style.fontSize = '0.74rem';
+        noteDiv.style.color = '#7E756C';
+        noteDiv.style.marginTop = '3px';
+        noteDiv.innerText = item.note ? `💬 備註: ${item.note}` : '';
+
+        left.appendChild(titleDiv);
+        if (item.note) left.appendChild(noteDiv);
+
+        // 右側金額與操作按鈕（修改 ✏️ / 刪除 🗑️）
+        const right = document.createElement('div');
+        right.style.display = 'flex';
+        right.style.alignItems = 'center';
+        right.style.gap = '6px';
+
+        const amountDiv = document.createElement('div');
+        amountDiv.style.textAlign = 'right';
+        amountDiv.innerHTML = `
+          <div style="font-weight:900; color:var(--accent-red); font-size:0.95rem;">¥ ${costJpy.toLocaleString()}</div>
+          <div style="font-size:0.7rem; color:var(--text-muted); font-weight:700;">NT$ ${costTwd.toLocaleString()}</div>
+        `;
+
+        // ✏️ 修改按鈕
+        const editBtn = document.createElement('button');
+        editBtn.className = 'shop-del-btn';
+        editBtn.innerHTML = '✏️';
+        editBtn.title = '修改此筆資料';
+        editBtn.style.color = 'var(--accent-navy)';
+        editBtn.style.opacity = '0.7';
+        editBtn.addEventListener('click', () => {
+          loadExpenseForEdit(item.id);
+        });
+
+        // 🗑️ 刪除按鈕 (密碼 0913)
+        const delBtn = document.createElement('button');
+        delBtn.className = 'shop-del-btn';
+        delBtn.innerHTML = '🗑️';
+        delBtn.title = '刪除此筆支出 (需密碼)';
+        delBtn.addEventListener('click', () => {
+          const pwd = prompt('請輸入刪除密碼以確認移除此筆記帳：');
+          if (pwd === DELETE_PASSWORD) {
+            expenseItems.splice(index, 1);
+            saveExpenseToCloud();
+            showToast('已刪除記帳！');
+          } else if (pwd !== null) {
+            alert('密碼錯誤，無法刪除！');
+          }
+        });
+
+        right.appendChild(amountDiv);
+        right.appendChild(editBtn);
+        right.appendChild(delBtn);
+
+        row.appendChild(left);
+        row.appendChild(right);
+        container.appendChild(row);
+      });
+
+      // 更新累計看板
+      if (totalJpyEl) totalJpyEl.innerText = `¥ ${sumJpy.toLocaleString()}`;
+      if (totalTwdEl) totalTwdEl.innerText = `約 NT$ ${Math.round(sumJpy * RATE).toLocaleString()}`;
+    }
+
+    // 載入資料回表單準備修改
+    function loadExpenseForEdit(id) {
+      const item = expenseItems.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('editExpenseId').value = item.id;
+      document.getElementById('expDate').value = item.date || '1/19 (D1)';
+      document.getElementById('expPayer').value = item.payer || '公費';
+      document.getElementById('expItem').value = item.item || '午餐';
+      document.getElementById('expCategory').value = item.category || '吃吃喝喝';
+      document.getElementById('expAmount').value = item.amount || '';
+      document.getElementById('expCurrency').value = item.currency || 'JPY';
+      document.getElementById('expNote').value = item.note || '';
+
+      document.getElementById('expSaveBtn').innerText = '💾 儲存修改';
+      document.getElementById('expSaveBtn').style.background = 'var(--accent-ochre)';
+      document.getElementById('expCancelBtn').style.display = 'inline-block';
+      document.getElementById('formTitleText').innerText = '✏️ 正在修改記帳資料...';
+
+      const formDetails = document.getElementById('expenseFormDetails');
+      if (formDetails) formDetails.open = true;
+      document.getElementById('expense-sec').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 取消編輯
+    function cancelEdit() {
+      document.getElementById('editExpenseId').value = '';
+      document.getElementById('expAmount').value = '';
+      document.getElementById('expNote').value = '';
+      document.getElementById('expSaveBtn').innerText = '＋記一筆';
+      document.getElementById('expSaveBtn').style.background = 'var(--accent-matcha)';
+      document.getElementById('expCancelBtn').style.display = 'none';
+      document.getElementById('formTitleText').innerText = '✍️ 填寫 / 記錄花費 (點此收折)';
+    }
+
+    // 新增或更新儲存
+    function saveExpense() {
+      const editId = document.getElementById('editExpenseId').value;
+      const date = document.getElementById('expDate').value;
+      const payer = document.getElementById('expPayer').value;
+      const item = document.getElementById('expItem').value;
+      const category = document.getElementById('expCategory').value;
+      const amountInput = document.getElementById('expAmount');
+      const currency = document.getElementById('expCurrency').value;
+      const noteInput = document.getElementById('expNote');
+
+      const amount = parseFloat(amountInput.value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('請輸入大於 0 的金額！');
+        return;
+      }
+
+      if (editId) {
+        const idx = expenseItems.findIndex(x => String(x.id) === String(editId));
+        if (idx !== -1) {
+          expenseItems[idx].date = date;
+          expenseItems[idx].payer = payer;
+          expenseItems[idx].item = item;
+          expenseItems[idx].category = category;
+          expenseItems[idx].amount = Math.round(amount);
+          expenseItems[idx].currency = currency;
+          expenseItems[idx].note = noteInput.value.trim();
+          showToast('已更新此筆支出！');
+        }
+        cancelEdit();
+      } else {
+        expenseItems.unshift({
+          id: Date.now(),
+          date: date,
+          payer: payer,
+          item: item,
+          category: category,
+          amount: Math.round(amount),
+          currency: currency,
+          note: noteInput.value.trim()
+        });
+        amountInput.value = '';
+        noteInput.value = '';
+        showToast('記帳成功！');
+      }
+
+      saveExpenseToCloud();
+    }
+
+    // 📥 匯出成 Excel (CSV 格式)
+    function exportToExcel() {
+      if (!expenseItems || expenseItems.length === 0) {
+        alert('目前還沒有任何記帳資料可以匯出喔！');
+        return;
+      }
+
+      const headers = ['日期', '付款者', '項目是???', '項目ㄌㄟ??', '原幣金額', '幣別', '折合日圓(JPY)', '折合台幣(TWD)', '備註看看Bar!!!'];
+      const rows = expenseItems.map(item => {
+        let costJpy = 0;
+        let costTwd = 0;
+        if (item.currency === 'TWD') {
+          costTwd = Number(item.amount) || 0;
+          costJpy = Math.round(costTwd / RATE);
+        } else {
+          costJpy = Number(item.amount) || 0;
+          costTwd = Math.round(costJpy * RATE);
+        }
+
+        const cleanNote = (item.note || '').replace(/"/g, '""');
+
+        return [
+          `"${item.date || ''}"`,
+          `"${item.payer || ''}"`,
+          `"${item.item || ''}"`,
+          `"${item.category || ''}"`,
+          item.amount || 0,
+          `"${item.currency || 'JPY'}"`,
+          costJpy,
+          costTwd,
+          `"${cleanNote}"`
+        ].join(',');
+      });
+
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', `2027京阪神_旅費記帳清單_${dateStr}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      showToast('已下載 Excel 記帳檔！');
+    }
+  </script>
+</body>
+</html>
   </script>
 </body>
 </html>
