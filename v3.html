@@ -920,7 +920,7 @@
     <!-- ⭐ 1. 購物清單支援收摺功能 (預設展開，支援點擊折疊) ⭐ -->
     <details class="memo-card" id="shop-sec" open style="margin-bottom: 20px; scroll-margin-top: 15px;">
       <summary style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem;">🛍️ 日本必買願望購物清單 (已買打勾存檔，刪除需密碼)</div>
+        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem;">🛍️ 日本必買願望購物清單 (已買打勾存檔)</div>
         <span class="day-toggle-icon"></span>
       </summary>
       
@@ -960,11 +960,36 @@
       <div class="day-content">
         <!-- 時間軸行程 -->
         <ul class="timeline">
+         <!-- 10:00 出發 (taiwan.png) -->
           <li class="timeline-node">
             <div class="time-txt">10:00</div>
             <div class="event-txt">開車自家出發</div>
             <div class="desc-txt">前往高雄小港機場，預計 12:30~13:00 抵達辦理報到手續。</div>
+
+            <!-- 📸 DAY 1 10:00 拍立得照片 -->
+            <div class="polaroid-card">
+              <img class="polaroid-img" src="taiwan.png" alt="自家出發" onerror="this.src='https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&auto=format&fit=crop&q=80'">
+              <div class="polaroid-caption">🚗 裝滿行李箱・準備出發小港機場！</div>
+            </div>
           </li>
+
+          <!-- 12:30 報到與起飛 (air2.png) -->
+          <li class="timeline-node">
+            <div class="time-txt">12:30 - 15:25</div>
+            <div class="event-txt">CI176 報到與起飛</div>
+            <div class="desc-txt">小港國際機場辦理登機與推車託運手續，15:25 起飛直奔關西。</div>
+
+            <!-- 📸 DAY 1 12:30 拍立得照片（tilt-right 微向右傾斜更生動） -->
+            <div class="polaroid-card tilt-right">
+              <img class="polaroid-img" src="air2.png" alt="CI176 登機起飛" onerror="this.src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&auto=format&fit=crop&q=80'">
+              <div class="polaroid-caption">🛫 華航 CI176・小港飛往關西機場</div>
+            </div>
+
+            <div class="btn-row">
+              <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=高雄國際機場">📍 導航到小港機場</a>
+            </div>
+          </li>
+        
 
           <li class="timeline-node">
             <div class="time-txt">12:30 - 15:25</div>
