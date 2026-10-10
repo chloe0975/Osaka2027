@@ -1857,26 +1857,26 @@
     const catRef = db.ref('osaka_trip/shop_categories');
     const wisherRef = db.ref('osaka_trip/shop_wishers');
 
-    // 監聽大項目分類
+    // 監聽大項目分類（容錯轉陣列，避免物件格式導致重置）
     catRef.on('value', (snapshot) => {
       const val = snapshot.val();
-      if (val && Array.isArray(val) && val.length > 0) {
-        shopCategories = val;
+      if (val) {
+        shopCategories = Array.isArray(val) ? val : Object.values(val);
       } else {
-        shopCategories = DEFAULT_CATEGORIES;
+        shopCategories = [...DEFAULT_CATEGORIES];
         catRef.set(DEFAULT_CATEGORIES);
       }
       renderCategorySelectOptions();
       renderShoppingList();
     });
 
-    // 監聽許願者清單
+   // 監聽許願者清單（容錯轉陣列）
     wisherRef.on('value', (snapshot) => {
       const val = snapshot.val();
-      if (val && Array.isArray(val) && val.length > 0) {
-        shopWishers = val;
+      if (val) {
+        shopWishers = Array.isArray(val) ? val : Object.values(val);
       } else {
-        shopWishers = DEFAULT_WISHERS;
+        shopWishers = [...DEFAULT_WISHERS];
         wisherRef.set(DEFAULT_WISHERS);
       }
       renderWisherSelectOptions();
