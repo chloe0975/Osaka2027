@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -723,7 +722,7 @@
       margin-top: 24px;
     }
 
-    /* 🌟🌟🌟 核心亮點：底部固定 App 式導航列 (大拇指區) 🌟🌟🌟 */
+    /* 🌟🌟🌟 固定底部 App 式導航列 (大拇指區) 🌟🌟🌟 */
     .bottom-bar-wrap {
       position: fixed;
       bottom: 0;
@@ -733,7 +732,7 @@
       display: flex;
       justify-content: center;
       padding: 8px 14px 14px 14px;
-      pointer-events: none; /* 讓周圍背景可穿透點擊 */
+      pointer-events: none;
     }
     .bottom-bar {
       pointer-events: auto;
@@ -781,7 +780,7 @@
       margin-top: 1px;
     }
 
-    /* 🗓️ 行程彈出選單 (點擊行程按鈕時向上彈出) */
+    /* 🗓️ 行程彈出選單 */
     .days-popup-modal {
       position: fixed;
       bottom: 75px;
@@ -822,6 +821,7 @@
       text-decoration: none;
       text-align: center;
       transition: all 0.15s ease;
+      cursor: pointer;
     }
     .days-grid-btn:active {
       background: var(--accent-ochre);
@@ -1117,7 +1117,7 @@
       • <b>票價提醒</b>：大人 1,490 日圓（兒童票請至現場窗口購買）。
     </div>
 
-    <!-- DAY 1 -->
+    <!-- DAY 1 (預設 open) -->
     <details class="day-book" id="d1" open>
       <summary>
         <div class="washi-tape"></div>
@@ -1204,7 +1204,7 @@
       </div>
     </details>
 
-    <!-- DAY 2 -->
+    <!-- DAY 2 (預設 open) -->
     <details class="day-book" id="d2" open>
       <summary>
         <div class="washi-tape right"></div>
@@ -1302,8 +1302,8 @@
       </div>
     </details>
 
-    <!-- DAY 3 -->
-    <details class="day-book" id="d3">
+    <!-- DAY 3 (預設 open) -->
+    <details class="day-book" id="d3" open>
       <summary>
         <div class="washi-tape green"></div>
         <div class="day-header">
@@ -1355,7 +1355,7 @@
           <li class="timeline-node">
             <div class="time-txt">16:30</div>
             <div class="event-txt"><span class="badge b-shop">採買</span> LAMU ラ・ムー 雄琴店 (量販超市)</div>
-            <div class="time-pill-bar"><span class="time-pill warn">⏰ 24小時營業</span></div>
+            <div class="time-pill-bar warn">⏰ 24小時營業</div>
             <div class="desc-txt">超好買的大型平價量販批發超市，採買零食、飲料、大顆草莓。</div>
             <div class="btn-row">
               <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=ラ・ムー雄琴店">📍 導航 LAMU 超市</a>
@@ -1373,8 +1373,8 @@
       </div>
     </details>
 
-    <!-- DAY 4 -->
-    <details class="day-book" id="d4">
+    <!-- DAY 4 (已加 open，點選自動展開) -->
+    <details class="day-book" id="d4" open>
       <summary>
         <div class="washi-tape right"></div>
         <div class="day-header">
@@ -1453,8 +1453,8 @@
       </div>
     </details>
 
-    <!-- DAY 5 -->
-    <details class="day-book" id="d5">
+    <!-- DAY 5 (已加 open，點選自動展開) -->
+    <details class="day-book" id="d5" open>
       <summary>
         <div class="washi-tape"></div>
         <div class="day-header">
@@ -1514,8 +1514,8 @@
       </div>
     </details>
 
-    <!-- DAY 6 -->
-    <details class="day-book" id="d6">
+    <!-- DAY 6 (已加 open，點選自動展開) -->
+    <details class="day-book" id="d6" open>
       <summary>
         <div class="washi-tape right"></div>
         <div class="day-header">
@@ -1559,8 +1559,8 @@
       </div>
     </details>
 
-    <!-- DAY 7 -->
-    <details class="day-book" id="d7">
+    <!-- DAY 7 (已加 open，點選自動展開) -->
+    <details class="day-book" id="d7" open>
       <summary>
         <div class="washi-tape green"></div>
         <div class="day-header">
@@ -1608,8 +1608,8 @@
       </div>
     </details>
 
-    <!-- DAY 8 -->
-    <details class="day-book" id="d8">
+    <!-- DAY 8 (已加 open，點選自動展開) -->
+    <details class="day-book" id="d8" open>
       <summary>
         <div class="washi-tape right"></div>
         <div class="day-header">
@@ -1668,44 +1668,44 @@
 
   </div>
 
-  <!-- 🌟 彈出式行程選擇框 (點擊底部「🗓️ 行程」時展開) -->
+  <!-- 🌟 彈出式行程選擇框 (點選後會自動將該天展開並滾動過去) -->
   <div id="daysPopupModal" class="days-popup-modal">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span style="font-size:0.8rem; font-weight:900; color:var(--accent-navy);">📍 選擇要前往的日程</span>
       <button onclick="toggleDaysPopup(false)" style="background:none; border:none; font-size:0.9rem; color:var(--text-muted); cursor:pointer;">✕</button>
     </div>
     <div class="days-grid">
-      <a href="#flight" class="days-grid-btn" onclick="toggleDaysPopup(false)">✈️ 航班</a>
-      <a href="#d1" class="days-grid-btn" onclick="toggleDaysPopup(false)">D1 難波</a>
-      <a href="#d2" class="days-grid-btn" onclick="toggleDaysPopup(false)">D2 神戶</a>
-      <a href="#d3" class="days-grid-btn" onclick="toggleDaysPopup(false)">D3 琵琶湖</a>
-      <a href="#d4" class="days-grid-btn" onclick="toggleDaysPopup(false)">D4 伊根</a>
-      <a href="#d5" class="days-grid-btn" onclick="toggleDaysPopup(false)">D5 天橋立</a>
-      <a href="#d6" class="days-grid-btn" onclick="toggleDaysPopup(false)">D6 USJ</a>
-      <a href="#d7" class="days-grid-btn" onclick="toggleDaysPopup(false)">D7 生日</a>
-      <a href="#d8" class="days-grid-btn" onclick="toggleDaysPopup(false)">D8 回程</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('flight')">✈️ 航班</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('d1')">D1 難波</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('d2')">D2 神戶</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('d3')">D3 琵琶湖</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('d4')">D4 伊根</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('d5')">D5 天橋立</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('d6')">D6 USJ</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('d7')">D7 生日</a>
+      <a class="days-grid-btn" onclick="jumpToTarget('d8')">D8 回程</a>
     </div>
   </div>
 
-  <!-- 🌟🌟🌟 固定底部 App 式導航列 (大拇指區) 🌟🌟🌟 -->
+  <!-- 🌟 固定底部 App 式導航列 (大拇指區) -->
   <div class="bottom-bar-wrap">
     <nav class="bottom-bar">
       <button class="bottom-tab" onclick="toggleDaysPopup()">
         <span class="bottom-tab-icon">🗓️</span>
         <span class="bottom-tab-text">行程</span>
       </button>
-      <a href="#luggage-sec" class="bottom-tab" onclick="toggleDaysPopup(false)">
+      <button class="bottom-tab" onclick="jumpToTarget('luggage-sec')">
         <span class="bottom-tab-icon">🎒</span>
         <span class="bottom-tab-text">備品</span>
-      </a>
-      <a href="#shop-sec" class="bottom-tab" onclick="toggleDaysPopup(false)">
+      </button>
+      <button class="bottom-tab" onclick="jumpToTarget('shop-sec')">
         <span class="bottom-tab-icon">🛍️</span>
         <span class="bottom-tab-text">購物</span>
-      </a>
-      <a href="#expense-sec" class="bottom-tab" onclick="toggleDaysPopup(false)">
+      </button>
+      <button class="bottom-tab" onclick="jumpToTarget('expense-sec')">
         <span class="bottom-tab-icon">💰</span>
         <span class="bottom-tab-text">記帳</span>
-      </a>
+      </button>
     </nav>
   </div>
 
@@ -1724,6 +1724,19 @@
         else modal.classList.remove('show');
       } else {
         modal.classList.toggle('show');
+      }
+    }
+
+    // 🌟 點選日期時：自動將該天展開 (open = true) 並平滑滾動過去
+    function jumpToTarget(targetId) {
+      toggleDaysPopup(false);
+      const el = document.getElementById(targetId);
+      if (el) {
+        // 如果是行程天數卡片 (details 標籤)，強制展開
+        if (el.tagName.toLowerCase() === 'details') {
+          el.open = true;
+        }
+        el.scrollIntoView({ behavior: 'smooth' });
       }
     }
 
@@ -1928,6 +1941,7 @@
             label.appendChild(checkbox);
             label.appendChild(span);
 
+            // 右側按鈕群：✏️ 編輯內容 + 🗑️ 密碼刪除
             const btnGroup = document.createElement('div');
             btnGroup.style.display = 'flex';
             btnGroup.style.alignItems = 'center';
@@ -2352,6 +2366,7 @@
             left.appendChild(wisherTag);
             left.appendChild(nameSpan);
 
+            // 右側操作：修改 ✏️ ＆ 刪除 🗑️
             const right = document.createElement('div');
             right.style.display = 'flex';
             right.style.alignItems = 'center';
