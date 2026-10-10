@@ -825,9 +825,17 @@
       cursor: pointer;
     }
     .days-grid-btn:active {
-      background: var(--accent-ochre);
-      color: white;
-    }
+    background: var(--accent-ochre);
+    color: white;
+  }
+  /* 🌟 當天高亮專屬樣式 */
+  .days-grid-btn.today {
+    background: var(--accent-red) !important;
+    color: #FFFFFF !important;
+    border-color: var(--accent-red) !important;
+    box-shadow: 0 2px 6px rgba(217, 83, 79, 0.35);
+    position: relative;
+  }
   </style>
 </head>
 <body>
@@ -2825,6 +2833,40 @@
     }
 
     autoSelectTodayTripDate();
+
+  // 🌟 自動高亮今日行程按鈕
+  function highlightTodayBtn() {
+    const now = new Date();
+    const month = now.getMonth() + 1; // 1~12 月
+    const date = now.getDate();
+
+    // 旅行期間：1 月 19 日到 1 月 26 日
+    if (month === 1) {
+      const dayMap = {
+        19: 'd1',
+        20: 'd2',
+        21: 'd3',
+        22: 'd4',
+        23: 'd5',
+        24: 'd6',
+        25: 'd7',
+        26: 'd8'
+      };
+
+      const todayTarget = dayMap[date];
+      if (todayTarget) {
+        const btns = document.querySelectorAll('.days-grid-btn');
+        btns.forEach(btn => {
+          if (btn.getAttribute('onclick')?.includes(`'${todayTarget}'`)) {
+            btn.classList.add('today');
+            btn.innerHTML = '✨ ' + btn.innerText;
+          }
+        });
+      }
+    }
+  }
+  highlightTodayBtn();
+</script>
   </script>
 </body>
 </html>
