@@ -74,7 +74,7 @@
       text-align: center;
       position: relative;
       margin-top: 14px;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
       box-shadow: 0 4px 16px rgba(60, 50, 40, 0.04);
     }
     .cover-card::before {
@@ -129,26 +129,42 @@
       color: var(--accent-red);
     }
 
+    /* 頂部吸頂滑動標籤列 */
+    .quick-nav-sticky-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      background: rgba(250, 247, 242, 0.95);
+      backdrop-filter: blur(6px);
+      margin: 0 -16px 16px -16px;
+      padding: 8px 16px;
+      border-bottom: 1px solid rgba(226, 215, 204, 0.6);
+      box-shadow: 0 2px 8px rgba(60, 50, 40, 0.03);
+    }
     .quick-nav {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px 6px;
-      padding: 4px 0 16px 0;
-      margin-bottom: 16px;
-      scroll-margin-top: 20px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 6px;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .quick-nav::-webkit-scrollbar {
+      display: none;
     }
     .nav-pill {
       flex-shrink: 0;
       background: #FFFFFF;
       border: 1.5px solid #DDD3C7;
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 0.82rem;
+      border-radius: 16px;
+      padding: 5px 11px;
+      font-size: 0.76rem;
       color: var(--text-main);
       text-decoration: none;
       font-weight: 700;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }
     .nav-pill:active { background: #EFE9DE; }
 
@@ -452,7 +468,7 @@
       margin-bottom: 22px;
       position: relative;
       box-shadow: 0 6px 16px rgba(63, 57, 52, 0.05);
-      scroll-margin-top: 15px;
+      scroll-margin-top: 55px;
     }
     details.day-book summary {
       list-style: none;
@@ -799,19 +815,22 @@
       </div>
     </div>
 
-    <!-- 快捷日期跳轉導航 -->
-    <div class="quick-nav" id="top-nav">
-      <a href="#flight" class="nav-pill">✈️ 航班</a>
-      <a href="#shop-sec" class="nav-pill">🛍️ 購物清單</a>
-      <a href="#expense-sec" class="nav-pill">💰 記帳本</a>
-      <a href="#d1" class="nav-pill">D1 難波</a>
-      <a href="#d2" class="nav-pill">D2 有馬神戶</a>
-      <a href="#d3" class="nav-pill">D3 琵琶湖雪</a>
-      <a href="#d4" class="nav-pill">D4 伊根舟屋</a>
-      <a href="#d5" class="nav-pill">D5 天橋立USJ</a>
-      <a href="#d6" class="nav-pill">D6 環球影城</a>
-      <a href="#d7" class="nav-pill">D7 慶生螃蟹</a>
-      <a href="#d8" class="nav-pill">D8 回程</a>
+    <!-- 🌟 快捷日期跳轉導航（手機版單行滑動＋吸頂） -->
+    <div class="quick-nav-sticky-wrap" id="top-nav">
+      <div class="quick-nav">
+        <a href="#flight" class="nav-pill">✈️ 航班</a>
+        <a href="#luggage-sec" class="nav-pill">🎒 行李備品</a>
+        <a href="#shop-sec" class="nav-pill">🛍️ 購物清單</a>
+        <a href="#expense-sec" class="nav-pill">💰 記帳本</a>
+        <a href="#d1" class="nav-pill">D1 難波</a>
+        <a href="#d2" class="nav-pill">D2 有馬神戶</a>
+        <a href="#d3" class="nav-pill">D3 琵琶湖</a>
+        <a href="#d4" class="nav-pill">D4 伊根舟屋</a>
+        <a href="#d5" class="nav-pill">D5 天橋立</a>
+        <a href="#d6" class="nav-pill">D6 USJ</a>
+        <a href="#d7" class="nav-pill">D7 慶生螃蟹</a>
+        <a href="#d8" class="nav-pill">D8 回程</a>
+      </div>
     </div>
 
     <!-- 航班資訊手帳卡 -->
@@ -852,67 +871,39 @@
       </div>
     </div>
 
-    <!-- 小工具組：左右雙欄版型（全雲端同步） -->
-    <div class="tools-grid">
-      <!-- 左欄：日幣試算 -->
-      <div class="tool-box">
-        <div class="tool-title">💴 日幣試算</div>
-        <input type="number" id="jpyInput" class="calc-input" placeholder="日幣 JPY" value="2000">
-        <div class="calc-out" id="twdOut">約 NT$ 430</div>
-      </div>
-
-      <!-- 右欄：行李＆備品檢查 -->
-      <div class="tool-box">
-        <div class="tool-title">🎒 行李＆備品檢查 <span id="sync-status-luggage" style="font-size:0.7rem; color:var(--accent-matcha);">● 雲端連線</span></div>
-        
-        <details class="checklist-group" open>
-          <summary>📄 重要證件與票券</summary>
-          <div class="checklist-items">
-            <div id="luggage-list-docs"></div>
-            <div class="mini-add-box">
-              <input type="text" id="addInput-docs" class="mini-input" placeholder="新增證件/票券..." />
-              <button class="mini-btn" onclick="addLuggageItem('docs')">＋</button>
-            </div>
-          </div>
-        </details>
-
-        <details class="checklist-group">
-          <summary>👁️ 個人護理與醫療</summary>
-          <div class="checklist-items">
-            <div id="luggage-list-med"></div>
-            <div class="mini-add-box">
-              <input type="text" id="addInput-med" class="mini-input" placeholder="新增護理/藥品..." />
-              <button class="mini-btn" onclick="addLuggageItem('med')">＋</button>
-            </div>
-          </div>
-        </details>
-
-        <details class="checklist-group">
-          <summary>👟 衣物生活與雜物</summary>
-          <div class="checklist-items">
-            <div id="luggage-list-clothes"></div>
-            <div class="mini-add-box">
-              <input type="text" id="addInput-clothes" class="mini-input" placeholder="新增衣物/用品..." />
-              <button class="mini-btn" onclick="addLuggageItem('clothes')">＋</button>
-            </div>
-          </div>
-        </details>
-
-        <details class="checklist-group">
-          <summary>📱 3C 與車用配件</summary>
-          <div class="checklist-items">
-            <div id="luggage-list-tech"></div>
-            <div class="mini-add-box">
-              <input type="text" id="addInput-tech" class="mini-input" placeholder="新增3C/線材..." />
-              <button class="mini-btn" onclick="addLuggageItem('tech')">＋</button>
-            </div>
-          </div>
-        </details>
+    <!-- 日幣試算獨立小卡 -->
+    <div class="memo-card" style="margin-bottom: 20px; padding: 12px 16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div style="font-size:0.88rem; font-weight:900; color:var(--accent-navy);">💴 日幣即時試算</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <input type="number" id="jpyInput" class="calc-input" placeholder="日幣" value="2000" style="width:110px; padding:4px 8px; font-size:0.85rem;">
+          <div class="calc-out" id="twdOut" style="margin-top:0; font-size:0.85rem; white-space:nowrap;">約 NT$ 430</div>
+        </div>
       </div>
     </div>
 
+    <!-- 🎒 行李＆備品檢查（支援自訂大項目分類管理＋內容編輯 ✏️＋預設收折） -->
+    <details class="memo-card" id="luggage-sec" open style="margin-bottom: 20px; scroll-margin-top: 55px;">
+      <summary style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem; display:flex; align-items:center; gap:6px;">
+          🎒 行李＆備品檢查 
+          <span id="sync-status-luggage" style="font-size:0.7rem; color:var(--accent-matcha);">● 雲端連線</span>
+        </div>
+        <span class="day-toggle-icon"></span>
+      </summary>
+
+      <!-- 統計與管理分類列 -->
+      <div style="background:#FFFDF5; border:1px dashed #E2D7CC; border-radius:10px; padding:8px 12px; margin-top:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted);" id="luggageCountSummary">備品統計：0 項 (已備 0)</span>
+        <button onclick="manageLuggageCategoriesModal()" style="background:none; border:none; color:var(--accent-navy); font-size:0.75rem; font-weight:700; cursor:pointer; text-decoration:underline;">⚙️ 管理行李分類</button>
+      </div>
+
+      <!-- 動態行李分類收折區塊容器 -->
+      <div id="luggageCategoriesContainer" style="display:flex; flex-direction:column; gap:6px;"></div>
+    </details>
+
     <!-- 🛍️ 購物清單 (預設收折 + 分類/許願者自訂 + 自動過濾 undefined + 匯出 CSV) -->
-    <details class="memo-card" id="shop-sec" open style="margin-bottom: 20px; scroll-margin-top: 15px;">
+    <details class="memo-card" id="shop-sec" open style="margin-bottom: 20px; scroll-margin-top: 55px;">
       <summary style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
         <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
           🛍️ 日本必買願望購物清單 
@@ -927,7 +918,7 @@
         <button onclick="exportShoppingToExcel()" class="nav-stamp-btn" style="padding:2px 8px; font-size:0.72rem; display:inline-flex;">📥 匯出購物清單 (CSV)</button>
       </div>
 
-      <!-- 新增/編輯 購物項目表單 (優化手機版面，按鈕不跑版) -->
+      <!-- 新增/編輯 購物項目表單 -->
       <div style="background:var(--paper-yellow); border:1px solid #ECE3D4; border-radius:12px; padding:12px; margin-top:10px; margin-bottom:12px;">
         <input type="hidden" id="editShopId" value="" />
         
@@ -969,7 +960,7 @@
     </details>
 
     <!-- 💰 家族專屬旅費即時記帳本 (全雲端同步 + 可收折 + 可修改 + 匯出 Excel) -->
-    <details class="memo-card" id="expense-sec" open style="margin-bottom: 22px; scroll-margin-top: 15px;">
+    <details class="memo-card" id="expense-sec" open style="margin-bottom: 22px; scroll-margin-top: 55px;">
       <summary style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
         <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem;">
           💰 家族旅費收支記帳 
@@ -1734,8 +1725,15 @@
     firebase.auth().signInAnonymously().catch(console.error);
     const db = firebase.database();
 
-    // 🎒 行李備品資料
-    const defaultLuggageData = {
+    // 🎒 5. 行李備品資料庫（支援內容修改 ✏️＋分類管理＋預設收折）
+    const DEFAULT_LUGGAGE_CATS = [
+      { key: 'docs', name: '📄 重要證件與票券' },
+      { key: 'med', name: '👁️ 個人護理與醫療' },
+      { key: 'clothes', name: '👟 衣物生活與雜物' },
+      { key: 'tech', name: '📱 3C 與車用配件' }
+    ];
+
+    const DEFAULT_LUGGAGE_DATA = {
       docs: [
         { id: 1, name: '護照正本', checked: false },
         { id: 2, name: '台灣駕照＋日文譯本', checked: false },
@@ -1758,22 +1756,32 @@
       ]
     };
 
-    let luggageData = defaultLuggageData;
+    let luggageCategories = [...DEFAULT_LUGGAGE_CATS];
+    let luggageData = { ...DEFAULT_LUGGAGE_DATA };
+
+    const luggageCatRef = db.ref('osaka_trip/luggage_categories');
     const luggageRef = db.ref('osaka_trip/luggage');
+
+    luggageCatRef.on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val && Array.isArray(val) && val.length > 0) {
+        luggageCategories = val.filter(c => c && c.key && c.name);
+      } else {
+        luggageCategories = [...DEFAULT_LUGGAGE_CATS];
+        luggageCatRef.set(DEFAULT_LUGGAGE_CATS);
+      }
+      renderAllLuggage();
+    });
 
     luggageRef.on('value', (snapshot) => {
       const val = snapshot.val();
       if (val) {
-        luggageData = {
-          docs: val.docs || [],
-          med: val.med || [],
-          clothes: val.clothes || [],
-          tech: val.tech || []
-        };
+        luggageData = val;
       } else {
-        luggageRef.set(defaultLuggageData);
+        luggageData = { ...DEFAULT_LUGGAGE_DATA };
+        luggageRef.set(DEFAULT_LUGGAGE_DATA);
       }
-      ['docs', 'med', 'clothes', 'tech'].forEach(renderLuggageCategory);
+      renderAllLuggage();
       const st = document.getElementById('sync-status-luggage');
       if (st) st.innerText = '● 已即時同步';
     });
@@ -1782,78 +1790,206 @@
       luggageRef.set(luggageData);
     }
 
-    function renderLuggageCategory(cat) {
-      const container = document.getElementById(`luggage-list-${cat}`);
+    function saveLuggageCategoriesToCloud() {
+      luggageCatRef.set(luggageCategories);
+    }
+
+    function renderAllLuggage() {
+      const container = document.getElementById('luggageCategoriesContainer');
+      const countEl = document.getElementById('luggageCountSummary');
       if (!container) return;
       container.innerHTML = '';
 
-      const list = luggageData[cat] || [];
-      list.forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = 'check-item-row';
+      let totalItems = 0;
+      let doneItems = 0;
 
-        const label = document.createElement('label');
-        label.className = 'check-item-label';
+      luggageCategories.forEach(cat => {
+        const items = luggageData[cat.key] || [];
+        const catDone = items.filter(x => x.checked).length;
+        totalItems += items.length;
+        doneItems += catDone;
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = !!item.checked;
-        checkbox.addEventListener('change', () => {
-          luggageData[cat][index].checked = checkbox.checked;
+        const details = document.createElement('details');
+        details.className = 'checklist-group';
+
+        const summary = document.createElement('summary');
+        summary.style.display = 'flex';
+        summary.style.justifyContent = 'space-between';
+        summary.style.alignItems = 'center';
+        summary.innerHTML = `
+          <span>${cat.name} <span style="font-size:0.72rem; color:var(--text-muted);">(${catDone}/${items.length})</span></span>
+          <span style="font-size:0.7rem; color:var(--accent-ochre); font-weight:700;">展開 ▼</span>
+        `;
+        details.appendChild(summary);
+
+        const listWrap = document.createElement('div');
+        listWrap.className = 'checklist-items';
+
+        if (items.length === 0) {
+          const empty = document.createElement('div');
+          empty.style.fontSize = '0.74rem';
+          empty.style.color = '#B0A89F';
+          empty.style.padding = '4px 0';
+          empty.innerText = '尚無備品項目';
+          listWrap.appendChild(empty);
+        } else {
+          items.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.className = 'check-item-row';
+
+            const label = document.createElement('label');
+            label.className = 'check-item-label';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = !!item.checked;
+            checkbox.addEventListener('change', () => {
+              luggageData[cat.key][index].checked = checkbox.checked;
+              saveLuggageToCloud();
+            });
+
+            const span = document.createElement('span');
+            span.className = 'check-item-text' + (item.checked ? ' done' : '');
+            span.textContent = item.name;
+
+            label.appendChild(checkbox);
+            label.appendChild(span);
+
+            // 右側按鈕群：✏️ 編輯內容 + 🗑️ 密碼刪除
+            const btnGroup = document.createElement('div');
+            btnGroup.style.display = 'flex';
+            btnGroup.style.alignItems = 'center';
+            btnGroup.style.gap = '2px';
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'item-del-btn';
+            editBtn.innerHTML = '✏️';
+            editBtn.title = '編輯此項目內容';
+            editBtn.style.color = 'var(--accent-navy)';
+            editBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              const newContent = prompt(`修改備品內容：`, item.name);
+              if (newContent !== null && newContent.trim() !== '') {
+                luggageData[cat.key][index].name = newContent.trim();
+                saveLuggageToCloud();
+                showToast('已更新項目內容！');
+              }
+            });
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'item-del-btn';
+            delBtn.innerHTML = '🗑️';
+            delBtn.title = '刪除此項目 (需密碼)';
+            delBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              const pwd = prompt('請輸入刪除密碼以確認移除此項目：');
+              if (pwd === DELETE_PASSWORD) {
+                luggageData[cat.key].splice(index, 1);
+                saveLuggageToCloud();
+                showToast('已刪除項目！');
+              } else if (pwd !== null) {
+                alert('密碼錯誤，無法刪除！');
+              }
+            });
+
+            btnGroup.appendChild(editBtn);
+            btnGroup.appendChild(delBtn);
+
+            row.appendChild(label);
+            row.appendChild(btnGroup);
+            listWrap.appendChild(row);
+          });
+        }
+
+        const addBox = document.createElement('div');
+        addBox.className = 'mini-add-box';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'mini-input';
+        input.placeholder = `新增至 ${cat.name}...`;
+
+        const btn = document.createElement('button');
+        btn.className = 'mini-btn';
+        btn.innerText = '＋';
+        
+        const addItemHandler = () => {
+          const val = input.value.trim();
+          if (!val) return;
+          if (!luggageData[cat.key]) luggageData[cat.key] = [];
+          luggageData[cat.key].push({
+            id: Date.now(),
+            name: val,
+            checked: false
+          });
           saveLuggageToCloud();
+          input.value = '';
+        };
+
+        btn.addEventListener('click', addItemHandler);
+        input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') addItemHandler();
         });
 
-        const span = document.createElement('span');
-        span.className = 'check-item-text' + (item.checked ? ' done' : '');
-        span.textContent = item.name;
+        addBox.appendChild(input);
+        addBox.appendChild(btn);
+        listWrap.appendChild(addBox);
 
-        label.appendChild(checkbox);
-        label.appendChild(span);
+        details.appendChild(listWrap);
+        container.appendChild(details);
+      });
 
-        const delBtn = document.createElement('button');
-        delBtn.className = 'item-del-btn';
-        delBtn.innerHTML = '🗑️';
-        delBtn.title = '刪除此項目 (需密碼)';
-        delBtn.addEventListener('click', () => {
-          const pwd = prompt('請輸入刪除密碼以確認移除：');
+      if (countEl) {
+        countEl.innerText = `備品統計：${totalItems} 項 (已備 ${doneItems})`;
+      }
+    }
+
+    function manageLuggageCategoriesModal() {
+      const action = prompt(`【管理行李備品分類】\n目前大分類：\n${luggageCategories.map((c, i) => `${i + 1}. ${c.name}`).join('\n')}\n\n請輸入號碼指令：\n1. ＋ 新增行李分類\n2. ✏️ 修改分類名稱\n3. 🗑️ 刪除分類 (需密碼)`);
+      if (action === '1') {
+        const newName = prompt('請輸入新分類名稱 (例如: 👶 嬰幼兒專區)：');
+        if (newName && newName.trim()) {
+          const key = 'cat_' + Date.now();
+          luggageCategories.push({ key: key, name: newName.trim() });
+          luggageData[key] = [];
+          saveLuggageCategoriesToCloud();
+          saveLuggageToCloud();
+          showToast(`已新增分類：${newName.trim()}`);
+        }
+      } else if (action === '2') {
+        const oldName = prompt(`請輸入要修改的分類名稱：\n(${luggageCategories.map(c => c.name).join(', ')})`);
+        const target = luggageCategories.find(c => c.name === (oldName || '').trim());
+        if (target) {
+          const newName = prompt(`將「${target.name}」修改為：`);
+          if (newName && newName.trim()) {
+            target.name = newName.trim();
+            saveLuggageCategoriesToCloud();
+            showToast('已更新分類名稱！');
+          }
+        } else if (oldName) {
+          alert('找不到該分類！');
+        }
+      } else if (action === '3') {
+        const delName = prompt(`請輸入要刪除的分類名稱：\n(${luggageCategories.map(c => c.name).join(', ')})`);
+        const targetIdx = luggageCategories.findIndex(c => c.name === (delName || '').trim());
+        if (targetIdx !== -1) {
+          const pwd = prompt('請輸入刪除密碼以確認移除此分類：');
           if (pwd === DELETE_PASSWORD) {
-            luggageData[cat].splice(index, 1);
+            const removed = luggageCategories.splice(targetIdx, 1)[0];
+            delete luggageData[removed.key];
+            saveLuggageCategoriesToCloud();
             saveLuggageToCloud();
-            showToast('已刪除項目！');
+            showToast(`已刪除分類：${removed.name}`);
           } else if (pwd !== null) {
             alert('密碼錯誤，無法刪除！');
           }
-        });
-
-        row.appendChild(label);
-        row.appendChild(delBtn);
-        container.appendChild(row);
-      });
+        } else if (delName) {
+          alert('找不到該分類！');
+        }
+      }
     }
 
-    function addLuggageItem(cat) {
-      const input = document.getElementById(`addInput-${cat}`);
-      if (!input) return;
-      const val = input.value.trim();
-      if (!val) return;
-      if (!luggageData[cat]) luggageData[cat] = [];
-      luggageData[cat].push({
-        id: Date.now(),
-        name: val,
-        checked: false
-      });
-      saveLuggageToCloud();
-      input.value = '';
-    }
-
-    ['docs', 'med', 'clothes', 'tech'].forEach(cat => {
-      const input = document.getElementById(`addInput-${cat}`);
-      input?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') addLuggageItem(cat);
-      });
-    });
-
-    // 🛍️ 購物清單雲端同步 (分類＋許願者自訂管理，加入嚴格清洗防護)
+    // 🛍️ 6. 購物清單雲端同步
     const DEFAULT_CATEGORIES = ['無印良品', '藥妝店', 'Outlet', '電器行', '機場免稅店', '大創', '零食', '其他'];
     const DEFAULT_WISHERS = ['許老爸', '朱老媽', '許老妹', '許老弟', '昀芮', '佳琪', '瑜珊', '阿嬤', '阿公', '爺爺'];
 
@@ -1863,12 +1999,10 @@
     const catRef = db.ref('osaka_trip/shop_categories');
     const wisherRef = db.ref('osaka_trip/shop_wishers');
 
-    // 監聽大項目分類（嚴格清洗 undefined 與空值）
     catRef.on('value', (snapshot) => {
       const val = snapshot.val();
       if (val) {
         let rawList = Array.isArray(val) ? val : Object.values(val);
-        // 過濾掉 undefined、null、空字串
         shopCategories = rawList.filter(item => typeof item === 'string' && item.trim().length > 0 && item !== 'undefined');
         if (shopCategories.length === 0) shopCategories = [...DEFAULT_CATEGORIES];
       } else {
@@ -1879,7 +2013,6 @@
       renderShoppingList();
     });
 
-    // 監聽許願者清單（嚴格清洗 undefined 與空值）
     wisherRef.on('value', (snapshot) => {
       const val = snapshot.val();
       if (val) {
@@ -1894,7 +2027,6 @@
     });
 
     function saveCategoriesToCloud() {
-      // 存入前再次確保無空值
       shopCategories = shopCategories.filter(item => typeof item === 'string' && item.trim().length > 0 && item !== 'undefined');
       catRef.set(shopCategories);
     }
@@ -1937,7 +2069,6 @@
       }
     }
 
-    // ⚙️ 大項目分類管理（新增/修改/刪除）
     function manageCategoriesModal() {
       const action = prompt(`【管理購物大項目分類】\n目前分類：\n${shopCategories.map((c, i) => `${i + 1}.${c}`).join('\n')}\n\n請輸入指令號碼：\n1. ＋ 新增分類\n2. ✏️ 修改分類名稱\n3. 🗑️ 刪除分類 (需密碼)`);
       if (action === '1') {
@@ -1992,7 +2123,6 @@
       }
     }
 
-    // ⚙️ 許願者名單管理（新增/修改/刪除）
     function manageWishersModal() {
       const action = prompt(`【管理許願者名單】\n目前許願者：\n${shopWishers.map((w, i) => `${i + 1}.${w}`).join('\n')}\n\n請輸入指令號碼：\n1. ＋ 新增許願者\n2. ✏️ 修改許願者姓名\n3. 🗑️ 刪除許願者 (需密碼)`);
       if (action === '1') {
@@ -2063,7 +2193,6 @@
       const val = snapshot.val();
       if (val) {
         let rawList = Array.isArray(val) ? val : Object.values(val);
-        // 清洗 shoppingItems，防止 category 是 undefined
         shoppingItems = rawList.filter(item => item && item.name).map(item => {
           if (!item.category || item.category === 'undefined') item.category = '其他';
           if (!item.wisher || item.wisher === 'undefined') item.wisher = '未指定';
@@ -2093,7 +2222,6 @@
         countSummaryEl.innerText = `清單統計：${totalCount} 項 (已買 ${doneCount})`;
       }
 
-      // 依分類建立收折區塊（嚴格排查 undefined）
       shopCategories.filter(c => c && c !== 'undefined').forEach(cat => {
         const catItems = shoppingItems.filter(item => (item.category || '其他') === cat);
         const catDoneCount = catItems.filter(x => x.checked).length;
@@ -2152,7 +2280,6 @@
             left.appendChild(wisherTag);
             left.appendChild(nameSpan);
 
-            // 右側操作：修改 ✏️ ＆ 刪除 🗑️
             const right = document.createElement('div');
             right.style.display = 'flex';
             right.style.alignItems = 'center';
@@ -2312,7 +2439,7 @@
       showToast('已下載購物清單 Excel 檔！');
     }
 
-    // 💡 自動依細項對應大項目分類
+    // 💡 7. 記帳大分類自動匹配
     function autoMatchCategory() {
       const item = document.getElementById('expItem').value;
       const catSelect = document.getElementById('expCategory');
@@ -2332,7 +2459,7 @@
       }
     }
 
-    // 🔥 5. 家族收支即時記帳雲端同步
+    // 🔥 8. 家族收支即時記帳雲端同步
     let expenseItems = [];
     const expenseRef = db.ref('osaka_trip/expenses');
 
