@@ -8,12 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- 引入 Firebase 核心與 Realtime Database 模組 (Compat 版本) -->
+  <!-- 引入 Firebase 模組 -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
-  <!-- 👇 請加入下面這一行 -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
   <style>
     :root {
       --bg-cream: #FAF7F2;
@@ -273,7 +272,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 3px 0;
+      padding: 4px 0;
       border-bottom: 1px dashed #F2ECE3;
     }
     .check-item-row:last-child {
@@ -341,15 +340,8 @@
       cursor: pointer;
     }
 
-    .shop-input-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-      margin-bottom: 12px;
-    }
     .shop-input {
-      flex: 1;
-      padding: 8px 12px;
+      padding: 8px 10px;
       border: 1.5px solid #DDD3C7;
       border-radius: 10px;
       font-size: 0.84rem;
@@ -377,10 +369,9 @@
       transform: scale(0.96);
     }
     .shop-list-wrap {
-      list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
     .shop-item-row {
       display: flex;
@@ -397,11 +388,20 @@
       gap: 8px;
       flex: 1;
       cursor: pointer;
+      flex-wrap: wrap;
     }
     .shop-item-left input {
       accent-color: var(--accent-matcha);
       width: 15px;
       height: 15px;
+    }
+    .wisher-tag {
+      font-size: 0.72rem;
+      background: #FEF3C7;
+      color: #92400E;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-weight: 700;
     }
     .shop-item-name {
       font-size: 0.84rem;
@@ -419,7 +419,7 @@
       color: #B42318;
       cursor: pointer;
       font-size: 0.85rem;
-      padding: 2px 6px;
+      padding: 2px 5px;
       border-radius: 4px;
       opacity: 0.6;
       transition: opacity 0.15s ease;
@@ -910,22 +910,56 @@
       </div>
     </div>
 
-    <!-- 下方獨立購物清單卡片（全雲端同步） -->
+    <!-- 🛍️ 購物清單 (預設收折 + 分類/許願者可自訂 + 買到可註記/刪除 + 一鍵匯出 CSV) -->
     <details class="memo-card" id="shop-sec" open style="margin-bottom: 20px; scroll-margin-top: 15px;">
-      <summary style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem;">
+      <summary style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+        <div class="tool-title" style="margin-bottom: 0; font-size: 0.95rem; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
           🛍️ 日本必買願望購物清單 
           <span id="sync-status-shop" style="font-size:0.7rem; color:var(--accent-matcha);">● 雲端連線</span>
         </div>
         <span class="day-toggle-icon"></span>
       </summary>
-      
-      <div class="shop-input-row">
-        <input type="text" id="shopNewInput" class="shop-input" placeholder="輸入想買的物品 (例如: 合利他命、白草莓...)" />
-        <button id="shopAddBtn" class="shop-add-btn">＋加入</button>
+
+      <!-- 統計與匯出工具列 -->
+      <div style="background:#FFFDF5; border:1px dashed #E2D7CC; border-radius:10px; padding:8px 12px; margin-top:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+        <span style="font-size:0.82rem; font-weight:700; color:var(--text-muted);" id="shopCountSummary">清單統計：0 項 (已買 0)</span>
+        <button onclick="exportShoppingToExcel()" class="nav-stamp-btn" style="padding:2px 8px; font-size:0.72rem; display:inline-flex;">📥 匯出購物清單 (CSV)</button>
       </div>
 
-      <div class="shop-list-wrap" id="shopListContainer"></div>
+      <!-- 新增/編輯 購物項目表單 -->
+      <div style="background:var(--paper-yellow); border:1px solid #ECE3D4; border-radius:12px; padding:12px; margin-top:10px; margin-bottom:12px;">
+        <input type="hidden" id="editShopId" value="" />
+        <div style="display:flex; gap:6px; margin-bottom:8px;">
+          <input type="text" id="shopNewInput" class="shop-input" placeholder="想買的品項 (例如: 咖哩調理包、護唇膏...)" style="flex:2;" />
+          <button id="shopAddBtn" class="shop-add-btn" style="flex:0.9;" onclick="saveShoppingItem()">＋加入清單</button>
+          <button id="shopCancelBtn" class="shop-add-btn" style="background:#9E9E9E; display:none; padding:0 8px; font-size:0.75rem;" onclick="cancelShopEdit()">取消</button>
+        </div>
+
+        <div style="display:flex; gap:6px; align-items:flex-end;">
+          <!-- 分類選擇與管理按鈕 -->
+          <div style="flex:1.2;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:0.73rem; font-weight:700; color:var(--text-muted);">🏬 大項目分類</label>
+              <button onclick="manageCategoriesModal()" style="background:none; border:none; color:var(--accent-navy); font-size:0.7rem; font-weight:700; cursor:pointer; text-decoration:underline;">⚙️ 管理分類</button>
+            </div>
+            <select id="shopCategorySelect" class="shop-input" style="padding:6px; font-size:0.8rem; width:100%; margin-top:2px;">
+            </select>
+          </div>
+
+          <!-- 許願者選擇與管理按鈕 -->
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:0.73rem; font-weight:700; color:var(--text-muted);">🙋 許願者</label>
+              <button onclick="manageWishersModal()" style="background:none; border:none; color:var(--accent-navy); font-size:0.7rem; font-weight:700; cursor:pointer; text-decoration:underline;">⚙️ 管理許願者</button>
+            </div>
+            <select id="shopWisherSelect" class="shop-input" style="padding:6px; font-size:0.8rem; width:100%; margin-top:2px;">
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分類收折清單展示區塊（預設摺疊收折） -->
+      <div id="shopCategoriesContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
     </details>
 
     <!-- 💰 家族專屬旅費即時記帳本 (全雲端同步 + 可收折 + 可修改 + 匯出 Excel) -->
@@ -950,7 +984,7 @@
         </div>
       </div>
 
-      <!-- 記帳輸入表單（包在 details 裡面可單獨收折，編輯中會提示） -->
+      <!-- 記帳輸入表單 -->
       <details id="expenseFormDetails" open style="margin-top:10px; margin-bottom:12px; background:var(--paper-yellow); border:1px solid #ECE3D4; border-radius:12px; overflow:hidden;">
         <summary style="padding:8px 12px; font-size:0.8rem; font-weight:700; background:#F4EFE6; cursor:pointer; color:var(--accent-navy); display:flex; justify-content:space-between;">
           <span id="formTitleText">✍️ 填寫 / 記錄花費 (點此收折)</span>
@@ -958,7 +992,6 @@
         </summary>
         
         <div style="padding:12px;">
-          <!-- 隱藏的編輯 ID 暫存欄位 -->
           <input type="hidden" id="editExpenseId" value="" />
 
           <!-- 第一行：日期 ＆ 付款者 -->
@@ -978,13 +1011,13 @@
             </div>
             <div style="flex:1;">
               <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">👤 付款者</label>
-             <select id="expPayer" class="shop-input" style="padding:6px; font-size:0.82rem; width:100%; margin-top:2px;">
-              <option value="許老媽" selected>許老媽</option>
-              <option value="公費">公費</option>
-              <option value="許老爸">許老爸</option>
-              <option value="許老姊">許老姊</option>
-              <option value="許老弟">許老弟</option>
-            </select>
+              <select id="expPayer" class="shop-input" style="padding:6px; font-size:0.82rem; width:100%; margin-top:2px;">
+                <option value="許老媽" selected>許老媽</option>
+                <option value="公費">公費</option>
+                <option value="許老爸">許老爸</option>
+                <option value="許老姊">許老姊</option>
+                <option value="許老弟">許老弟</option>
+              </select>
             </div>
           </div>
 
@@ -1053,7 +1086,7 @@
         </div>
       </details>
 
-      <!-- 明細收折器（點擊可收折長長的清單） -->
+      <!-- 明細收折器 -->
       <details open style="margin-top:6px;">
         <summary style="font-size:0.78rem; font-weight:700; color:var(--text-muted); cursor:pointer; padding:4px 0; user-select:none;">
           📋 支出歷史明細列表 (點此展開/收折)
@@ -1695,7 +1728,7 @@
     firebase.auth().signInAnonymously().catch(console.error);
     const db = firebase.database();
 
-    // 預設行李備品資料
+    // 🎒 行李備品資料
     const defaultLuggageData = {
       docs: [
         { id: 1, name: '護照正本', checked: false },
@@ -1814,16 +1847,199 @@
       });
     });
 
-    // 購物清單雲端同步
+    // 🛍️ 購物清單雲端同步 (分類＋許願者自訂管理)
+    const DEFAULT_CATEGORIES = ['無印良品', '藥妝店', 'Outlet', '電器行', '機場免稅店', '大創', '零食', '其他'];
+    const DEFAULT_WISHERS = ['許老爸', '朱老媽', '許老妹', '許老弟', '昀芮', '佳琪', '瑜珊', '阿嬤', '阿公', '爺爺'];
+
+    let shopCategories = DEFAULT_CATEGORIES;
+    let shopWishers = DEFAULT_WISHERS;
+
+    const catRef = db.ref('osaka_trip/shop_categories');
+    const wisherRef = db.ref('osaka_trip/shop_wishers');
+
+    // 監聽大項目分類
+    catRef.on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val && Array.isArray(val) && val.length > 0) {
+        shopCategories = val;
+      } else {
+        shopCategories = DEFAULT_CATEGORIES;
+        catRef.set(DEFAULT_CATEGORIES);
+      }
+      renderCategorySelectOptions();
+      renderShoppingList();
+    });
+
+    // 監聽許願者清單
+    wisherRef.on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val && Array.isArray(val) && val.length > 0) {
+        shopWishers = val;
+      } else {
+        shopWishers = DEFAULT_WISHERS;
+        wisherRef.set(DEFAULT_WISHERS);
+      }
+      renderWisherSelectOptions();
+    });
+
+    function saveCategoriesToCloud() {
+      catRef.set(shopCategories);
+    }
+
+    function saveWishersToCloud() {
+      wisherRef.set(shopWishers);
+    }
+
+    function renderCategorySelectOptions() {
+      const select = document.getElementById('shopCategorySelect');
+      if (!select) return;
+      const currentVal = select.value;
+      select.innerHTML = '';
+      shopCategories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+      if (shopCategories.includes(currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    function renderWisherSelectOptions() {
+      const select = document.getElementById('shopWisherSelect');
+      if (!select) return;
+      const currentVal = select.value;
+      select.innerHTML = '';
+      shopWishers.forEach(w => {
+        const opt = document.createElement('option');
+        opt.value = w;
+        opt.textContent = w;
+        if (w === '朱老媽' && !currentVal) opt.selected = true;
+        select.appendChild(opt);
+      });
+      if (shopWishers.includes(currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    // ⚙️ 大項目分類管理（新增/修改/刪除）
+    function manageCategoriesModal() {
+      const action = prompt(`【管理購物大項目分類】\n目前分類：\n${shopCategories.map((c, i) => `${i + 1}.${c}`).join('\n')}\n\n請輸入指令號碼：\n1. ＋ 新增分類\n2. ✏️ 修改分類名稱\n3. 🗑️ 刪除分類 (需密碼)`);
+      if (action === '1') {
+        const newCat = prompt('請輸入新分類名稱 (例如: 唐吉訶德)：');
+        if (newCat && newCat.trim()) {
+          const trimmed = newCat.trim();
+          if (!shopCategories.includes(trimmed)) {
+            shopCategories.push(trimmed);
+            saveCategoriesToCloud();
+            showToast(`已新增分類：${trimmed}`);
+          } else {
+            alert('此分類已經存在囉！');
+          }
+        }
+      } else if (action === '2') {
+        const oldCat = prompt(`請輸入要修改的原本分類名稱：\n(${shopCategories.join(', ')})`);
+        if (oldCat && shopCategories.includes(oldCat.trim())) {
+          const newName = prompt(`將「${oldCat.trim()}」修改為：`);
+          if (newName && newName.trim()) {
+            const trimmedNew = newName.trim();
+            const idx = shopCategories.indexOf(oldCat.trim());
+            shopCategories[idx] = trimmedNew;
+            shoppingItems.forEach(item => {
+              if (item.category === oldCat.trim()) item.category = trimmedNew;
+            });
+            saveCategoriesToCloud();
+            saveShoppingToCloud();
+            showToast('已更新分類名稱！');
+          }
+        } else if (oldCat) {
+          alert('找不到該分類名稱！');
+        }
+      } else if (action === '3') {
+        const delCat = prompt(`請輸入要刪除的分類名稱：\n(${shopCategories.join(', ')})`);
+        if (delCat && shopCategories.includes(delCat.trim())) {
+          const pwd = prompt('請輸入刪除密碼以確認移除此分類：');
+          if (pwd === DELETE_PASSWORD) {
+            shopCategories = shopCategories.filter(c => c !== delCat.trim());
+            shoppingItems.forEach(item => {
+              if (item.category === delCat.trim()) item.category = '其他';
+            });
+            if (!shopCategories.includes('其他')) shopCategories.push('其他');
+            saveCategoriesToCloud();
+            saveShoppingToCloud();
+            showToast(`已刪除分類：${delCat.trim()}`);
+          } else if (pwd !== null) {
+            alert('密碼錯誤，無法刪除！');
+          }
+        } else if (delCat) {
+          alert('找不到該分類名稱！');
+        }
+      }
+    }
+
+    // ⚙️ 許願者名單管理（新增/修改/刪除）
+    function manageWishersModal() {
+      const action = prompt(`【管理許願者名單】\n目前許願者：\n${shopWishers.map((w, i) => `${i + 1}.${w}`).join('\n')}\n\n請輸入指令號碼：\n1. ＋ 新增許願者\n2. ✏️ 修改許願者姓名\n3. 🗑️ 刪除許願者 (需密碼)`);
+      if (action === '1') {
+        const newWisher = prompt('請輸入新許願者姓名 (例如: 小阿姨)：');
+        if (newWisher && newWisher.trim()) {
+          const trimmed = newWisher.trim();
+          if (!shopWishers.includes(trimmed)) {
+            shopWishers.push(trimmed);
+            saveWishersToCloud();
+            showToast(`已新增許願者：${trimmed}`);
+          } else {
+            alert('此許願者已在名單中囉！');
+          }
+        }
+      } else if (action === '2') {
+        const oldWisher = prompt(`請輸入要修改的許願者姓名：\n(${shopWishers.join(', ')})`);
+        if (oldWisher && shopWishers.includes(oldWisher.trim())) {
+          const newName = prompt(`將「${oldWisher.trim()}」修改為：`);
+          if (newName && newName.trim()) {
+            const trimmedNew = newName.trim();
+            const idx = shopWishers.indexOf(oldWisher.trim());
+            shopWishers[idx] = trimmedNew;
+            shoppingItems.forEach(item => {
+              if (item.wisher === oldWisher.trim()) item.wisher = trimmedNew;
+            });
+            saveWishersToCloud();
+            saveShoppingToCloud();
+            showToast('已更新許願者姓名！');
+          }
+        } else if (oldWisher) {
+          alert('找不到該許願者！');
+        }
+      } else if (action === '3') {
+        const delWisher = prompt(`請輸入要刪除的許願者姓名：\n(${shopWishers.join(', ')})`);
+        if (delWisher && shopWishers.includes(delWisher.trim())) {
+          const pwd = prompt('請輸入刪除密碼以確認移除此許願者：');
+          if (pwd === DELETE_PASSWORD) {
+            shopWishers = shopWishers.filter(w => w !== delWisher.trim());
+            shoppingItems.forEach(item => {
+              if (item.wisher === delWisher.trim()) item.wisher = '未指定';
+            });
+            saveWishersToCloud();
+            saveShoppingToCloud();
+            showToast(`已刪除許願者：${delWisher.trim()}`);
+          } else if (pwd !== null) {
+            alert('密碼錯誤，無法刪除！');
+          }
+        } else if (delWisher) {
+          alert('找不到該許願者！');
+        }
+      }
+    }
+
     const defaultShoppingItems = [
-      { id: 1, name: '向井酒造「伊根滿開」紫米紅清酒', checked: false },
-      { id: 2, name: 'Royce 生巧克力 / 洋芋片巧克力', checked: false },
-      { id: 3, name: '有馬溫泉 三ツ森炭酸煎餅', checked: false },
-      { id: 4, name: '黑門中川大草莓（白草莓/古都華）', checked: false },
-      { id: 5, name: '合利他命 EX Plus 強效錠', checked: false },
-      { id: 6, name: '大正百保能感冒微粒 / EVE 止痛藥', checked: false },
-      { id: 7, name: '休足時間足貼（環球影城回飯店必貼！）', checked: false },
-      { id: 8, name: 'USJ 超級任天堂世界「能量手環」', checked: false }
+      { id: 1, name: '合利他命 EX Plus 強效錠', category: '藥妝店', wisher: '朱老媽', checked: false },
+      { id: 2, name: '大正百保能感冒微粒 / EVE 止痛藥', category: '藥妝店', wisher: '許老爸', checked: false },
+      { id: 3, name: '休足時間足貼', category: '藥妝店', wisher: '許老妹', checked: false },
+      { id: 4, name: 'Royce 生巧克力 / 洋芋片巧克力', category: '機場免稅店', wisher: '昀芮', checked: false },
+      { id: 5, name: '黑門中川大草莓（白草莓/古都華）', category: '零食', wisher: '朱老媽', checked: false },
+      { id: 6, name: '日本收納好物與文具', category: '無印良品', wisher: '佳琪', checked: false },
+      { id: 7, name: 'USJ 超級任天堂世界能量手環', category: '其他', wisher: '許老弟', checked: false }
     ];
 
     let shoppingItems = defaultShoppingItems;
@@ -1846,71 +2062,235 @@
     }
 
     function renderShoppingList() {
-      const container = document.getElementById('shopListContainer');
+      const container = document.getElementById('shopCategoriesContainer');
+      const countSummaryEl = document.getElementById('shopCountSummary');
       if (!container) return;
       container.innerHTML = '';
 
-      shoppingItems.forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = 'shop-item-row';
+      const totalCount = shoppingItems.length;
+      const doneCount = shoppingItems.filter(x => x.checked).length;
+      if (countSummaryEl) {
+        countSummaryEl.innerText = `清單統計：${totalCount} 項 (已買 ${doneCount})`;
+      }
 
-        const left = document.createElement('label');
-        left.className = 'shop-item-left';
+      // 依分類建立收折區塊（預設收摺）
+      shopCategories.forEach(cat => {
+        const catItems = shoppingItems.filter(item => (item.category || '其他') === cat);
+        const catDoneCount = catItems.filter(x => x.checked).length;
+        
+        const details = document.createElement('details');
+        details.className = 'checklist-group';
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = !!item.checked;
-        checkbox.addEventListener('change', () => {
-          shoppingItems[index].checked = checkbox.checked;
-          saveShoppingToCloud();
-        });
+        const summary = document.createElement('summary');
+        summary.style.display = 'flex';
+        summary.style.justifyContent = 'space-between';
+        summary.style.alignItems = 'center';
+        summary.innerHTML = `
+          <span>🏪 ${cat} <span style="font-size:0.72rem; color:var(--text-muted);">(${catDoneCount}/${catItems.length})</span></span>
+          <span style="font-size:0.7rem; color:var(--accent-ochre); font-weight:700;">點擊展開 ▼</span>
+        `;
+        details.appendChild(summary);
 
-        const span = document.createElement('span');
-        span.className = 'shop-item-name' + (item.checked ? ' done' : '');
-        span.textContent = item.name;
+        const listWrap = document.createElement('div');
+        listWrap.className = 'checklist-items';
 
-        left.appendChild(checkbox);
-        left.appendChild(span);
+        if (catItems.length === 0) {
+          const empty = document.createElement('div');
+          empty.style.fontSize = '0.74rem';
+          empty.style.color = '#B0A89F';
+          empty.style.padding = '6px 4px';
+          empty.innerText = '尚無此分類項目';
+          listWrap.appendChild(empty);
+        } else {
+          catItems.forEach(item => {
+            const originalIndex = shoppingItems.findIndex(x => x.id === item.id);
+            const row = document.createElement('div');
+            row.className = 'shop-item-row';
+            row.style.margin = '4px 0';
 
-        const delBtn = document.createElement('button');
-        delBtn.className = 'shop-del-btn';
-        delBtn.innerHTML = '🗑️';
-        delBtn.title = '刪除此項目 (需密碼)';
-        delBtn.addEventListener('click', () => {
-          const pwd = prompt('請輸入刪除密碼以確認移除：');
-          if (pwd === DELETE_PASSWORD) {
-            shoppingItems.splice(index, 1);
-            saveShoppingToCloud();
-            showToast('已刪除項目！');
-          } else if (pwd !== null) {
-            alert('密碼錯誤，無法刪除！');
-          }
-        });
+            const left = document.createElement('label');
+            left.className = 'shop-item-left';
 
-        row.appendChild(left);
-        row.appendChild(delBtn);
-        container.appendChild(row);
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = !!item.checked;
+            checkbox.title = '點擊標記已買到';
+            checkbox.addEventListener('change', () => {
+              shoppingItems[originalIndex].checked = checkbox.checked;
+              saveShoppingToCloud();
+            });
+
+            const wisherTag = document.createElement('span');
+            wisherTag.className = 'wisher-tag';
+            wisherTag.textContent = item.wisher ? `${item.wisher}` : '未指定';
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'shop-item-name' + (item.checked ? ' done' : '');
+            nameSpan.textContent = item.name;
+
+            left.appendChild(checkbox);
+            left.appendChild(wisherTag);
+            left.appendChild(nameSpan);
+
+            // 右側操作：修改 ✏️ ＆ 刪除 🗑️
+            const right = document.createElement('div');
+            right.style.display = 'flex';
+            right.style.alignItems = 'center';
+            right.style.gap = '4px';
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'shop-del-btn';
+            editBtn.innerHTML = '✏️';
+            editBtn.title = '編輯此品項';
+            editBtn.style.color = 'var(--accent-navy)';
+            editBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              loadShopForEdit(item.id);
+            });
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'shop-del-btn';
+            delBtn.innerHTML = '🗑️';
+            delBtn.title = '刪除此品項 (需密碼)';
+            delBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              const pwd = prompt('請輸入刪除密碼以確認移除：');
+              if (pwd === DELETE_PASSWORD) {
+                shoppingItems.splice(originalIndex, 1);
+                saveShoppingToCloud();
+                showToast('已刪除項目！');
+              } else if (pwd !== null) {
+                alert('密碼錯誤，無法刪除！');
+              }
+            });
+
+            right.appendChild(editBtn);
+            right.appendChild(delBtn);
+
+            row.appendChild(left);
+            row.appendChild(right);
+            listWrap.appendChild(row);
+          });
+        }
+
+        details.appendChild(listWrap);
+        container.appendChild(details);
       });
     }
 
-    function addNewShoppingItem() {
+    function loadShopForEdit(id) {
+      const item = shoppingItems.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('editShopId').value = item.id;
+      document.getElementById('shopNewInput').value = item.name;
+      
+      const catSelect = document.getElementById('shopCategorySelect');
+      if (!shopCategories.includes(item.category)) {
+        shopCategories.push(item.category);
+        renderCategorySelectOptions();
+      }
+      catSelect.value = item.category || '其他';
+
+      const wisherSelect = document.getElementById('shopWisherSelect');
+      if (item.wisher && !shopWishers.includes(item.wisher)) {
+        shopWishers.push(item.wisher);
+        renderWisherSelectOptions();
+      }
+      wisherSelect.value = item.wisher || '朱老媽';
+
+      const addBtn = document.getElementById('shopAddBtn');
+      addBtn.innerText = '💾 儲存修改';
+      addBtn.style.background = 'var(--accent-ochre)';
+      document.getElementById('shopCancelBtn').style.display = 'inline-block';
+
+      document.getElementById('shop-sec').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function cancelShopEdit() {
+      document.getElementById('editShopId').value = '';
+      document.getElementById('shopNewInput').value = '';
+      const addBtn = document.getElementById('shopAddBtn');
+      addBtn.innerText = '＋加入清單';
+      addBtn.style.background = 'var(--accent-matcha)';
+      document.getElementById('shopCancelBtn').style.display = 'none';
+    }
+
+    function saveShoppingItem() {
       const input = document.getElementById('shopNewInput');
+      const category = document.getElementById('shopCategorySelect').value;
+      const wisher = document.getElementById('shopWisherSelect').value;
+      const editId = document.getElementById('editShopId').value;
       if (!input) return;
+
       const val = input.value.trim();
-      if (!val) return;
-      shoppingItems.unshift({
-        id: Date.now(),
-        name: val,
-        checked: false
-      });
+      if (!val) {
+        alert('請輸入品項名稱！');
+        return;
+      }
+
+      if (editId) {
+        const idx = shoppingItems.findIndex(x => String(x.id) === String(editId));
+        if (idx !== -1) {
+          shoppingItems[idx].name = val;
+          shoppingItems[idx].category = category;
+          shoppingItems[idx].wisher = wisher;
+          showToast('已修改購物項目！');
+        }
+        cancelShopEdit();
+      } else {
+        shoppingItems.unshift({
+          id: Date.now(),
+          name: val,
+          category: category,
+          wisher: wisher,
+          checked: false
+        });
+        input.value = '';
+        showToast('已新增至願望清單！');
+      }
+
       saveShoppingToCloud();
-      input.value = '';
     }
 
-    document.getElementById('shopAddBtn')?.addEventListener('click', addNewShoppingItem);
     document.getElementById('shopNewInput')?.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') addNewShoppingItem();
+      if (e.key === 'Enter') saveShoppingItem();
     });
+
+    // 📥 匯出購物清單 (CSV 格式)
+    function exportShoppingToExcel() {
+      if (!shoppingItems || shoppingItems.length === 0) {
+        alert('目前購物清單中沒有任何項目可以匯出喔！');
+        return;
+      }
+
+      const headers = ['大項目分類', '許願者', '想買品項', '購買狀態'];
+      const rows = shoppingItems.map(item => {
+        const cleanName = (item.name || '').replace(/"/g, '""');
+        const status = item.checked ? '已購買' : '未購買';
+        return [
+          `"${item.category || '其他'}"`,
+          `"${item.wisher || '未指定'}"`,
+          `"${cleanName}"`,
+          `"${status}"`
+        ].join(',');
+      });
+
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', `2027京阪神_願望購物清單_${dateStr}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      showToast('已下載購物清單 Excel 檔！');
+    }
 
     // 💡 自動依細項對應大項目分類
     function autoMatchCategory() {
@@ -2133,6 +2513,7 @@
       saveExpenseToCloud();
     }
 
+    // 📥 匯出記帳清單
     function exportToExcel() {
       if (!expenseItems || expenseItems.length === 0) {
         alert('目前還沒有任何記帳資料可以匯出喔！');
@@ -2181,16 +2562,16 @@
 
       showToast('已下載 Excel 記帳檔！');
     }
-// 📅 依目前實際日期自動選取當天的行程日期
+
+    // 📅 依目前實際日期自動選取當天的行程日期
     function autoSelectTodayTripDate() {
       const dateSelect = document.getElementById('expDate');
       if (!dateSelect) return;
 
       const now = new Date();
-      const month = now.getMonth() + 1; // 1 ~ 12 月
+      const month = now.getMonth() + 1;
       const date = now.getDate();
 
-      // 在 1 月 19 日到 1 月 26 日期間，打開網頁會自動切換為當天的日期
       if (month === 1) {
         const tripMap = {
           19: '1/19 (D1)',
@@ -2208,7 +2589,6 @@
       }
     }
 
-    // 每次打開網頁自動執行判斷
     autoSelectTodayTripDate();
   </script>
 </body>
