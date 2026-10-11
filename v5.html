@@ -553,29 +553,29 @@
     }
 
     /* 🌟 Q版全家福位置標記 */
-    .family-now-marker {
+.family-now-marker {
     position: absolute;
-    left: -54px;
-    top: -24px;
-    width: 62px;       /* 🌟 放大至 62px，表情動作超清晰！ */
+    left: -42px;       /* 🌟 往右推 12px，紅旗不切邊、完美靠在圓點旁 */
+    top: -30px;        /* 稍微往上一點點，不擋住下方的時間標籤 */
+    width: 74px;       /* 🌟 再大一點點，表情動作最清晰！ */
     height: auto;
     z-index: 10;
     pointer-events: none;
     animation: familyWalk 1.8s ease-in-out infinite;
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.22));
   }
   .family-now-bubble {
     position: absolute;
-    left: 14px;
-    top: -22px;        /* 氣泡往上移，避免擋到小紅旗 */
+    left: 22px;        /* 🌟 氣泡跟著往右對齊，完美浮在隊伍上方 */
+    top: -26px;
     background: #D9534F;
     color: white;
     font-size: 0.65rem;
     font-weight: 900;
-    padding: 2px 7px;
-    border-radius: 8px;
+    padding: 2px 8px;
+    border-radius: 10px;
     white-space: nowrap;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.18);
   }
     @keyframes familyWalk {
       0%, 100% { transform: translateY(0px) rotate(-2deg); }
