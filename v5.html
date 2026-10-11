@@ -552,6 +552,36 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
 
+    /* 🌟 Q版全家福位置標記 */
+    .family-now-marker {
+      position: absolute;
+      left: -38px;
+      top: -8px;
+      width: 38px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+      animation: familyWalk 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 3px 5px rgba(0,0,0,0.25));
+    }
+    .family-now-bubble {
+      position: absolute;
+      left: 10px;
+      top: -16px;
+      background: #D9534F;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 8px;
+      white-space: nowrap;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    @keyframes familyWalk {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50% { transform: translateY(-4px) rotate(2deg); }
+    }
+
     .time-txt {
       font-size: 0.78rem;
       font-weight: 900;
@@ -2832,7 +2862,64 @@
       }
     }
 
-    autoSelectTodayTripDate();
+   autoSelectTodayTripDate();
+
+    // 🌟 自動追蹤時間並移動 Q 版全家福
+    function updateFamilyPosition() {
+      const now = new Date();
+      const currentMonth = now.getMonth() + 1; // 1~12 月
+      const currentDate = now.getDate();
+      const currentHour = now.getHours();
+      const currentMin = now.getMinutes();
+      const currentTotalMins = currentHour * 60 + currentMin;
+
+      // 旅行日期對應：1/19 ~ 1/26
+      const dayMap = { 19:'d1', 20:'d2', 21:'d3', 22:'d4', 23:'d5', 24:'d6', 25:'d7', 26:'d8' };
+      const todayId = (currentMonth === 1) ? dayMap[currentDate] : null;
+
+      // 移除先前的標記
+      document.querySelector('.family-now-marker')?.remove();
+      document.querySelector('.family-now-bubble')?.remove();
+
+      // 如果不是旅行當月當天，預設先放在 Day 1 讓你現在測試看得到效果
+      const activeCardId = todayId || 'd1';
+      const targetCard = document.getElementById(activeCardId);
+      if (!targetCard) return;
+
+      const nodes = targetCard.querySelectorAll('.timeline-node');
+      let activeNode = nodes[0];
+
+      nodes.forEach(node => {
+        const timeTxt = node.querySelector('.time-txt')?.innerText.trim() || '';
+        const match = timeTxt.match(/(\d{1,2}):(\d{2})/);
+        if (match) {
+          const nodeMins = parseInt(match[1]) * 60 + parseInt(match[2]);
+          // 如果是旅行當天則比對真實時間；平時測試則掛在第一個節點
+          if (todayId && currentTotalMins >= nodeMins) {
+            activeNode = node;
+          }
+        }
+      });
+
+      if (activeNode) {
+        const marker = document.createElement('img');
+        marker.src = 'family_marker.png'; // ⚠️ 請確認你的檔名是 family_marker.png 或 family_marker.jpg
+        marker.className = 'family-now-marker';
+        marker.alt = '我們在這裡';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'family-now-bubble';
+        bubble.innerText = '📍 我們在這裡！';
+
+        activeNode.appendChild(marker);
+        activeNode.appendChild(bubble);
+      }
+    }
+
+    updateFamilyPosition();
+    setInterval(updateFamilyPosition, 60000); // 每分鐘自動檢查一次
+  </script>
+</body>
 
   // 🌟 自動高亮今日行程按鈕
   function highlightTodayBtn() {
