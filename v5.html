@@ -2917,7 +2917,66 @@
     }
 
     updateFamilyPosition();
-    setInterval(updateFamilyPosition, 60000); // 每分鐘自動檢查一次
+    setInterval(updateFamilyPosition, 60000);
+
+    // 🌟 自動抓取 Open-Meteo 即時日本天氣 API
+    async function fetchLiveWeather() {
+      // 各天對應的地點經緯度與日期 (2027-01-19 ~ 2027-01-26)
+      const destinations = [
+        { dayId: 'd1', name: '大阪', lat: 34.6937, lon: 135.5023, date: '2027-01-19' },
+        { dayId: 'd2', name: '有馬/神戶', lat: 34.7967, lon: 135.2475, date: '2027-01-20' },
+        { dayId: 'd3', name: '琵琶湖', lat: 35.2078, lon: 135.8856, date: '2027-01-21', isSnow: true },
+        { dayId: 'd4', name: '伊根舟屋', lat: 35.6744, lon: 135.2891, date: '2027-01-22', isSnow: true },
+        { dayId: 'd5', name: '天橋立', lat: 35.5684, lon: 135.1914, date: '2027-01-23' },
+        { dayId: 'd6', name: '環球影城', lat: 34.6654, lon: 135.4323, date: '2027-01-24' },
+        { dayId: 'd7', name: '大阪市區', lat: 34.6937, lon: 135.5023, date: '2027-01-25' },
+        { dayId: 'd8', name: '關空/難波', lat: 34.4348, lon: 135.2441, date: '2027-01-26' }
+      ];
+
+      // WMO 天氣代碼轉換為圖示與中文說明
+      function getWeatherDesc(code) {
+        if (code === 0) return { icon: '☀️', txt: '晴' };
+        if ([1, 2].includes(code)) return { icon: '🌤️', txt: '多雲' };
+        if (code === 3) return { icon: '☁️', txt: '陰' };
+        if ([45, 48].includes(code)) return { icon: '🌫️', txt: '霧' };
+        if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return { icon: '🌧️', txt: '有雨' };
+        if ([71, 73, 75, 77, 85, 86].includes(code)) return { icon: '❄️', txt: '降雪' };
+        if ([95, 96, 99].includes(code)) return { icon: '⛈️', txt: '雷雨' };
+        return { icon: '🌤️', txt: '陰晴' };
+      }
+
+      for (const dest of destinations) {
+        try {
+          // 呼叫 Open-Meteo 免費氣象 API
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${dest.lat}&longitude=${dest.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo`;
+          const res = await fetch(url);
+          if (!res.ok) continue;
+          const data = await res.json();
+
+          if (data.daily && data.daily.time) {
+            const idx = data.daily.time.indexOf(dest.date);
+            // 如果旅行日在 14 天預報期內，更新為精準實況
+            if (idx !== -1) {
+              const code = data.daily.weather_code[idx];
+              const minT = Math.round(data.daily.temperature_2m_min[idx]);
+              const maxT = Math.round(data.daily.temperature_2m_max[idx]);
+              const info = getWeatherDesc(code);
+
+              const card = document.getElementById(dest.dayId);
+              const pill = card?.querySelector('.weather-pill');
+              if (pill) {
+                pill.innerHTML = `${info.icon} ${dest.name} ${minT}°C~${maxT}°C (${info.txt})`;
+                if (code >= 71 && code <= 86) pill.classList.add('snow');
+              }
+            }
+          }
+        } catch (e) {
+          console.warn(`Weather load failed for ${dest.name}:`, e);
+        }
+      }
+    }
+
+    fetchLiveWeather();
   </script>
 </body>
 
