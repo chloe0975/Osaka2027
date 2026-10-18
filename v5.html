@@ -2987,7 +2987,7 @@
 
    autoSelectTodayTripDate();
 
-    // 🌟 自動追蹤時間並移動 Q 版全家福
+   // 🌟 自動追蹤時間並移動 Q 版全家福
     function updateFamilyPosition() {
       const now = new Date();
       const currentMonth = now.getMonth() + 1; // 1~12 月
@@ -3000,24 +3000,25 @@
       const dayMap = { 19:'d1', 20:'d2', 21:'d3', 22:'d4', 23:'d5', 24:'d6', 25:'d7', 26:'d8' };
       const todayId = (currentMonth === 1) ? dayMap[currentDate] : null;
 
-      // 移除先前的標記
+      // 移除先前的標記，避免重複出現
       document.querySelector('.family-now-marker')?.remove();
       document.querySelector('.family-now-bubble')?.remove();
 
-      // 如果不是旅行當月當天，預設先放在 Day 1 讓你現在測試看得到效果
+      // 非旅行期間預設掛在 d1 預覽效果；旅行當天則鎖定當天
       const activeCardId = todayId || 'd1';
       const targetCard = document.getElementById(activeCardId);
       if (!targetCard) return;
 
       const nodes = targetCard.querySelectorAll('.timeline-node');
+      if (!nodes || nodes.length === 0) return;
+
       let activeNode = nodes[0];
 
       nodes.forEach(node => {
         const timeTxt = node.querySelector('.time-txt')?.innerText.trim() || '';
         const match = timeTxt.match(/(\d{1,2}):(\d{2})/);
         if (match) {
-          const nodeMins = parseInt(match[1]) * 60 + parseInt(match[2]);
-          // 如果是旅行當天則比對真實時間；平時測試則掛在第一個節點
+          const nodeMins = parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
           if (todayId && currentTotalMins >= nodeMins) {
             activeNode = node;
           }
@@ -3026,7 +3027,7 @@
 
       if (activeNode) {
         const marker = document.createElement('img');
-        marker.src = 'family_marker.png'; // ⚠️ 請確認你的檔名是 family_marker.png 或 family_marker.jpg
+        marker.src = 'family_marker.png'; // ⚠️ 請確認 GitHub 倉庫有此圖檔
         marker.className = 'family-now-marker';
         marker.alt = '我們在這裡';
 
@@ -3041,6 +3042,10 @@
 
     updateFamilyPosition();
     setInterval(updateFamilyPosition, 60000);
+</script>
+</body>
+</html>
+    
 
     // 🌟 自動抓取 Open-Meteo 即時日本天氣 API
     async function fetchLiveWeather() {
