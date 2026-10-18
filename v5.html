@@ -1512,11 +1512,12 @@
     </details>
 
     <!-- DAY 5 (已加 open，點選自動展開) -->
-    <details class="day-book" id="d5" open>
-      <summary>
+   <!-- DAY 5 -->
+<details class="day-book" id="d5" open>
+  <summary>
     <div class="washi-tape"></div>
     <div class="day-header">
-      <div>
+      <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
         <span class="day-badge">DAY 5</span>
         <span class="day-date">1/23 (週六)</span>
         <span class="weather-pill">🌲 天橋立 待同步</span>
@@ -1530,34 +1531,32 @@
 
   <div class="day-content">
     <div class="timeline">
-      <!-- 07:00 起床 -->
-      <div class="timeline-item" data-time="07:00">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">07:00</div>
-        <div class="timeline-card">
-          <div class="timeline-title">⏰ 晨起梳洗</div>
-          <div class="timeline-desc">享受海灣晨曦，準備退房與行李上車。</div>
+
+      <!-- 07:00 -->
+      <div class="time-node">
+        <div class="time-stamp">07:00</div>
+        <div class="schedule-card">
+          <div class="card-title">⏰ 晨起梳洗</div>
+          <div class="card-desc">享受海灣晨曦，準備退房與行李上車。</div>
         </div>
       </div>
 
-      <!-- 08:00 早餐 -->
-      <div class="timeline-item" data-time="08:00">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">08:00</div>
-        <div class="timeline-card">
-          <div class="timeline-title">🍳 飯店享用早餐</div>
-          <div class="timeline-desc">悠閒享用熱騰騰和風朝食，充飽電力出發！</div>
+      <!-- 08:00 -->
+      <div class="time-node">
+        <div class="time-stamp">08:00</div>
+        <div class="schedule-card">
+          <div class="card-title">🍳 飯店享用早餐</div>
+          <div class="card-desc">悠閒享用熱騰騰和風朝食，充飽電力出發！</div>
         </div>
       </div>
 
-      <!-- 10:00 天橋立 View Land -->
-      <div class="timeline-item" data-time="10:00">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">10:00</div>
-        <div class="timeline-card">
+      <!-- 10:00 -->
+      <div class="time-node">
+        <div class="time-stamp">10:00</div>
+        <div class="schedule-card">
           <span class="tag tag-spot">景點</span>
-          <div class="timeline-title">🌲 天橋立 View Land & サイクルカー</div>
-          <div class="timeline-desc">
+          <div class="card-title">🌲 天橋立 View Land & サイクルカー</div>
+          <div class="card-desc">
             搭乘登山纜車/吊椅上山，經典「股覗き」飛龍在天倒立觀景！<br>
             🚲 <b>Cycle Car（空中腳踏車）</b>：在松樹樹冠高空踩腳踏車俯瞰海灣美景！
           </div>
@@ -1565,66 +1564,57 @@
         </div>
       </div>
 
-      <!-- 12:00 午餐 -->
-      <div class="timeline-item" data-time="12:00">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">12:00</div>
-        <div class="timeline-card">
+      <!-- 12:00 -->
+      <div class="time-node">
+        <div class="time-stamp">12:00</div>
+        <div class="schedule-card">
           <span class="tag tag-food">美食</span>
-          <div class="timeline-title">🍱 觀景台展望餐廳午餐</div>
-          <div class="timeline-desc">
-            邊看無敵海景邊吃：熱騰騰海鮮丼飯、讚岐烏龍麵，最後別忘了來個招牌布丁甜點！🍮
-          </div>
+          <div class="card-title">🍱 觀景台展望餐廳午餐</div>
+          <div class="card-desc">邊看無敵海景邊吃：熱騰騰海鮮丼飯、讚岐烏龍麵，最後再來個招牌布丁甜點！🍮</div>
         </div>
       </div>
 
-      <!-- 17:00 前往關空 -->
-      <div class="timeline-item" data-time="17:00">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">17:00</div>
-        <div class="timeline-card">
-          <span class="tag tag-traffic">自駕</span>
-          <div class="timeline-title">🚗 開車出發往關西國際機場</div>
-          <div class="timeline-desc">整理行李、加滿油，走高速公路直奔關空還車門市。</div>
+      <!-- 17:00 -->
+      <div class="time-node">
+        <div class="time-stamp">17:00</div>
+        <div class="schedule-card">
+          <span class="tag tag-trans">自駕</span>
+          <div class="card-title">🚗 開車出發往關西國際機場</div>
+          <div class="card-desc">整理行李、加滿油，走高速公路直奔關西機場還車門市。</div>
         </div>
       </div>
 
-      <!-- 19:30 還車與機場晚餐 -->
-      <div class="timeline-item" data-time="19:30">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">19:30</div>
-        <div class="timeline-card">
-          <span class="tag tag-traffic">手續</span>
-          <div class="timeline-title">🏁 關西機場還車 ＆ 晚餐覓食</div>
-          <div class="timeline-desc">
-            完成還車點交與高速公路 ETC 結算。隨後在關西機場航廈餐廳輕鬆吃晚餐覓食！
-          </div>
+      <!-- 19:30 -->
+      <div class="time-node">
+        <div class="time-stamp">19:30</div>
+        <div class="schedule-card">
+          <span class="tag tag-trans">手續</span>
+          <div class="card-title">🏁 關西機場還車 ＆ 晚餐覓食</div>
+          <div class="card-desc">完成還車點交與高速公路 ETC 結算。隨後在關西機場航廈餐廳輕鬆吃晚餐覓食！</div>
         </div>
       </div>
 
-      <!-- 20:30 搭乘鐵道前往環球城 -->
-      <div class="timeline-item" data-time="20:30">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">20:30</div>
-        <div class="timeline-card">
-          <span class="tag tag-traffic">鐵道轉乘</span>
-          <div class="timeline-title">🚆 關西機場 ➔ 環球影城港灣酒店</div>
-          <div class="timeline-desc">
-            <b>轉乘指引超簡單：</b><br>
+      <!-- 20:30 -->
+      <div class="time-node">
+        <div class="time-stamp">20:30</div>
+        <div class="schedule-card">
+          <span class="tag tag-trans">鐵道轉乘</span>
+          <div class="card-title">🚆 關西機場 ➔ 環球影城港灣酒店</div>
+          <div class="card-desc">
+            <b>轉乘指引：</b><br>
             1. 從關西機場搭乘 <b>JR 關空快速</b>（往大阪/京橋方向），坐到<b>「西九條站」</b>（約 55～60 分鐘）。<br>
             2. 西九條站下車後，走到<b>對側月台</b>（通常為第 2、3 月台）轉乘 <b>JR 櫻島線（夢咲線）</b>，直達<b>《環球城站》</b>！
           </div>
         </div>
       </div>
 
-      <!-- 21:45 飯店 Check-in -->
-      <div class="timeline-item" data-time="21:45">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">21:45</div>
-        <div class="timeline-card">
-          <span class="tag tag-hotel">住宿</span>
-          <div class="timeline-title">🏨 環球影城港灣酒店 Check-in</div>
-          <div class="timeline-desc">出站步行即可抵達飯店辦理入住，好好泡澡休息，蓄勢待發迎接明天的 USJ 慶生狂歡！🎢</div>
+      <!-- 21:45 -->
+      <div class="time-node">
+        <div class="time-stamp">21:45</div>
+        <div class="schedule-card">
+          <span class="tag tag-stay">住宿</span>
+          <div class="card-title">🏨 環球影城港灣酒店 Check-in</div>
+          <div class="card-desc">出站步行即可抵達飯店辦理入住，好好泡澡休息，迎接明天的 USJ 狂歡！🎢</div>
           <a class="nav-btn" href="https://maps.google.com/?q=Hotel+Universal+Port" target="_blank">📍 導航港灣酒店</a>
         </div>
       </div>
