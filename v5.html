@@ -1651,108 +1651,111 @@
       </div>
     </details>
 
-    <!-- DAY 7 (已加 open，點選自動展開) -->
-   <details class="day-book" id="d7">
-  <summary>
-    <div class="washi-tape"></div>
-    <div class="day-header">
-      <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
-        <span class="day-badge">DAY 7</span>
-        <span class="day-date">1/25 (週一)</span>
-        <span class="weather-pill">🍔 大阪市區 待同步</span>
-      </div>
-      <div class="day-toggle-wrap">
-        <span class="day-toggle-icon"></span>
-      </div>
-    </div>
-    <div class="day-theme">🍔 Shake Shack 早午餐 ➔ 大阪城巡禮 ➔ 赤丸食堂</div>
-  </summary>
-
-  <div class="day-content">
-    <div class="timeline">
-
-      <!-- 09:00 起床 -->
-      <div class="time-node">
-        <div class="time-stamp">09:00</div>
-        <div class="schedule-card">
-          <div class="card-title">⏰ 悠閒晨起整理</div>
-          <div class="card-desc">在環球影城港灣酒店睡飽飽，整理行李準備退房。</div>
-        </div>
-      </div>
-
-      <!-- 10:30 早午餐 -->
-      <div class="time-node">
-        <div class="time-stamp">10:30</div>
-        <div class="schedule-card">
-          <span class="tag tag-food">美食</span>
-          <div class="card-title">🍔 Shake Shack 早午餐（The Front Park 飯店店）</div>
-          <div class="card-desc">
-            退房後前往 Universal Citywalk 享用紐約超人氣鮮嫩多汁牛肉漢堡、香濃波浪薯條與經典奶昔！
+  <!-- DAY 7 (已加 open，點選自動展開) -->
+    <details class="day-book" id="d7" open>
+      <summary>
+        <div class="washi-tape right"></div>
+        <div class="day-header">
+          <div>
+            <span class="day-badge">DAY 7</span>
+            <span class="day-date">1/25 (週一)</span>
+            <span class="weather-pill">🍔 大阪市區 待同步</span>
           </div>
-          <a class="nav-btn" href="https://maps.google.com/?q=Shake+Shack+The+Park+Front+Hotel+at+Universal+Studios+Japan" target="_blank">📍 導航 Shake Shack</a>
-        </div>
-      </div>
-
-      <!-- 11:45 轉乘前往難波 -->
-      <div class="time-node">
-        <div class="time-stamp">11:45</div>
-        <div class="schedule-card">
-          <span class="tag tag-trans">鐵道轉乘</span>
-          <div class="card-title">🚆 環球城 ➔ 難波假日酒店（寄放行李）</div>
-          <div class="card-desc">
-            <b>轉乘詳細指引：</b><br>
-            1. 步行約 3 分鐘至 <b>JR 環球城站（Universal City）</b>。<br>
-            2. 搭乘 <b>JR 櫻島線（夢咲線）</b>往「西九條」方向電車，約 5 分鐘抵達 <b>JR 西九條站</b>下車。<br>
-            3. 出 JR 西九條站剪票口後，依指標前往旁邊的 <b>阪神 西九條站</b>（步行約 1～2 分鐘）。<br>
-            4. 搭乘<b>阪神難波線</b>往「大阪難波 / 奈良」方向列車，約 8～10 分鐘抵達 <b>大阪難波站</b>。<br>
-            5. 出站後走地下街<b>「Namba Walk」朝 B20 / B22 出口</b>出站，步行至難波假日酒店寄放行李！
+          <div class="day-toggle-wrap">
+            <span class="day-toggle-icon"></span>
           </div>
-          <a class="nav-btn" href="https://maps.google.com/?q=Holiday+Inn+Osaka+Namba" target="_blank">📍 導航難波假日酒店</a>
         </div>
-      </div>
+        <div class="day-theme">🍔 Shake Shack 早午餐 ➔ 大阪城巡禮 ➔ 赤丸食堂</div>
+      </summary>
 
-      <!-- 13:30 大阪城巡禮 -->
-      <div class="time-node">
-        <div class="time-stamp">13:30</div>
-        <div class="schedule-card">
-          <span class="tag tag-spot">景點</span>
-          <div class="card-title">🏯 大阪城天守閣 ＆ 大阪城公園</div>
-          <div class="card-desc">
-            漫步歷史悠久的大阪城公園，欣賞雄偉護城河石垣與天守閣景緻，悠閒散步拍照！
+      <div class="day-content">
+        <ul class="timeline">
+          <li class="timeline-node">
+            <div class="time-txt">09:00</div>
+            <div class="event-txt">⏰ 悠閒晨起收拾</div>
+            <div class="desc-txt">在環球影城港灣酒店睡飽飽，整理戰利品與行李退房。</div>
+          </li>
+
+          <li class="timeline-node">
+            <div class="time-txt">10:30</div>
+            <div class="event-txt"><span class="badge b-eat">早午餐</span> Shake Shack (The Park Front 飯店店)</div>
+            <div class="time-pill-bar">
+              <span class="time-pill warn">⏰ 10:00 - 22:00</span>
+              <span class="time-pill">🚶 Universal Citywalk 步行 2 分</span>
+            </div>
+            <div class="desc-txt">退房後享用紐約超人氣多汁牛肉漢堡、香濃波浪薯條與香濃奶昔！</div>
+
+            <div class="polaroid-card">
+              <img class="polaroid-img" src="burger.png" alt="Shake Shack漢堡" onerror="this.src='https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80'">
+              <div class="polaroid-caption">🍔 美味多汁・Shake Shack 經典漢堡</div>
+            </div>
+
+            <div class="btn-row">
+              <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Shake+Shack+The+Park+Front+Hotel+at+Universal+Studios+Japan">📍 導航 Shake Shack</a>
+            </div>
+          </li>
+
+          <li class="timeline-node">
+            <div class="time-txt">11:45</div>
+            <div class="event-txt"><span class="badge b-see">鐵道</span> 環球城 ➔ 難波假日酒店（寄放行李）</div>
+            <div class="desc-txt">
+              <b>轉乘詳細指引：</b><br>
+              1. 步行約 3 分鐘至 <b>JR 環球城站（Universal City）</b>。<br>
+              2. 搭乘 <b>JR 櫻島線（夢咲線）</b>往西九條方向電車，約 5 分鐘抵達 <b>JR 西九條站</b>下車。<br>
+              3. 出 JR 西九條站剪票口後，依指標前往旁邊的 <b>阪神 西九條站</b>（步行約 1～2 分鐘）。<br>
+              4. 搭乘<b>阪神難波線</b>往「大阪難波 / 奈良」方向列車，約 8～10 分鐘抵達 <b>大阪難波站</b>。<br>
+              5. 出站後走地下街<b>「Namba Walk」朝 B20 / B22 出口方向</b>出站，步行至飯店寄放行李！
+            </div>
+            <div class="btn-row">
+              <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Holiday+Inn+Osaka+Namba">📍 導航難波假日酒店</a>
+            </div>
+          </li>
+
+          <li class="timeline-node">
+            <div class="time-txt">13:30</div>
+            <div class="event-txt"><span class="badge b-see">景點</span> 大阪城天守閣 ＆ 大阪城公園</div>
+            <div class="time-pill-bar">
+              <span class="time-pill warn">⏰ 天守閣：09:00 - 17:00</span>
+            </div>
+            <div class="desc-txt">漫步歷史悠久的大阪城公園，欣賞雄偉護城河石垣與天守閣景緻，悠閒散步拍照！</div>
+
+            <div class="polaroid-card">
+              <img class="polaroid-img" src="osakacastle.png" alt="大阪城天守閣" onerror="this.src='https://images.unsplash.com/photo-1590559899731-a3728805f98f?w=600&auto=format&fit=crop&q=80'">
+              <div class="polaroid-caption">🏯 雄偉歷史名城・大阪城天守閣</div>
+            </div>
+
+            <div class="btn-row">
+              <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=大阪城">📍 導航大阪城</a>
+              <button class="nav-stamp-btn" onclick="copyTxt('1 315 889*82')">📌 MapCode</button>
+            </div>
+          </li>
+
+          <li class="timeline-node">
+            <div class="time-txt">18:30</div>
+            <div class="event-txt"><span class="badge b-eat">晚餐</span> 赤丸食堂（在地昭和大份量老鋪）</div>
+            <div class="time-pill-bar">
+              <span class="time-pill warn">⏰ 11:00 - 21:00</span>
+              <span class="time-pill">🚶 弁天町站步行約 7 分</span>
+            </div>
+            <div class="desc-txt">
+              在地 70 年昭和人氣老字號食堂！必吃大份量特炸豬排定食、特製炸雞與家庭料理，暖心又飽足！
+            </div>
+            <div class="btn-row">
+              <a class="nav-stamp-btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=赤丸食堂">📍 導航赤丸食堂</a>
+            </div>
+          </li>
+        </ul>
+
+        <div class="hotel-sticky-bottom">
+          <div>🏨 <b>今晚住宿：</b><span class="hotel-name">大阪難波假日酒店 (Holiday Inn Osaka Namba)</span></div>
+          <div class="btn-row">
+            <a class="nav-stamp-btn navy" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Holiday+Inn+Osaka+Namba">📍 導航假日酒店</a>
+            <button class="nav-stamp-btn" onclick="copyTxt('1 285 244*25')">📌 飯店電話: 06-6211-3211</button>
           </div>
-          <a class="nav-btn" href="https://maps.google.com/?q=Osaka+Castle" target="_blank">📍 導航大阪城</a>
         </div>
       </div>
-
-      <!-- 18:30 晚餐：赤丸食堂 -->
-      <div class="time-node">
-        <div class="time-stamp">18:30</div>
-        <div class="schedule-card">
-          <span class="tag tag-food">美食</span>
-          <div class="card-title">🍱 晚餐：赤丸食堂（在地大份量老鋪）</div>
-          <div class="card-desc">
-            在地昭和老字號人氣食堂！必吃份量十足的酥脆炸豬排、特製炸雞定食與和風家庭料理，暖胃又滿足！
-          </div>
-          <a class="nav-btn" href="https://maps.google.com/?q=Akamaru+Shokudo+Osaka" target="_blank">📍 導航赤丸食堂</a>
-        </div>
-      </div>
-
-      <!-- 20:30 Check-in 飯店 -->
-      <div class="time-node">
-        <div class="time-stamp">20:30</div>
-        <div class="schedule-card">
-          <span class="tag tag-stay">住宿</span>
-          <div class="card-title">🏨 Check-in 難波假日酒店（Holiday Inn）</div>
-          <div class="card-desc">
-            返回飯店正式辦理入住手續並領取行李。飯店位於道頓堀核心商圈，晚上還能隨時下樓逛街採買消夜！
-          </div>
-          <a class="nav-btn" href="https://maps.google.com/?q=Holiday+Inn+Osaka+Namba" target="_blank">📍 導航難波假日酒店</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</details>
+    </details>
+    
     <!-- DAY 8 (已加 open，點選自動展開) -->
     <details class="day-book" id="d8" open>
       <summary>
