@@ -2731,6 +2731,7 @@
     }
 
    // 👛 現金皮夾總額（支援雲端同步）
+    const RATE = 0.215; // 確保匯率存在
     let initialCash = 0;
     const cashRef = db.ref('osaka_trip/initial_cash');
 
@@ -2770,14 +2771,16 @@
       expenseRef.set(expenseItems);
     }
 
-    // 갱新現鈔皮夾計算與變色
+    // 更新現鈔皮夾計算與變色
     function updateCashDisplay(currentExpenseJpy) {
       if (typeof currentExpenseJpy === 'undefined') {
         currentExpenseJpy = 0;
-        expenseItems.forEach(item => {
-          let costJpy = (item.currency === 'TWD') ? Math.round((Number(item.amount) || 0) / RATE) : (Number(item.amount) || 0);
-          currentExpenseJpy += costJpy;
-        });
+        if (Array.isArray(expenseItems)) {
+          expenseItems.forEach(item => {
+            let costJpy = (item.currency === 'TWD') ? Math.round((Number(item.amount) || 0) / RATE) : (Number(item.amount) || 0);
+            currentExpenseJpy += costJpy;
+          });
+        }
       }
 
       const initialTxt = document.getElementById('initialCashTxt');
@@ -2786,14 +2789,13 @@
 
       if (!initialTxt || !remainJpyEl) return;
 
-      const remainJpy = initialCash - currentExpenseJpy;
+      const remainJpy = (Number(initialCash) || 0) - currentExpenseJpy;
       const remainTwd = Math.round(remainJpy * RATE);
 
-      initialTxt.innerText = `¥ ${initialCash.toLocaleString()}`;
+      initialTxt.innerText = `¥ ${(Number(initialCash) || 0).toLocaleString()}`;
       remainJpyEl.innerText = `¥ ${remainJpy.toLocaleString()}`;
       if (remainTwdEl) remainTwdEl.innerText = `約 NT$ ${remainTwd.toLocaleString()}`;
 
-      // 餘額過低提醒（小於等於 10,000 日圓變紅色警告）
       if (remainJpy <= 10000) {
         remainJpyEl.style.color = 'var(--accent-red)';
       } else {
@@ -2810,7 +2812,192 @@
       container.innerHTML = '';
       let sumJpy = 0;
 
-      expenseItems.forEach((item, index) => {
+      if (Array.isArray(expenseItems)) {
+        expenseItems.forEach((item, index) => {
+          let costJpy = 0;
+          let costTwd = 0;
+          if (item.currency === 'TWD') {
+            costTwd = Number(item.amount) || 0;
+            costJpy = Math.round(costTwd / RATE);
+          } else {
+            costJpy = Number(item.amount) || 0;
+            costTwd = Math.round(costJpy * RATE);
+          }
+          sumJpy += costJpy;
+
+          const row = document.createElement('div');
+          row.className = 'shop-item-row';
+          row.style.alignItems = 'flex-start';
+          row.style.padding = '9px 10px';
+
+          const left = document.createElement('div');
+          left.style.flex = '1';
+
+          const titleDiv = document.createElement('div');
+          titleDiv.style.display = 'flex';
+          titleDiv.style.alignItems = 'center';
+          titleDiv.style.gap = '6px';
+          titleDiv.style.flexWrap = 'wrap';
+          titleDiv.innerHTML = `
+            <span style="font-size:0.72rem; background:#E8F0F7; color:var(--accent-navy); padding:1px 6px; border-radius:4px; font-weight:700;">${item.date || ''}</span>
+            <span style="font-size:0.72rem; background:#FEF3C7; color:#92400E; padding:1px 6px; border-radius:4px; font-weight:700;">${item.payer || ''}</span>
+            <span style="font-weight:900; font-size:0.88rem; color:var(--text-main);">${item.item || ''}</span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">(${item.category || ''})</span>
+          `;
+
+          const noteDiv = document.createElement('div');
+          noteDiv.style.fontSize = '0.74rem';
+          noteDiv.style.color = '#7E756C';
+          noteDiv.style.marginTop = '3px';
+          noteDiv.innerText = item.note ? `💬 備註: ${item.note}` : '';
+
+          left.appendChild(titleDiv);
+          if (item.note) left.appendChild(noteDiv);
+
+          const right = document.createElement('div');
+          right.style.display = 'flex';
+          right.style.alignItems = 'center';
+          right.style.gap = '6px';
+
+          const amountDiv = document.createElement('div');
+          amountDiv.style.textAlign = 'right';
+          amountDiv.innerHTML = `
+            <div style="font-weight:900; color:var(--accent-red); font-size:0.95rem;">¥ ${costJpy.toLocaleString()}</div>
+            <div style="font-size:0.7rem; color:var(--text-muted); font-weight:700;">NT$ ${costTwd.toLocaleString()}</div>
+          `;
+
+          const editBtn = document.createElement('button');
+          editBtn.className = 'shop-del-btn';
+          editBtn.innerHTML = '✏️';
+          editBtn.title = '修改此筆資料';
+          editBtn.style.color = 'var(--accent-navy)';
+          editBtn.style.opacity = '0.7';
+          editBtn.addEventListener('click', () => {
+            loadExpenseForEdit(item.id);
+          });
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'shop-del-btn';
+          delBtn.innerHTML = '🗑️';
+          delBtn.title = '刪除此筆支出 (需密碼)';
+          delBtn.addEventListener('click', () => {
+            const pwd = prompt('請輸入刪除密碼以確認移除此筆記帳：');
+            if (pwd === DELETE_PASSWORD) {
+              expenseItems.splice(index, 1);
+              saveExpenseToCloud();
+              showToast('已刪除記帳！');
+            } else if (pwd !== null) {
+              alert('密碼錯誤，無法刪除！');
+            }
+          });
+
+          right.appendChild(amountDiv);
+          right.appendChild(editBtn);
+          right.appendChild(delBtn);
+
+          row.appendChild(left);
+          row.appendChild(right);
+          container.appendChild(row);
+        });
+      }
+
+      if (totalJpyEl) totalJpyEl.innerText = `¥ ${sumJpy.toLocaleString()}`;
+      if (totalTwdEl) totalTwdEl.innerText = `約 NT$ ${Math.round(sumJpy * RATE).toLocaleString()}`;
+
+      // 連動更新現鈔餘額看板
+      updateCashDisplay(sumJpy);
+    }
+
+    function loadExpenseForEdit(id) {
+      const item = expenseItems.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('editExpenseId').value = item.id;
+      document.getElementById('expDate').value = item.date || '1/19 (D1)';
+      document.getElementById('expPayer').value = item.payer || '公費';
+      document.getElementById('expItem').value = item.item || '午餐';
+      document.getElementById('expCategory').value = item.category || '吃吃喝喝';
+      document.getElementById('expAmount').value = item.amount || '';
+      document.getElementById('expCurrency').value = item.currency || 'JPY';
+      document.getElementById('expNote').value = item.note || '';
+
+      document.getElementById('expSaveBtn').innerText = '💾 儲存修改';
+      document.getElementById('expSaveBtn').style.background = 'var(--accent-ochre)';
+      document.getElementById('expCancelBtn').style.display = 'inline-block';
+      document.getElementById('formTitleText').innerText = '✏️ 正在修改記帳資料...';
+
+      const formDetails = document.getElementById('expenseFormDetails');
+      if (formDetails) formDetails.open = true;
+      document.getElementById('expense-sec').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function cancelEdit() {
+      document.getElementById('editExpenseId').value = '';
+      document.getElementById('expAmount').value = '';
+      document.getElementById('expNote').value = '';
+      document.getElementById('expSaveBtn').innerText = '＋記一筆';
+      document.getElementById('expSaveBtn').style.background = 'var(--accent-matcha)';
+      document.getElementById('expCancelBtn').style.display = 'none';
+      document.getElementById('formTitleText').innerText = '✍️ 填寫 / 記錄花費 (點此收折)';
+    }
+
+    function saveExpense() {
+      const editId = document.getElementById('editExpenseId').value;
+      const date = document.getElementById('expDate').value;
+      const payer = document.getElementById('expPayer').value;
+      const item = document.getElementById('expItem').value;
+      const category = document.getElementById('expCategory').value;
+      const amountInput = document.getElementById('expAmount');
+      const currency = document.getElementById('expCurrency').value;
+      const noteInput = document.getElementById('expNote');
+
+      const amount = parseFloat(amountInput.value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('請輸入大於 0 的金額！');
+        return;
+      }
+
+      if (editId) {
+        const idx = expenseItems.findIndex(x => String(x.id) === String(editId));
+        if (idx !== -1) {
+          expenseItems[idx].date = date;
+          expenseItems[idx].payer = payer;
+          expenseItems[idx].item = item;
+          expenseItems[idx].category = category;
+          expenseItems[idx].amount = Math.round(amount);
+          expenseItems[idx].currency = currency;
+          expenseItems[idx].note = noteInput.value.trim();
+          showToast('已更新此筆支出！');
+        }
+        cancelEdit();
+      } else {
+        expenseItems.unshift({
+          id: Date.now(),
+          date: date,
+          payer: payer,
+          item: item,
+          category: category,
+          amount: Math.round(amount),
+          currency: currency,
+          note: noteInput.value.trim()
+        });
+        amountInput.value = '';
+        noteInput.value = '';
+        showToast('記帳成功！');
+      }
+
+      saveExpenseToCloud();
+    }
+
+    // 📥 匯出記帳清單
+    function exportToExcel() {
+      if (!expenseItems || expenseItems.length === 0) {
+        alert('目前還沒有任何記帳資料可以匯出喔！');
+        return;
+      }
+
+      const headers = ['日期', '付款者', '項目是???', '項目ㄌㄟ??', '原幣金額', '幣別', '折合日圓(JPY)', '折合台幣(TWD)', '備註看看Bar!!!'];
+      const rows = expenseItems.map(item => {
         let costJpy = 0;
         let costTwd = 0;
         if (item.currency === 'TWD') {
@@ -2820,53 +3007,37 @@
           costJpy = Number(item.amount) || 0;
           costTwd = Math.round(costJpy * RATE);
         }
-        sumJpy += costJpy;
 
-        const row = document.createElement('div');
-        row.className = 'shop-item-row';
-        row.style.alignItems = 'flex-start';
-        row.style.padding = '9px 10px';
+        const cleanNote = (item.note || '').replace(/"/g, '""');
 
-        const left = document.createElement('div');
-        left.style.flex = '1';
+        return [
+          `"${item.date || ''}"`,
+          `"${item.payer || ''}"`,
+          `"${item.item || ''}"`,
+          `"${item.category || ''}"`,
+          item.amount || 0,
+          `"${item.currency || 'JPY'}"`,
+          costJpy,
+          costTwd,
+          `"${cleanNote}"`
+        ].join(',');
+      });
 
-        const titleDiv = document.createElement('div');
-        titleDiv.style.display = 'flex';
-        titleDiv.style.alignItems = 'center';
-        titleDiv.style.gap = '6px';
-        titleDiv.style.flexWrap = 'wrap';
-        titleDiv.innerHTML = `
-          <span style="font-size:0.72rem; background:#E8F0F7; color:var(--accent-navy); padding:1px 6px; border-radius:4px; font-weight:700;">${item.date || ''}</span>
-          <span style="font-size:0.72rem; background:#FEF3C7; color:#92400E; padding:1px 6px; border-radius:4px; font-weight:700;">${item.payer || ''}</span>
-          <span style="font-weight:900; font-size:0.
-
-    // 📅 依目前實際日期自動選取當天的行程日期
-    function autoSelectTodayTripDate() {
-      const dateSelect = document.getElementById('expDate');
-      if (!dateSelect) return;
-
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
       const now = new Date();
-      const month = now.getMonth() + 1;
-      const date = now.getDate();
+      const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', `2027京阪神_旅費記帳清單_${dateStr}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-      if (month === 1) {
-        const tripMap = {
-          19: '1/19 (D1)',
-          20: '1/20 (D2)',
-          21: '1/21 (D3)',
-          22: '1/22 (D4)',
-          23: '1/23 (D5)',
-          24: '1/24 (D6)',
-          25: '1/25 (D7)',
-          26: '1/26 (D8)'
-        };
-        if (tripMap[date]) {
-          dateSelect.value = tripMap[date];
-        }
-      }
+      showToast('已下載 Excel 記帳檔！');
     }
-
-   autoSelectTodayTripDate();
 
    // 🌟 自動追蹤時間並移動 Q 版全家福
     function updateFamilyPosition() {
